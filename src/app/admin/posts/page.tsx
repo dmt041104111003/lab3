@@ -20,12 +20,10 @@ interface Post {
 export default function AdminPosts() {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
-  const [showCreateForm, setShowCreateForm] = useState(false)
-  const [newPost, setNewPost] = useState({
-    title: '',
-    content: '',
-    excerpt: ''
-  })
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [postToDelete, setPostToDelete] = useState<Post | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [toast, setToast] = useState('')
 
   useEffect(() => {
     fetchPosts()
@@ -43,28 +41,41 @@ export default function AdminPosts() {
     }
   }
 
-  const handleCreatePost = async (e: React.FormEvent) => {
-    e.preventDefault()
+
+  const handleDeleteClick = (post: Post) => {
+    setPostToDelete(post)
+    setShowDeleteModal(true)
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!postToDelete) return
+
+    setIsDeleting(true)
     try {
-      const response = await fetch('/api/posts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...newPost,
-          authorId: '1' // In a real app, get from session
-        }),
+      const response = await fetch(`/api/posts?id=${postToDelete.id}`, {
+        method: 'DELETE',
       })
 
+      const data = await response.json()
+
       if (response.ok) {
-        setShowCreateForm(false)
-        setNewPost({ title: '', content: '', excerpt: '' })
-        fetchPosts() // Refresh posts list
+        setToast('Xóa bài viết thành công')
+        setPosts(posts.filter(post => post.id !== postToDelete.id))
+        setShowDeleteModal(false)
+        setPostToDelete(null)
+      } else {
+        setToast(data.message || 'Xóa thất bại')
       }
     } catch (error) {
-      console.error('Error creating post:', error)
+      setToast('Có lỗi xảy ra khi xóa bài viết')
+    } finally {
+      setIsDeleting(false)
     }
+  }
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false)
+    setPostToDelete(null)
   }
 
   const togglePublish = async (postId: string, published: boolean) => {
@@ -107,12 +118,12 @@ export default function AdminPosts() {
           <div className="px-6 py-4 border-b border-gray-200">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-medium text-gray-900">Danh sách bài viết</h2>
-              <button
-                onClick={() => setShowCreateForm(true)}
+              <a
+                href="/admin/posts/create"
                 className="bg-tech-blue text-white px-4 py-2 rounded-md hover:bg-tech-dark-blue transition-colors"
               >
                 Tạo bài viết mới
-              </button>
+              </a>
             </div>
           </div>
 
@@ -172,10 +183,16 @@ export default function AdminPosts() {
                       >
                         {post.published ? 'Ẩn' : 'Xuất bản'}
                       </button>
-                      <button className="text-tech-blue hover:text-tech-dark-blue">
+                      <a
+                        href={`/admin/posts/edit/${post.id}`}
+                        className="text-tech-blue hover:text-tech-dark-blue"
+                      >
                         Sửa
-                      </button>
-                      <button className="text-red-600 hover:text-red-900">
+                      </a>
+                      <button 
+                        onClick={() => handleDeleteClick(post)}
+                        className="text-red-600 hover:text-red-900"
+                      >
                         Xóa
                       </button>
                     </td>
@@ -186,67 +203,51 @@ export default function AdminPosts() {
           </div>
         </div>
 
-        {/* Create Post Modal */}
-        {showCreateForm && (
+
+        {/* Toast Notification */}
+        {toast && (
+          <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg z-50">
+            {toast}
+          </div>
+        )}
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteModal && postToDelete && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
               <div className="mt-3">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Tạo bài viết mới</h3>
-                <form onSubmit={handleCreatePost}>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Tiêu đề
-                    </label>
-                    <input
-                      type="text"
-                      value={newPost.title}
-                      onChange={(e) => setNewPost({...newPost, title: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
-                      required
-                    />
-                  </div>
-                  
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Mô tả ngắn
-                    </label>
-                    <textarea
-                      value={newPost.excerpt}
-                      onChange={(e) => setNewPost({...newPost, excerpt: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
-                      rows={3}
-                    />
-                  </div>
-                  
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Nội dung
-                    </label>
-                    <textarea
-                      value={newPost.content}
-                      onChange={(e) => setNewPost({...newPost, content: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
-                      rows={6}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="flex justify-end space-x-3">
+                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                  <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                  </svg>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    Xác nhận xóa bài viết
+                  </h3>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Bạn có chắc chắn muốn xóa bài viết <strong>"{postToDelete.title}"</strong> không?
+                  </p>
+                  <p className="text-xs text-red-600 mb-6">
+                    Hành động này không thể hoàn tác. Bài viết sẽ bị xóa vĩnh viễn.
+                  </p>
+                  <div className="flex justify-center space-x-3">
                     <button
-                      type="button"
-                      onClick={() => setShowCreateForm(false)}
-                      className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                      onClick={handleDeleteCancel}
+                      disabled={isDeleting}
+                      className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 disabled:opacity-50"
                     >
                       Hủy
                     </button>
                     <button
-                      type="submit"
-                      className="px-4 py-2 text-sm font-medium text-white bg-tech-blue rounded-md hover:bg-tech-dark-blue"
+                      onClick={handleDeleteConfirm}
+                      disabled={isDeleting}
+                      className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 disabled:opacity-50"
                     >
-                      Tạo bài viết
+                      {isDeleting ? 'Đang xóa...' : 'Xóa'}
                     </button>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>

@@ -25,7 +25,10 @@ export default function CreatePost() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          authorId: '1' // In a real app, get from session
+        }),
       })
 
       const data = await response.json()
