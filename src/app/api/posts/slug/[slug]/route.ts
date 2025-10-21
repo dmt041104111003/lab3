@@ -24,10 +24,14 @@ export async function GET(
           }
         },
         tags: {
-          select: {
-            id: true,
-            name: true,
-            color: true
+          include: {
+            tag: {
+              select: {
+                id: true,
+                name: true,
+                color: true
+              }
+            }
           }
         }
       }
