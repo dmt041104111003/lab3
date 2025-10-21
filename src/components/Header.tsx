@@ -11,14 +11,34 @@ export default function Header() {
   const [user, setUser] = useState<User | null>(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     const session = getSession()
     if (session) {
       setUser(session)
       setIsLoggedIn(true)
     }
   }, [])
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            <div className="flex items-center space-x-4">
+              <div className="w-32 h-8 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="w-20 h-8 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+      </header>
+    )
+  }
 
   const handleSignOut = () => {
     clearSession()

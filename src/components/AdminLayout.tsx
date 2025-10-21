@@ -17,8 +17,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     const session = getSession()
     if (!session) {
       router.push('/auth/signin')
@@ -33,6 +35,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     setUser(session)
     setIsLoading(false)
   }, [router])
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-tech-blue"></div>
+          <p className="mt-4 text-gray-600">Đang tải...</p>
+        </div>
+      </div>
+    )
+  }
 
   const handleSignOut = () => {
     clearSession()
