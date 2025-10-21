@@ -21,18 +21,6 @@ export default function AdminDashboard() {
     }
   ])
 
-  const [showCreateForm, setShowCreateForm] = useState(false)
-  const [newPost, setNewPost] = useState({
-    title: '',
-    content: '',
-    excerpt: ''
-  })
-
-  const handleCreatePost = (e: React.FormEvent) => {
-    e.preventDefault()
-    setShowCreateForm(false)
-    setNewPost({ title: '', content: '', excerpt: '' })
-  }
 
   return (
     <AdminLayout>
@@ -42,17 +30,17 @@ export default function AdminDashboard() {
       </div>
 
         <div className="bg-white shadow rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <div className="flex justify-between items-center">
-              <h2 className="text-lg font-medium text-gray-900">Danh sách bài viết</h2>
-              <button
-                onClick={() => setShowCreateForm(true)}
-                className="bg-tech-blue text-white px-4 py-2 rounded-md hover:bg-tech-dark-blue transition-colors"
-              >
-                Tạo bài viết mới
-              </button>
-            </div>
-          </div>
+              <div className="px-6 py-4 border-b border-gray-200">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-lg font-medium text-gray-900">Danh sách bài viết</h2>
+                  <a
+                    href="/admin/posts/create"
+                    className="bg-tech-blue text-white px-4 py-2 rounded-md hover:bg-tech-dark-blue transition-colors"
+                  >
+                    Tạo bài viết mới
+                  </a>
+                </div>
+              </div>
 
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
@@ -111,71 +99,6 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Create Post Modal */}
-        {showCreateForm && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-              <div className="mt-3">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Tạo bài viết mới</h3>
-                <form onSubmit={handleCreatePost}>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Tiêu đề
-                    </label>
-                    <input
-                      type="text"
-                      value={newPost.title}
-                      onChange={(e) => setNewPost({...newPost, title: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
-                      required
-                    />
-                  </div>
-                  
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Mô tả ngắn
-                    </label>
-                    <textarea
-                      value={newPost.excerpt}
-                      onChange={(e) => setNewPost({...newPost, excerpt: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
-                      rows={3}
-                    />
-                  </div>
-                  
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Nội dung
-                    </label>
-                    <textarea
-                      value={newPost.content}
-                      onChange={(e) => setNewPost({...newPost, content: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
-                      rows={6}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="flex justify-end space-x-3">
-                    <button
-                      type="button"
-                      onClick={() => setShowCreateForm(false)}
-                      className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-                    >
-                      Hủy
-                    </button>
-                    <button
-                      type="submit"
-                      className="px-4 py-2 text-sm font-medium text-white bg-tech-blue rounded-md hover:bg-tech-dark-blue"
-                    >
-                      Tạo bài viết
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        )}
     </AdminLayout>
   )
 }
