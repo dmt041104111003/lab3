@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { title, content, excerpt, authorId, category, subcategory } = await request.json()
+    const { title, content, excerpt, published, authorId, category, subcategory } = await request.json()
 
     // Generate slug from title with Vietnamese character support
     const baseSlug = generateSlug(title)
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     const existingPosts = await prisma.post.findMany({
       select: { slug: true }
     })
-    const existingSlugs = existingPosts.map(post => post.slug)
+    const existingSlugs = existingPosts.map((post: { slug: string }) => post.slug)
     const uniqueSlug = await generateUniqueSlug(baseSlug, existingSlugs)
 
     const post = await prisma.post.create({
@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
         content,
         excerpt,
         slug: uniqueSlug,
+        published,
         authorId,
         category,
         subcategory
@@ -87,7 +88,7 @@ export async function PUT(request: NextRequest) {
       select: { slug: true },
       where: { id: { not: id } }
     })
-    const existingSlugs = existingPosts.map(post => post.slug)
+    const existingSlugs = existingPosts.map((post: { slug: string }) => post.slug)
     const uniqueSlug = await generateUniqueSlug(baseSlug, existingSlugs)
 
     const post = await prisma.post.update({

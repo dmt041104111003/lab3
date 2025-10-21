@@ -1,104 +1,235 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AdminLayout from '@/components/AdminLayout'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
+import AdminStatsCard from '@/components/admin/AdminStatsCard'
+import AdminLoadingState from '@/components/admin/AdminLoadingState'
+import AdminTable from '@/components/admin/AdminTable'
+
+interface Post {
+  id: string
+  title: string
+  published: boolean
+  createdAt: string
+  author: {
+    name: string
+  }
+}
+
+interface User {
+  id: string
+  name: string
+  email: string
+  role: string
+  createdAt: string
+}
+
+interface Stats {
+  totalPosts: number
+  publishedPosts: number
+  draftPosts: number
+  totalUsers: number
+  adminUsers: number
+  regularUsers: number
+  recentPosts: Post[]
+  recentUsers: User[]
+}
 
 export default function AdminDashboard() {
-  const [posts, setPosts] = useState([
-    {
-      id: '1',
-      title: 'Xu hướng AI trong doanh nghiệp Việt Nam 2025',
-      status: 'published',
-      createdAt: '2025-01-20',
-      views: 1250
-    },
-    {
-      id: '2', 
-      title: 'Startup Việt Nam: Cơ hội và thách thức',
-      status: 'draft',
-      createdAt: '2025-01-19',
-      views: 0
-    }
-  ])
+  const [stats, setStats] = useState<Stats | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
+  useEffect(() => {
+    fetchStats()
+  }, [])
+
+  const fetchStats = async () => {
+    try {
+      const [postsRes, usersRes] = await Promise.all([
+        fetch('/api/posts'),
+        fetch('/api/users')
+      ])
+
+      const [posts, users] = await Promise.all([
+        postsRes.json(),
+        usersRes.json()
+      ])
+
+      const publishedPosts = posts.filter((post: Post) => post.published)
+      const draftPosts = posts.filter((post: Post) => !post.published)
+      const adminUsers = users.filter((user: User) => user.role === 'ADMIN')
+      const regularUsers = users.filter((user: User) => user.role === 'USER')
+
+      setStats({
+        totalPosts: posts.length,
+        publishedPosts: publishedPosts.length,
+        draftPosts: draftPosts.length,
+        totalUsers: users.length,
+        adminUsers: adminUsers.length,
+        regularUsers: regularUsers.length,
+        recentPosts: posts.slice(0, 5),
+        recentUsers: users.slice(0, 5)
+      })
+    } catch (error) {
+      console.error('Error fetching stats:', error)
+      setError('Có lỗi xảy ra khi tải thống kê')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <AdminLoadingState message="Đang tải thống kê..." />
+      </AdminLayout>
+    )
+  }
+
+  if (error) {
+    return (
+      <AdminLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-lg text-red-600">{error}</div>
+        </div>
+      </AdminLayout>
+    )
+  }
+
+  if (!stats) return null
 
   return (
     <AdminLayout>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="mt-2 text-gray-600">Tổng quan hệ thống quản trị</p>
+      <AdminPageHeader 
+        title="Dashboard"
+        description="Tổng quan hệ thống quản trị"
+      />
+
+      {/* Stats Summary */}
+      <div className="bg-white shadow rounded-lg p-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <AdminStatsCard 
+            title="Tổng bài viết"
+            value={stats.totalPosts}
+            color="blue"
+          />
+          <AdminStatsCard 
+            title="Đã xuất bản"
+            value={stats.publishedPosts}
+            color="green"
+          />
+          <AdminStatsCard 
+            title="Bản nháp"
+            value={stats.draftPosts}
+            color="yellow"
+          />
+          <AdminStatsCard 
+            title="Tổng người dùng"
+            value={stats.totalUsers}
+            color="purple"
+          />
+        </div>
       </div>
 
-        <div className="bg-white shadow rounded-lg">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-lg font-medium text-gray-900">Danh sách bài viết</h2>
-                  <a
-                    href="/admin/posts/create"
-                    className="bg-tech-blue text-white px-4 py-2 rounded-md hover:bg-tech-dark-blue transition-colors"
-                  >
-                    Tạo bài viết mới
-                  </a>
-                </div>
-              </div>
-
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Tiêu đề
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Trạng thái
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Ngày tạo
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Lượt xem
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Thao tác
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {posts.map((post) => (
-                  <tr key={post.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{post.title}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        post.status === 'published' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
-                        {post.status === 'published' ? 'Đã xuất bản' : 'Bản nháp'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {post.createdAt}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {post.views.toLocaleString()}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button className="text-tech-blue hover:text-tech-dark-blue mr-4">
-                        Sửa
-                      </button>
-                      <button className="text-red-600 hover:text-red-900">
-                        Xóa
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      {/* Recent Posts */}
+      <div className="bg-white shadow rounded-lg mb-8">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <div className="flex justify-between items-center">
+            <h2 className="text-lg font-medium text-gray-900">Bài viết gần đây</h2>
+            <a
+              href="/admin/posts"
+              className="text-tech-blue hover:text-tech-dark-blue text-sm font-medium"
+            >
+              Xem tất cả
+            </a>
           </div>
         </div>
+        <AdminTable
+          columns={[
+            { key: 'title', label: 'Tiêu đề' },
+            { key: 'author', label: 'Tác giả' },
+            { key: 'status', label: 'Trạng thái' },
+            { key: 'createdAt', label: 'Ngày tạo' }
+          ]}
+          data={stats.recentPosts}
+          renderRow={(post) => (
+            <tr key={post.id}>
+              <td className="px-6 py-4">
+                <div className="text-sm font-medium text-gray-900 truncate max-w-xs">
+                  {post.title}
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {post.author.name}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                  post.published 
+                    ? 'bg-green-100 text-green-800' 
+                    : 'bg-yellow-100 text-yellow-800'
+                }`}>
+                  {post.published ? 'Đã xuất bản' : 'Bản nháp'}
+                </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {new Date(post.createdAt).toLocaleDateString('vi-VN')}
+              </td>
+            </tr>
+          )}
+          emptyMessage="Không có bài viết"
+          emptyDescription="Chưa có bài viết nào trong hệ thống."
+        />
+      </div>
 
+      {/* Recent Users */}
+      <div className="bg-white shadow rounded-lg">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <div className="flex justify-between items-center">
+            <h2 className="text-lg font-medium text-gray-900">Người dùng gần đây</h2>
+            <a
+              href="/admin/users"
+              className="text-tech-blue hover:text-tech-dark-blue text-sm font-medium"
+            >
+              Xem tất cả
+            </a>
+          </div>
+        </div>
+        <AdminTable
+          columns={[
+            { key: 'name', label: 'Tên' },
+            { key: 'email', label: 'Email' },
+            { key: 'role', label: 'Vai trò' },
+            { key: 'createdAt', label: 'Ngày tạo' }
+          ]}
+          data={stats.recentUsers}
+          renderRow={(user) => (
+            <tr key={user.id}>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm font-medium text-gray-900">{user.name}</div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {user.email}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                  user.role === 'ADMIN' 
+                    ? 'bg-purple-100 text-purple-800' 
+                    : 'bg-blue-100 text-blue-800'
+                }`}>
+                  {user.role === 'ADMIN' ? 'Quản trị' : 'Người dùng'}
+                </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {new Date(user.createdAt).toLocaleDateString('vi-VN')}
+              </td>
+            </tr>
+          )}
+          emptyMessage="Không có người dùng"
+          emptyDescription="Chưa có người dùng nào trong hệ thống."
+        />
+      </div>
     </AdminLayout>
   )
 }

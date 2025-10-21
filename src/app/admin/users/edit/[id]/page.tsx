@@ -3,6 +3,15 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import AdminLayout from '@/components/AdminLayout'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
+import AdminCard from '@/components/admin/AdminCard'
+import AdminFormField from '@/components/admin/AdminFormField'
+import AdminInput from '@/components/admin/AdminInput'
+import AdminSelect from '@/components/admin/AdminSelect'
+import AdminCheckbox from '@/components/admin/AdminCheckbox'
+import AdminButton from '@/components/admin/AdminButton'
+import AdminErrorAlert from '@/components/admin/AdminErrorAlert'
+import AdminLoadingState from '@/components/admin/AdminLoadingState'
 
 interface User {
   id: string
@@ -125,12 +134,7 @@ export default function EditUser() {
   if (isLoading) {
     return (
       <AdminLayout>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-tech-blue"></div>
-            <p className="mt-4 text-gray-600">Đang tải thông tin người dùng...</p>
-          </div>
-        </div>
+        <AdminLoadingState message="Đang tải thông tin người dùng..." />
       </AdminLayout>
     )
   }
@@ -153,126 +157,92 @@ export default function EditUser() {
 
   return (
     <AdminLayout>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Chỉnh sửa người dùng</h1>
-        <p className="mt-2 text-gray-600">Cập nhật thông tin và quyền hạn của người dùng</p>
-      </div>
+      <AdminPageHeader 
+        title="Chỉnh sửa người dùng"
+        description="Cập nhật thông tin và quyền hạn của người dùng"
+      />
 
-      {error && (
-        <div className="mb-6 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded">
-          {error}
-        </div>
-      )}
-
+      <AdminErrorAlert message={error} />
+      
       {success && (
         <div className="mb-6 bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded">
           {success}
         </div>
       )}
 
-      <div className="bg-white shadow rounded-lg">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">Thông tin người dùng</h2>
-        </div>
-
-        <form onSubmit={handleSubmit} className="p-6">
+      <AdminCard title="Thông tin người dùng">
+        <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* User Info */}
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Tên người dùng
-                </label>
-                <input
+              <AdminFormField label="Tên người dùng">
+                <AdminInput
                   type="text"
                   value={user.name}
                   disabled
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500"
+                  className="bg-gray-50 text-gray-500"
                 />
-              </div>
+              </AdminFormField>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
-                </label>
-                <input
+              <AdminFormField label="Email">
+                <AdminInput
                   type="email"
                   value={user.email}
                   disabled
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500"
+                  className="bg-gray-50 text-gray-500"
                 />
-              </div>
+              </AdminFormField>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Số bài viết
-                </label>
-                <input
+              <AdminFormField label="Số bài viết">
+                <AdminInput
                   type="text"
                   value={`${user._count.posts} bài viết`}
                   disabled
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500"
+                  className="bg-gray-50 text-gray-500"
                 />
-              </div>
+              </AdminFormField>
             </div>
 
             {/* Permissions */}
             <div className="space-y-4">
-              <div>
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
-                  Vai trò <span className="text-red-500">*</span>
-                </label>
-                <select
-                  id="role"
+              <AdminFormField label="Vai trò" required>
+                <AdminSelect
                   name="role"
                   value={formData.role}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+                  options={[
+                    { value: 'USER', label: 'Người dùng' },
+                    { value: 'ADMIN', label: 'Quản trị viên' }
+                  ]}
                   required
-                >
-                  <option value="USER">Người dùng</option>
-                  <option value="ADMIN">Quản trị viên</option>
-                </select>
-              </div>
+                />
+              </AdminFormField>
 
-              <div>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="isBanned"
-                    checked={formData.isBanned}
-                    onChange={handleChange}
-                    className="h-4 w-4 text-tech-blue focus:ring-tech-blue border-gray-300 rounded"
-                  />
-                  <span className="ml-2 text-sm font-medium text-gray-700">
-                    Cấm người dùng
-                  </span>
-                </label>
-              </div>
+              <AdminCheckbox
+                name="isBanned"
+                checked={formData.isBanned}
+                onChange={handleChange}
+                label="Cấm người dùng"
+              />
 
               {formData.isBanned && (
                 <div>
-                  <label className="flex items-center mb-2">
-                    <input
-                      type="checkbox"
-                      name="hasBannedUntil"
-                      checked={formData.hasBannedUntil}
-                      onChange={handleChange}
-                      className="h-4 w-4 text-tech-blue focus:ring-tech-blue border-gray-300 rounded"
-                    />
-                    <span className="ml-2 text-sm font-medium text-gray-700">
-                      Cấm có thời hạn
-                    </span>
-                  </label>
+                  <AdminCheckbox
+                    name="hasBannedUntil"
+                    checked={formData.hasBannedUntil}
+                    onChange={handleChange}
+                    label="Cấm có thời hạn"
+                  />
 
                   {formData.hasBannedUntil && (
-                    <input
-                      type="datetime-local"
-                      name="bannedUntil"
-                      value={formData.bannedUntil}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
-                    />
+                    <AdminFormField label="Ngày hết hạn cấm">
+                      <AdminInput
+                        type="datetime-local"
+                        name="bannedUntil"
+                        value={formData.bannedUntil}
+                        onChange={handleChange}
+                      />
+                    </AdminFormField>
                   )}
                 </div>
               )}
@@ -280,23 +250,23 @@ export default function EditUser() {
           </div>
 
           <div className="mt-8 flex justify-end space-x-3">
-            <button
+            <AdminButton
               type="button"
+              variant="secondary"
               onClick={() => router.push('/admin/users')}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
             >
               Hủy
-            </button>
-            <button
+            </AdminButton>
+            <AdminButton
               type="submit"
+              loading={isSaving}
               disabled={isSaving}
-              className="px-4 py-2 text-sm font-medium text-white bg-tech-blue rounded-md hover:bg-tech-dark-blue disabled:opacity-50"
             >
-              {isSaving ? 'Đang lưu...' : 'Lưu thay đổi'}
-            </button>
+              Lưu thay đổi
+            </AdminButton>
           </div>
         </form>
-      </div>
+      </AdminCard>
     </AdminLayout>
   )
 }

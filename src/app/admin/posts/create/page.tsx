@@ -3,6 +3,15 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import AdminLayout from '@/components/AdminLayout'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
+import AdminCard from '@/components/admin/AdminCard'
+import AdminFormField from '@/components/admin/AdminFormField'
+import AdminInput from '@/components/admin/AdminInput'
+import AdminTextarea from '@/components/admin/AdminTextarea'
+import AdminSelect from '@/components/admin/AdminSelect'
+import AdminCheckbox from '@/components/admin/AdminCheckbox'
+import AdminButton from '@/components/admin/AdminButton'
+import AdminErrorAlert from '@/components/admin/AdminErrorAlert'
 import { CATEGORIES, type Category, type Subcategory } from '@/lib/categories'
 import { generateSlug } from '@/lib/slug'
 
@@ -26,6 +35,7 @@ export default function CreatePost() {
     title: '',
     content: '',
     excerpt: '',
+    published: false,
     selectedTags: [] as string[],
     selectedImage: '',
     imageType: 'existing' as 'existing' | 'upload' | 'url',
@@ -80,6 +90,7 @@ export default function CreatePost() {
           title: formData.title,
           content: formData.content,
           excerpt: formData.excerpt,
+          published: formData.published,
           selectedTags: formData.selectedTags,
           selectedImage: formData.selectedImage,
           imageType: formData.imageType,
@@ -105,11 +116,20 @@ export default function CreatePost() {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value
-    })
+    const { name, value, type } = e.target
+    
+    if (type === 'checkbox') {
+      const checked = (e.target as HTMLInputElement).checked
+      setFormData(prev => ({
+        ...prev,
+        [name]: checked
+      }))
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }))
+    }
   }
 
 
@@ -136,34 +156,20 @@ export default function CreatePost() {
 
   return (
     <AdminLayout>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Tạo bài viết mới</h1>
-        <p className="mt-2 text-gray-600">Viết và xuất bản bài viết mới</p>
-      </div>
+      <AdminPageHeader 
+        title="Tạo bài viết mới"
+        description="Viết và xuất bản bài viết mới"
+      />
 
-      <div className="bg-white shadow rounded-lg">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">Thông tin bài viết</h2>
-        </div>
+      <AdminCard title="Thông tin bài viết">
+        <form onSubmit={handleSubmit}>
+          <AdminErrorAlert message={error} />
 
-        <form onSubmit={handleSubmit} className="p-6">
-          {error && (
-            <div className="mb-6 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded">
-              {error}
-            </div>
-          )}
-
-          <div className="mb-6">
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
-              Tiêu đề bài viết <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              id="title"
+          <AdminFormField label="Tiêu đề bài viết" required>
+            <AdminInput
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
               placeholder="Nhập tiêu đề bài viết"
               required
             />
@@ -175,45 +181,39 @@ export default function CreatePost() {
                 </span>
               </div>
             )}
-          </div>
+          </AdminFormField>
 
-          <div className="mb-6">
-            <label htmlFor="excerpt" className="block text-sm font-medium text-gray-700 mb-2">
-              Mô tả ngắn
-            </label>
-            <textarea
-              id="excerpt"
+          <AdminFormField label="Mô tả ngắn">
+            <AdminTextarea
               name="excerpt"
               value={formData.excerpt}
               onChange={handleChange}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
               placeholder="Nhập mô tả ngắn về bài viết"
+              rows={3}
             />
-          </div>
+          </AdminFormField>
 
-          <div className="mb-6">
-            <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
-              Nội dung bài viết <span className="text-red-500">*</span>
-            </label>
-            <textarea
-              id="content"
+          <AdminCheckbox
+            name="published"
+            checked={formData.published}
+            onChange={handleChange}
+            label="Xuất bản bài viết"
+            helpText="Bài viết sẽ hiển thị công khai khi được xuất bản"
+          />
+
+          <AdminFormField label="Nội dung bài viết" required>
+            <AdminTextarea
               name="content"
               value={formData.content}
               onChange={handleChange}
-              rows={12}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
               placeholder="Viết nội dung bài viết..."
+              rows={12}
               required
             />
-          </div>
+          </AdminFormField>
 
-          {/* Category Selection */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Chuyên mục <span className="text-red-500">*</span>
-            </label>
-            <select
+          <AdminFormField label="Chuyên mục" required>
+            <AdminSelect
               name="category"
               value={formData.category}
               onChange={(e) => {
@@ -223,50 +223,33 @@ export default function CreatePost() {
                   subcategory: '' // Reset subcategory when category changes
                 })
               }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+              options={CATEGORIES.map(cat => ({ value: cat.id, label: cat.name }))}
+              placeholder="Chọn chuyên mục"
               required
-            >
-              <option value="">Chọn chuyên mục</option>
-              {CATEGORIES.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
+            />
+          </AdminFormField>
 
-          {/* Subcategory Selection */}
           {formData.category && (
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Tiểu mục <span className="text-red-500">*</span>
-              </label>
-              <select
+            <AdminFormField label="Tiểu mục" required>
+              <AdminSelect
                 name="subcategory"
                 value={formData.subcategory}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+                options={CATEGORIES.find(cat => cat.id === formData.category)?.subcategories.map(sub => ({ 
+                  value: sub.id, 
+                  label: sub.name 
+                })) || []}
+                placeholder="Chọn tiểu mục"
                 required
-              >
-                <option value="">Chọn tiểu mục</option>
-                {CATEGORIES.find(cat => cat.id === formData.category)?.subcategories.map((subcategory) => (
-                  <option key={subcategory.id} value={subcategory.id}>
-                    {subcategory.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+              />
+            </AdminFormField>
           )}
 
-          {/* Tags Selection */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Thẻ (Tags)
-            </label>
+          <AdminFormField label="Thẻ (Tags)">
             {loadingData ? (
               <div className="text-sm text-gray-500">Đang tải thẻ...</div>
             ) : (
-              <select
+              <AdminSelect
                 name="selectedTags"
                 value={formData.selectedTags[0] || ''}
                 onChange={(e) => {
@@ -275,17 +258,15 @@ export default function CreatePost() {
                     selectedTags: e.target.value ? [e.target.value] : []
                   })
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
-              >
-                <option value="">Chọn thẻ (tùy chọn)</option>
-                {tags.map((tag) => (
-                  <option key={tag.id} value={tag.id} style={{ color: tag.color }}>
-                    {tag.name}
-                  </option>
-                ))}
-              </select>
+                options={tags.map(tag => ({ 
+                  value: tag.id, 
+                  label: tag.name, 
+                  color: tag.color 
+                }))}
+                placeholder="Chọn thẻ (tùy chọn)"
+              />
             )}
-          </div>
+          </AdminFormField>
 
 
           {/* Featured Image Selection */}
@@ -344,6 +325,7 @@ export default function CreatePost() {
                     value={formData.selectedImage}
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+                    aria-label="Chọn hình ảnh"
                   >
                     <option value="">Chọn hình ảnh (tùy chọn)</option>
                     {images.map((image) => (
@@ -385,6 +367,7 @@ export default function CreatePost() {
                   accept="image/*"
                   onChange={handleFileSelect}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+                  aria-label="Tải lên hình ảnh mới"
                 />
                 {formData.newImageFile && (
                   <div className="mt-2">
@@ -438,23 +421,23 @@ export default function CreatePost() {
           </div>
 
           <div className="flex justify-end space-x-3">
-            <button
+            <AdminButton
               type="button"
+              variant="secondary"
               onClick={() => router.push('/admin/posts')}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
             >
               Hủy
-            </button>
-            <button
+            </AdminButton>
+            <AdminButton
               type="submit"
+              loading={isLoading}
               disabled={isLoading}
-              className="px-4 py-2 text-sm font-medium text-white bg-tech-blue rounded-md hover:bg-tech-dark-blue disabled:opacity-50"
             >
-              {isLoading ? 'Đang tạo...' : 'Tạo bài viết'}
-            </button>
+              Tạo bài viết
+            </AdminButton>
           </div>
         </form>
-      </div>
+      </AdminCard>
     </AdminLayout>
   )
 }

@@ -1,0 +1,35 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { category: string } }
+) {
+  try {
+    const posts = await prisma.post.findMany({
+      where: {
+        category: params.category,
+        published: true
+      },
+      include: {
+        author: {
+          select: {
+            name: true,
+            email: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    return NextResponse.json(posts)
+  } catch (error) {
+    console.error('Get posts by category error:', error)
+    return NextResponse.json(
+      { message: 'Có lỗi xảy ra khi lấy bài viết theo chuyên mục' },
+      { status: 500 }
+    )
+  }
+}

@@ -1,8 +1,16 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import AdminLayout from '@/components/AdminLayout'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
+import AdminCard from '@/components/admin/AdminCard'
+import AdminFormField from '@/components/admin/AdminFormField'
+import AdminInput from '@/components/admin/AdminInput'
+import AdminButton from '@/components/admin/AdminButton'
+import AdminLoadingState from '@/components/admin/AdminLoadingState'
+import AdminDeleteModal from '@/components/admin/AdminDeleteModal'
+import AdminModal from '@/components/admin/AdminModal'
+import AdminPagination from '@/components/admin/AdminPagination'
 
 interface Image {
   id: string
@@ -25,6 +33,8 @@ export default function ImagesPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [altText, setAltText] = useState('')
   const [deletingImage, setDeletingImage] = useState<Image | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 6
 
   useEffect(() => {
     fetchImages()
@@ -110,131 +120,113 @@ export default function ImagesPage() {
     (image.alt && image.alt.toLowerCase().includes(searchTerm.toLowerCase()))
   )
 
+  // Pagination logic
+  const totalPages = Math.ceil(filteredImages.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const paginatedImages = filteredImages.slice(startIndex, endIndex)
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
   if (loading) {
     return (
       <AdminLayout>
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-tech-blue"></div>
-        </div>
+        <AdminLoadingState message="Đang tải danh sách hình ảnh..." />
       </AdminLayout>
     )
   }
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900">Quản lý hình ảnh</h1>
-          <button
-            onClick={() => setShowUploadForm(true)}
-            className="bg-tech-blue text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-          >
-            Tải lên hình ảnh
-          </button>
-        </div>
+      <AdminPageHeader 
+        title="Quản lý hình ảnh"
+        actionButton={{
+          text: "Tải lên hình ảnh",
+          onClick: () => setShowUploadForm(true)
+        }}
+      />
 
-        {/* Search */}
-        <div className="bg-white p-4 rounded-lg shadow">
-          <input
+      <AdminCard>
+        <AdminFormField label="Tìm kiếm hình ảnh">
+          <AdminInput
             type="text"
             placeholder="Tìm kiếm hình ảnh..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-tech-blue"
           />
-        </div>
+        </AdminFormField>
+      </AdminCard>
 
-        {/* Upload Form Modal */}
-        {showUploadForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-xl w-96">
-              <h2 className="text-xl font-bold mb-4">Tải lên hình ảnh</h2>
-              <form onSubmit={handleUpload}>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Chọn file
-                  </label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileSelect}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-tech-blue"
-                    required
-                  />
+        <AdminModal
+          isOpen={showUploadForm}
+          title="Tải lên hình ảnh"
+          onClose={() => setShowUploadForm(false)}
+          size="md"
+        >
+          <form onSubmit={handleUpload}>
+            <AdminFormField label="Chọn file" required>
+              <AdminInput
+                type="file"
+                accept="image/*"
+                onChange={handleFileSelect}
+                required
+              />
+            </AdminFormField>
+            
+            <AdminFormField label="Alt text">
+              <AdminInput
+                type="text"
+                value={altText}
+                onChange={(e) => setAltText(e.target.value)}
+                placeholder="Mô tả hình ảnh"
+              />
+            </AdminFormField>
+            
+            {selectedFile && (
+              <div className="mb-4">
+                <div className="text-sm text-gray-600">
+                  <p>File: {selectedFile.name}</p>
+                  <p>Size: {formatFileSize(selectedFile.size)}</p>
+                  <p>Type: {selectedFile.type}</p>
                 </div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Alt text
-                  </label>
-                  <input
-                    type="text"
-                    value={altText}
-                    onChange={(e) => setAltText(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-tech-blue"
-                    placeholder="Mô tả hình ảnh"
-                  />
-                </div>
-                {selectedFile && (
-                  <div className="mb-4">
-                    <div className="text-sm text-gray-600">
-                      <p>File: {selectedFile.name}</p>
-                      <p>Size: {formatFileSize(selectedFile.size)}</p>
-                      <p>Type: {selectedFile.type}</p>
-                    </div>
-                  </div>
-                )}
-                <div className="flex justify-end space-x-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowUploadForm(false)}
-                    className="px-4 py-2 text-gray-600 hover:text-gray-800"
-                    disabled={uploading}
-                  >
-                    Hủy
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-tech-blue text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
-                    disabled={uploading || !selectedFile}
-                  >
-                    {uploading ? 'Đang tải lên...' : 'Tải lên'}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
-
-        {/* Delete Confirmation Modal */}
-        {deletingImage && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-xl w-96">
-              <h2 className="text-xl font-bold mb-4 text-red-600">Xác nhận xóa hình ảnh</h2>
-              <p className="text-gray-700 mb-6">
-                Bạn có chắc chắn muốn xóa hình ảnh <strong>"{deletingImage.originalName}"</strong>? 
-                Hành động này sẽ xóa hình ảnh khỏi Cloudinary và không thể hoàn tác.
-              </p>
-              <div className="flex justify-end space-x-2">
-                <button
-                  onClick={() => setDeletingImage(null)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
-                >
-                  Hủy
-                </button>
-                <button
-                  onClick={handleDeleteImage}
-                  className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
-                >
-                  Xóa hình ảnh
-                </button>
               </div>
+            )}
+            
+            <div className="flex justify-end space-x-2">
+              <AdminButton
+                type="button"
+                variant="secondary"
+                onClick={() => setShowUploadForm(false)}
+                disabled={uploading}
+              >
+                Hủy
+              </AdminButton>
+              <AdminButton
+                type="submit"
+                loading={uploading}
+                disabled={uploading || !selectedFile}
+              >
+                Tải lên
+              </AdminButton>
             </div>
-          </div>
-        )}
+          </form>
+        </AdminModal>
+
+        <AdminDeleteModal
+          isOpen={!!deletingImage}
+          title="Xác nhận xóa hình ảnh"
+          message="Bạn có chắc chắn muốn xóa hình ảnh"
+          itemName={deletingImage?.originalName}
+          warningMessage="Hành động này sẽ xóa hình ảnh khỏi Cloudinary và không thể hoàn tác."
+          onConfirm={handleDeleteImage}
+          onCancel={() => setDeletingImage(null)}
+        />
 
         {/* Images Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredImages.map((image) => (
+          {paginatedImages.map((image) => (
             <div key={image.id} className="bg-white rounded-lg shadow overflow-hidden">
               <div className="aspect-w-16 aspect-h-9">
                 <img
@@ -286,7 +278,18 @@ export default function ImagesPage() {
             {searchTerm ? 'Không tìm thấy hình ảnh nào' : 'Chưa có hình ảnh nào'}
           </div>
         )}
-      </div>
+
+        {filteredImages.length > 0 && (
+          <div className="mt-6">
+            <AdminPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              itemsPerPage={itemsPerPage}
+              totalItems={filteredImages.length}
+            />
+          </div>
+        )}
     </AdminLayout>
   )
 }

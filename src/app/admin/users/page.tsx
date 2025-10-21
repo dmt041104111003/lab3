@@ -2,6 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import AdminLayout from '@/components/AdminLayout'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
+import AdminLoadingState from '@/components/admin/AdminLoadingState'
+import AdminTable from '@/components/admin/AdminTable'
+import AdminDeleteModal from '@/components/admin/AdminDeleteModal'
+import AdminToast from '@/components/admin/AdminToast'
+import AdminPagination from '@/components/admin/AdminPagination'
 
 interface User {
   id: string
@@ -25,6 +31,8 @@ export default function AdminUsers() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [userToDelete, setUserToDelete] = useState<User | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 6
 
   useEffect(() => {
     fetchUsers()
@@ -104,25 +112,30 @@ export default function AdminUsers() {
     setUserToDelete(null)
   }
 
+  // Pagination logic
+  const totalPages = Math.ceil(users.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const paginatedUsers = users.slice(startIndex, endIndex)
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
   if (isLoading) {
     return (
       <AdminLayout>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-tech-blue"></div>
-            <p className="mt-4 text-gray-600">Đang tải danh sách người dùng...</p>
-          </div>
-        </div>
+        <AdminLoadingState message="Đang tải danh sách người dùng..." />
       </AdminLayout>
     )
   }
 
   return (
     <AdminLayout>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Quản lý người dùng</h1>
-        <p className="mt-2 text-gray-600">Danh sách tất cả người dùng trong hệ thống</p>
-      </div>
+      <AdminPageHeader 
+        title="Quản lý người dùng"
+        description="Danh sách tất cả người dùng trong hệ thống"
+      />
 
       {error && (
         <div className="mb-6 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded">
@@ -130,11 +143,11 @@ export default function AdminUsers() {
         </div>
       )}
 
-      {toast && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg z-50">
-          {toast}
-        </div>
-      )}
+      <AdminToast 
+        message={toast}
+        isVisible={!!toast}
+        onClose={() => setToast('')}
+      />
 
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200">
@@ -143,158 +156,112 @@ export default function AdminUsers() {
           </h2>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Người dùng
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Email
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Vai trò
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Trạng thái
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Bài viết
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Ngày tạo
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Thao tác
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {users.map((user) => (
-                <tr key={user.id}>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10">
-                        <div className="h-10 w-10 rounded-full bg-tech-blue flex items-center justify-center">
-                          <span className="text-sm font-medium text-white">
-                            {user.name.charAt(0).toUpperCase()}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                        <div className="text-sm text-gray-500">ID: {user.id.slice(-8)}</div>
-                      </div>
+        <AdminTable
+          columns={[
+            { key: 'user', label: 'Người dùng' },
+            { key: 'email', label: 'Email' },
+            { key: 'role', label: 'Vai trò' },
+            { key: 'status', label: 'Trạng thái' },
+            { key: 'posts', label: 'Bài viết' },
+            { key: 'createdAt', label: 'Ngày tạo' },
+            { key: 'actions', label: 'Thao tác' }
+          ]}
+          data={paginatedUsers}
+          renderRow={(user) => (
+            <tr key={user.id}>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0 h-10 w-10">
+                    <div className="h-10 w-10 rounded-full bg-tech-blue flex items-center justify-center">
+                      <span className="text-sm font-medium text-white">
+                        {user.name.charAt(0).toUpperCase()}
+                      </span>
                     </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <button
-                      onClick={() => copyEmail(user.email)}
-                      className="text-sm text-gray-900 hover:text-tech-blue cursor-pointer max-w-32 truncate"
-                      title={user.email}
-                    >
-                      {user.email}
-                    </button>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      user.role === 'ADMIN' 
-                        ? 'bg-purple-100 text-purple-800' 
-                        : 'bg-green-100 text-green-800'
-                    }`}>
-                      {user.role === 'ADMIN' ? 'Quản trị viên' : 'Người dùng'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {user.isBanned ? (
-                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
-                        {user.bannedUntil ? 'Bị cấm tạm thời' : 'Bị cấm vĩnh viễn'}
-                      </span>
-                    ) : (
-                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                        Hoạt động
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {user._count.posts} bài viết
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {formatDate(user.createdAt)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <a
-                      href={`/admin/users/edit/${user.id}`}
-                      className="text-tech-blue hover:text-tech-dark-blue mr-4"
-                    >
-                      Chỉnh sửa
-                    </a>
-                    <button 
-                      onClick={() => handleDeleteClick(user)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      Xóa
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                  </div>
+                  <div className="ml-4">
+                    <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                    <div className="text-sm text-gray-500">ID: {user.id.slice(-8)}</div>
+                  </div>
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <button
+                  onClick={() => copyEmail(user.email)}
+                  className="text-sm text-gray-900 hover:text-tech-blue cursor-pointer max-w-32 truncate"
+                  title={user.email}
+                >
+                  {user.email}
+                </button>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                  user.role === 'ADMIN' 
+                    ? 'bg-purple-100 text-purple-800' 
+                    : 'bg-green-100 text-green-800'
+                }`}>
+                  {user.role === 'ADMIN' ? 'Quản trị viên' : 'Người dùng'}
+                </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                {user.isBanned ? (
+                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                    {user.bannedUntil ? 'Bị cấm tạm thời' : 'Bị cấm vĩnh viễn'}
+                  </span>
+                ) : (
+                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                    Hoạt động
+                  </span>
+                )}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {user._count.posts} bài viết
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {formatDate(user.createdAt)}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <a
+                  href={`/admin/users/edit/${user.id}`}
+                  className="text-tech-blue hover:text-tech-dark-blue mr-4"
+                >
+                  Chỉnh sửa
+                </a>
+                <button 
+                  onClick={() => handleDeleteClick(user)}
+                  className="text-red-600 hover:text-red-900"
+                >
+                  Xóa
+                </button>
+              </td>
+            </tr>
+          )}
+          emptyMessage="Không có người dùng"
+          emptyDescription="Chưa có người dùng nào trong hệ thống."
+        />
 
-        {users.length === 0 && (
-          <div className="text-center py-12">
-            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-            </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">Không có người dùng</h3>
-            <p className="mt-1 text-sm text-gray-500">Chưa có người dùng nào trong hệ thống.</p>
+        {users.length > 0 && (
+          <div className="mt-6">
+            <AdminPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              itemsPerPage={itemsPerPage}
+              totalItems={users.length}
+            />
           </div>
         )}
       </div>
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteModal && userToDelete && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div className="mt-3">
-              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                </svg>
-              </div>
-              <div className="text-center">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Xác nhận xóa người dùng
-                </h3>
-                <p className="text-sm text-gray-500 mb-4">
-                  Bạn có chắc chắn muốn xóa người dùng <strong>{userToDelete.name}</strong> không?
-                </p>
-                <p className="text-xs text-red-600 mb-6">
-                  Hành động này không thể hoàn tác. Tất cả dữ liệu liên quan sẽ bị xóa vĩnh viễn.
-                </p>
-                <div className="flex justify-center space-x-3">
-                  <button
-                    onClick={handleDeleteCancel}
-                    disabled={isDeleting}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 disabled:opacity-50"
-                  >
-                    Hủy
-                  </button>
-                  <button
-                    onClick={handleDeleteConfirm}
-                    disabled={isDeleting}
-                    className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 disabled:opacity-50"
-                  >
-                    {isDeleting ? 'Đang xóa...' : 'Xóa'}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <AdminDeleteModal
+        isOpen={showDeleteModal}
+        title="Xác nhận xóa người dùng"
+        message="Bạn có chắc chắn muốn xóa người dùng"
+        itemName={userToDelete?.name}
+        warningMessage="Hành động này không thể hoàn tác. Tất cả dữ liệu liên quan sẽ bị xóa vĩnh viễn."
+        isDeleting={isDeleting}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+      />
     </AdminLayout>
   )
 }
