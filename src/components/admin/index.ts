@@ -1,6 +1,9 @@
 // Layout & Structure
 export { default as AdminLayout } from '../AdminLayout'
 export { default as AdminPageHeader } from './AdminPageHeader'
+
+// Filter & Search
+export { default as AdminFilter } from './AdminFilter'
 export { default as AdminCard } from './AdminCard'
 
 // Form Components

@@ -107,40 +107,32 @@ export default function AdminDashboard() {
         description="Tổng quan hệ thống quản trị"
       />
 
-      {/* Stats Summary */}
+      {/* Stats Summary - 1 dòng */}
       <div className="bg-white shadow rounded-lg p-6 mb-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <AdminStatsCard 
-            title="Tổng bài viết"
-            value={stats.totalPosts}
-            color="blue"
-          />
-          <AdminStatsCard 
-            title="Đã xuất bản"
-            value={stats.publishedPosts}
-            color="green"
-          />
-          <AdminStatsCard 
-            title="Bản nháp"
-            value={stats.draftPosts}
-            color="yellow"
-          />
-          <AdminStatsCard 
-            title="Tổng người dùng"
-            value={stats.totalUsers}
-            color="purple"
-          />
+        <div className="flex justify-center items-center space-x-12">
+          <div className="text-center">
+            <div className="text-3xl font-bold text-gray-800 mb-1">
+              {stats.totalPosts}
+            </div>
+            <div className="text-sm text-gray-600">Tổng bài viết</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-gray-800 mb-1">
+              {stats.totalUsers}
+            </div>
+            <div className="text-sm text-gray-600">Tổng người dùng</div>
+          </div>
         </div>
       </div>
 
-      {/* Recent Posts */}
+      {/* Recent Posts Table */}
       <div className="bg-white shadow rounded-lg mb-8">
         <div className="px-6 py-4 border-b border-gray-200">
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-medium text-gray-900">Bài viết gần đây</h2>
             <a
               href="/admin/posts"
-              className="text-tech-blue hover:text-tech-dark-blue text-sm font-medium"
+              className="text-gray-600 hover:text-gray-900 text-sm font-medium"
             >
               Xem tất cả
             </a>
@@ -183,14 +175,14 @@ export default function AdminDashboard() {
         />
       </div>
 
-      {/* Recent Users */}
+      {/* Recent Users Table */}
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200">
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-medium text-gray-900">Người dùng gần đây</h2>
             <a
               href="/admin/users"
-              className="text-tech-blue hover:text-tech-dark-blue text-sm font-medium"
+              className="text-gray-600 hover:text-gray-900 text-sm font-medium"
             >
               Xem tất cả
             </a>

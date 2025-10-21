@@ -12,6 +12,7 @@ import AdminDeleteModal from '@/components/admin/AdminDeleteModal'
 import AdminModal from '@/components/admin/AdminModal'
 import AdminPagination from '@/components/admin/AdminPagination'
 import AdminToast from '@/components/admin/AdminToast'
+import AdminFilter from '@/components/admin/AdminFilter'
 
 interface Image {
   id: string
@@ -37,6 +38,10 @@ export default function ImagesPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
   const [toast, setToast] = useState('')
+  
+  // Additional filter states
+  const [sortBy, setSortBy] = useState('')
+  const [filterBy, setFilterBy] = useState('')
 
   useEffect(() => {
     fetchImages()
@@ -117,19 +122,49 @@ export default function ImagesPage() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }
 
-  const filteredImages = images.filter(image =>
-    image.originalName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (image.alt && image.alt.toLowerCase().includes(searchTerm.toLowerCase()))
-  )
+  // Filter and search logic
+  const filteredImages = images.filter(image => {
+    const matchesSearch = image.originalName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (image.alt && image.alt.toLowerCase().includes(searchTerm.toLowerCase()))
+    
+    const matchesFilter = filterBy === '' || 
+                         (filterBy === 'withAlt' && image.alt) ||
+                         (filterBy === 'withoutAlt' && !image.alt)
+    
+    return matchesSearch && matchesFilter
+  })
+
+  // Sort logic
+  const sortedImages = [...filteredImages].sort((a, b) => {
+    switch (sortBy) {
+      case 'name':
+        return a.originalName.localeCompare(b.originalName)
+      case 'size':
+        return b.size - a.size
+      case 'createdAt':
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      case 'alt':
+        return (a.alt || '').localeCompare(b.alt || '')
+      default:
+        return 0
+    }
+  })
 
   // Pagination logic
-  const totalPages = Math.ceil(filteredImages.length / itemsPerPage)
+  const totalPages = Math.ceil(sortedImages.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
-  const paginatedImages = filteredImages.slice(startIndex, endIndex)
+  const paginatedImages = sortedImages.slice(startIndex, endIndex)
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
+  }
+
+  const handleReset = () => {
+    setSearchTerm('')
+    setSortBy('')
+    setFilterBy('')
+    setCurrentPage(1)
   }
 
   const copyImageUrl = async (url: string) => {
@@ -161,16 +196,27 @@ export default function ImagesPage() {
         }}
       />
 
-      <AdminCard>
-        <AdminFormField label="Tìm kiếm hình ảnh">
-          <AdminInput
-            type="text"
-            placeholder="Tìm kiếm hình ảnh..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </AdminFormField>
-      </AdminCard>
+      <AdminFilter
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        searchPlaceholder="Tìm kiếm theo tên file hoặc alt text..."
+        sortBy={sortBy}
+        onSortChange={setSortBy}
+        sortOptions={[
+          { value: 'name', label: 'Tên file A-Z' },
+          { value: 'size', label: 'Kích thước lớn nhất' },
+          { value: 'createdAt', label: 'Ngày tải lên mới nhất' },
+          { value: 'alt', label: 'Alt text A-Z' }
+        ]}
+        filterBy={filterBy}
+        onFilterChange={setFilterBy}
+        filterOptions={[
+          { value: 'withAlt', label: 'Có alt text' },
+          { value: 'withoutAlt', label: 'Không có alt text' }
+        ]}
+        onReset={handleReset}
+        className="mb-6"
+      />
 
       <AdminToast 
         message={toast}

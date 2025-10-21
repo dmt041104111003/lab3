@@ -12,6 +12,7 @@ import AdminDeleteModal from '@/components/admin/AdminDeleteModal'
 import AdminTable from '@/components/admin/AdminTable'
 import AdminModal from '@/components/admin/AdminModal'
 import AdminPagination from '@/components/admin/AdminPagination'
+import AdminFilter from '@/components/admin/AdminFilter'
 
 interface Tag {
   id: string
@@ -32,6 +33,10 @@ export default function TagsPage() {
   const [deletingTag, setDeletingTag] = useState<Tag | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
+  
+  // Additional filter states
+  const [sortBy, setSortBy] = useState('')
+  const [filterBy, setFilterBy] = useState('')
 
   useEffect(() => {
     fetchTags()
@@ -110,18 +115,46 @@ export default function TagsPage() {
     }
   }
 
-  const filteredTags = tags.filter(tag =>
-    tag.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  // Filter and search logic
+  const filteredTags = tags.filter(tag => {
+    const matchesSearch = tag.name.toLowerCase().includes(searchTerm.toLowerCase())
+    
+    const matchesFilter = filterBy === '' || 
+                         (filterBy === 'recent' && new Date(tag.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) ||
+                         (filterBy === 'old' && new Date(tag.createdAt) <= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
+    
+    return matchesSearch && matchesFilter
+  })
+
+  // Sort logic
+  const sortedTags = [...filteredTags].sort((a, b) => {
+    switch (sortBy) {
+      case 'name':
+        return a.name.localeCompare(b.name)
+      case 'createdAt':
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      case 'color':
+        return a.color.localeCompare(b.color)
+      default:
+        return 0
+    }
+  })
 
   // Pagination logic
-  const totalPages = Math.ceil(filteredTags.length / itemsPerPage)
+  const totalPages = Math.ceil(sortedTags.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
-  const paginatedTags = filteredTags.slice(startIndex, endIndex)
+  const paginatedTags = sortedTags.slice(startIndex, endIndex)
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
+  }
+
+  const handleReset = () => {
+    setSearchTerm('')
+    setSortBy('')
+    setFilterBy('')
+    setCurrentPage(1)
   }
 
   if (loading) {
@@ -142,16 +175,26 @@ export default function TagsPage() {
         }}
       />
 
-      <AdminCard>
-        <AdminFormField label="Tìm kiếm thẻ">
-          <AdminInput
-            type="text"
-            placeholder="Tìm kiếm thẻ..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </AdminFormField>
-      </AdminCard>
+      <AdminFilter
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        searchPlaceholder="Tìm kiếm theo tên thẻ..."
+        sortBy={sortBy}
+        onSortChange={setSortBy}
+        sortOptions={[
+          { value: 'name', label: 'Tên A-Z' },
+          { value: 'createdAt', label: 'Ngày tạo mới nhất' },
+          { value: 'color', label: 'Màu sắc' }
+        ]}
+        filterBy={filterBy}
+        onFilterChange={setFilterBy}
+        filterOptions={[
+          { value: 'recent', label: 'Thẻ mới (7 ngày qua)' },
+          { value: 'old', label: 'Thẻ cũ (trước 7 ngày)' }
+        ]}
+        onReset={handleReset}
+        className="mb-6"
+      />
 
         <AdminModal
           isOpen={showCreateForm}

@@ -3,9 +3,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { getSession, clearSession, isAdmin, type User } from '@/lib/session'
 
 export default function Header() {
+  const pathname = usePathname()
   const [user, setUser] = useState<User | null>(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -24,6 +26,29 @@ export default function Header() {
     setUser(null)
     setIsLoggedIn(false)
     window.location.href = '/'
+  }
+
+  const isActive = (path: string) => {
+    if (path === '/') {
+      return pathname === '/'
+    }
+    return pathname.startsWith(path)
+  }
+
+  const getNavLinkClasses = (path: string) => {
+    const baseClasses = "transition-colors"
+    const activeClasses = "text-tech-blue font-semibold"
+    const inactiveClasses = "text-gray-700 hover:text-tech-blue"
+    
+    return `${baseClasses} ${isActive(path) ? activeClasses : inactiveClasses}`
+  }
+
+  const getMobileNavLinkClasses = (path: string) => {
+    const baseClasses = "block px-3 py-2 text-base font-medium rounded-md transition-colors"
+    const activeClasses = "text-tech-blue bg-tech-blue/10 font-semibold"
+    const inactiveClasses = "text-gray-700 hover:text-tech-blue hover:bg-gray-100"
+    
+    return `${baseClasses} ${isActive(path) ? activeClasses : inactiveClasses}`
   }
 
   return (
@@ -57,19 +82,19 @@ export default function Header() {
 
           {/* Navigation - Desktop */}
           <nav className="hidden md:flex space-x-8">
-            <Link href="/tin-tuc" className="text-gray-700 hover:text-tech-blue transition-colors">
+            <Link href="/tin-tuc" className={getNavLinkClasses('/tin-tuc')}>
               Tin tức
             </Link>
-            <Link href="/ai-chuyen-doi-so" className="text-gray-700 hover:text-tech-blue transition-colors">
+            <Link href="/ai-chuyen-doi-so" className={getNavLinkClasses('/ai-chuyen-doi-so')}>
               AI – Chuyển đổi số
             </Link>
-            <Link href="/doi-moi-sang-tao" className="text-gray-700 hover:text-tech-blue transition-colors">
+            <Link href="/doi-moi-sang-tao" className={getNavLinkClasses('/doi-moi-sang-tao')}>
               Đổi mới sáng tạo
             </Link>
-            <Link href="/san-pham-review" className="text-gray-700 hover:text-tech-blue transition-colors">
+            <Link href="/san-pham-review" className={getNavLinkClasses('/san-pham-review')}>
               Sản phẩm & Review
             </Link>
-            <Link href="/xu-huong-tuong-lai" className="text-gray-700 hover:text-tech-blue transition-colors">
+            <Link href="/xu-huong-tuong-lai" className={getNavLinkClasses('/xu-huong-tuong-lai')}>
               Xu hướng tương lai
             </Link>
           </nav>
@@ -119,35 +144,35 @@ export default function Header() {
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
               <Link
                 href="/tin-tuc"
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-tech-blue hover:bg-gray-100 rounded-md"
+                className={getMobileNavLinkClasses('/tin-tuc')}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Tin tức
               </Link>
               <Link
                 href="/ai-chuyen-doi-so"
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-tech-blue hover:bg-gray-100 rounded-md"
+                className={getMobileNavLinkClasses('/ai-chuyen-doi-so')}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 AI – Chuyển đổi số
               </Link>
               <Link
                 href="/doi-moi-sang-tao"
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-tech-blue hover:bg-gray-100 rounded-md"
+                className={getMobileNavLinkClasses('/doi-moi-sang-tao')}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Đổi mới sáng tạo
               </Link>
               <Link
                 href="/san-pham-review"
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-tech-blue hover:bg-gray-100 rounded-md"
+                className={getMobileNavLinkClasses('/san-pham-review')}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Sản phẩm & Review
               </Link>
               <Link
                 href="/xu-huong-tuong-lai"
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-tech-blue hover:bg-gray-100 rounded-md"
+                className={getMobileNavLinkClasses('/xu-huong-tuong-lai')}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Xu hướng tương lai

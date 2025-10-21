@@ -8,6 +8,7 @@ import AdminTable from '@/components/admin/AdminTable'
 import AdminDeleteModal from '@/components/admin/AdminDeleteModal'
 import AdminToast from '@/components/admin/AdminToast'
 import AdminPagination from '@/components/admin/AdminPagination'
+import AdminFilter from '@/components/admin/AdminFilter'
 import {  getCategoryById, getSubcategoryById } from '@/lib/categories'
 
 interface Post {
@@ -35,6 +36,11 @@ export default function AdminPosts() {
   const [toast, setToast] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
+  
+  // Filter states
+  const [searchTerm, setSearchTerm] = useState('')
+  const [sortBy, setSortBy] = useState('')
+  const [filterBy, setFilterBy] = useState('')
 
   useEffect(() => {
     fetchPosts()
@@ -89,14 +95,47 @@ export default function AdminPosts() {
     setPostToDelete(null)
   }
 
+  // Filter and search logic
+  const filteredPosts = posts.filter(post => {
+    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         post.author.name.toLowerCase().includes(searchTerm.toLowerCase())
+    
+    const matchesFilter = filterBy === '' || post.category === filterBy
+    
+    return matchesSearch && matchesFilter
+  })
+
+  // Sort logic
+  const sortedPosts = [...filteredPosts].sort((a, b) => {
+    switch (sortBy) {
+      case 'title':
+        return a.title.localeCompare(b.title)
+      case 'author':
+        return a.author.name.localeCompare(b.author.name)
+      case 'createdAt':
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      case 'published':
+        return Number(b.published) - Number(a.published)
+      default:
+        return 0
+    }
+  })
+
   // Pagination logic
-  const totalPages = Math.ceil(posts.length / itemsPerPage)
+  const totalPages = Math.ceil(sortedPosts.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
-  const paginatedPosts = posts.slice(startIndex, endIndex)
+  const paginatedPosts = sortedPosts.slice(startIndex, endIndex)
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
+  }
+
+  const handleReset = () => {
+    setSearchTerm('')
+    setSortBy('')
+    setFilterBy('')
+    setCurrentPage(1)
   }
 
   const togglePublish = async (postId: string, published: boolean) => {
@@ -139,6 +178,32 @@ export default function AdminPosts() {
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-medium text-gray-900">Danh sách bài viết</h2>
+        </div>
+
+        <div className="p-6">
+          <AdminFilter
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            searchPlaceholder="Tìm kiếm theo tiêu đề hoặc tác giả..."
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+            sortOptions={[
+              { value: 'title', label: 'Tiêu đề A-Z' },
+              { value: 'author', label: 'Tác giả A-Z' },
+              { value: 'createdAt', label: 'Ngày tạo mới nhất' },
+              { value: 'published', label: 'Trạng thái xuất bản' }
+            ]}
+            filterBy={filterBy}
+            onFilterChange={setFilterBy}
+            filterOptions={[
+              { value: 'ai-chuyen-doi-so', label: 'AI – Chuyển đổi số' },
+              { value: 'doi-moi-sang-tao', label: 'Đổi mới sáng tạo' },
+              { value: 'san-pham-review', label: 'Sản phẩm & Review' },
+              { value: 'xu-huong-tuong-lai', label: 'Xu hướng tương lai' }
+            ]}
+            onReset={handleReset}
+            className="mb-6"
+          />
         </div>
 
         <AdminTable

@@ -8,6 +8,7 @@ import AdminTable from '@/components/admin/AdminTable'
 import AdminDeleteModal from '@/components/admin/AdminDeleteModal'
 import AdminToast from '@/components/admin/AdminToast'
 import AdminPagination from '@/components/admin/AdminPagination'
+import AdminFilter from '@/components/admin/AdminFilter'
 
 interface User {
   id: string
@@ -33,6 +34,11 @@ export default function AdminUsers() {
   const [isDeleting, setIsDeleting] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
+  
+  // Filter states
+  const [searchTerm, setSearchTerm] = useState('')
+  const [sortBy, setSortBy] = useState('')
+  const [filterBy, setFilterBy] = useState('')
 
   useEffect(() => {
     fetchUsers()
@@ -112,14 +118,47 @@ export default function AdminUsers() {
     setUserToDelete(null)
   }
 
+  // Filter and search logic
+  const filteredUsers = users.filter(user => {
+    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    
+    const matchesFilter = filterBy === '' || user.role === filterBy
+    
+    return matchesSearch && matchesFilter
+  })
+
+  // Sort logic
+  const sortedUsers = [...filteredUsers].sort((a, b) => {
+    switch (sortBy) {
+      case 'name':
+        return a.name.localeCompare(b.name)
+      case 'email':
+        return a.email.localeCompare(b.email)
+      case 'createdAt':
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      case 'role':
+        return a.role.localeCompare(b.role)
+      default:
+        return 0
+    }
+  })
+
   // Pagination logic
-  const totalPages = Math.ceil(users.length / itemsPerPage)
+  const totalPages = Math.ceil(sortedUsers.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
-  const paginatedUsers = users.slice(startIndex, endIndex)
+  const paginatedUsers = sortedUsers.slice(startIndex, endIndex)
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
+  }
+
+  const handleReset = () => {
+    setSearchTerm('')
+    setSortBy('')
+    setFilterBy('')
+    setCurrentPage(1)
   }
 
   if (isLoading) {
@@ -152,8 +191,32 @@ export default function AdminUsers() {
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-medium text-gray-900">
-            Danh sách người dùng ({users.length})
+            Danh sách người dùng ({sortedUsers.length})
           </h2>
+        </div>
+
+        <div className="p-6">
+          <AdminFilter
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            searchPlaceholder="Tìm kiếm theo tên hoặc email..."
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+            sortOptions={[
+              { value: 'name', label: 'Tên A-Z' },
+              { value: 'email', label: 'Email A-Z' },
+              { value: 'createdAt', label: 'Ngày tạo mới nhất' },
+              { value: 'role', label: 'Vai trò' }
+            ]}
+            filterBy={filterBy}
+            onFilterChange={setFilterBy}
+            filterOptions={[
+              { value: 'ADMIN', label: 'Quản trị viên' },
+              { value: 'USER', label: 'Người dùng' }
+            ]}
+            onReset={handleReset}
+            className="mb-6"
+          />
         </div>
 
         <AdminTable
