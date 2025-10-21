@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import AdminLayout from '@/components/AdminLayout'
 import AdminPageHeader from '@/components/admin/AdminPageHeader'
-import AdminCard from '@/components/admin/AdminCard'
 import AdminFormField from '@/components/admin/AdminFormField'
 import AdminInput from '@/components/admin/AdminInput'
 import AdminButton from '@/components/admin/AdminButton'
