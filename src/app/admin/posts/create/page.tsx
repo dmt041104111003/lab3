@@ -10,11 +10,6 @@ interface Tag {
   color: string
 }
 
-interface Topic {
-  id: string
-  name: string
-  description: string | null
-}
 
 interface Image {
   id: string
@@ -30,7 +25,6 @@ export default function CreatePost() {
     content: '',
     excerpt: '',
     selectedTags: [] as string[],
-    selectedTopics: [] as string[],
     selectedImage: '',
     imageType: 'existing' as 'existing' | 'upload' | 'url',
     newImageFile: null as File | null,
@@ -39,7 +33,6 @@ export default function CreatePost() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [tags, setTags] = useState<Tag[]>([])
-  const [topics, setTopics] = useState<Topic[]>([])
   const [images, setImages] = useState<Image[]>([])
   const [loadingData, setLoadingData] = useState(true)
 
@@ -49,20 +42,17 @@ export default function CreatePost() {
 
   const fetchData = async () => {
     try {
-      const [tagsRes, topicsRes, imagesRes] = await Promise.all([
+      const [tagsRes, imagesRes] = await Promise.all([
         fetch('/api/tags'),
-        fetch('/api/topics'),
         fetch('/api/images')
       ])
 
-      const [tagsData, topicsData, imagesData] = await Promise.all([
+      const [tagsData, imagesData] = await Promise.all([
         tagsRes.json(),
-        topicsRes.json(),
         imagesRes.json()
       ])
 
       setTags(tagsData)
-      setTopics(topicsData)
       setImages(imagesData)
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -87,7 +77,6 @@ export default function CreatePost() {
           content: formData.content,
           excerpt: formData.excerpt,
           selectedTags: formData.selectedTags,
-          selectedTopics: formData.selectedTopics,
           selectedImage: formData.selectedImage,
           imageType: formData.imageType,
           imageUrl: formData.imageUrl,
@@ -118,19 +107,6 @@ export default function CreatePost() {
   }
 
 
-  const handleTopicChange = (topicId: string, checked: boolean) => {
-    if (checked) {
-      setFormData({
-        ...formData,
-        selectedTopics: [...formData.selectedTopics, topicId]
-      })
-    } else {
-      setFormData({
-        ...formData,
-        selectedTopics: formData.selectedTopics.filter(id => id !== topicId)
-      })
-    }
-  }
 
   const handleImageTypeChange = (type: 'existing' | 'upload' | 'url') => {
     setFormData({
@@ -247,34 +223,6 @@ export default function CreatePost() {
             )}
           </div>
 
-          {/* Topics Selection */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Chủ đề (Topics)
-            </label>
-            {loadingData ? (
-              <div className="text-sm text-gray-500">Đang tải chủ đề...</div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {topics.map((topic) => (
-                  <label key={topic.id} className="flex items-center space-x-2 p-2 border rounded-md hover:bg-gray-50">
-                    <input
-                      type="checkbox"
-                      checked={formData.selectedTopics.includes(topic.id)}
-                      onChange={(e) => handleTopicChange(topic.id, e.target.checked)}
-                      className="h-4 w-4 text-tech-blue focus:ring-tech-blue border-gray-300 rounded"
-                    />
-                    <div>
-                      <span className="text-sm font-medium">{topic.name}</span>
-                      {topic.description && (
-                        <p className="text-xs text-gray-500">{topic.description}</p>
-                      )}
-                    </div>
-                  </label>
-                ))}
-              </div>
-            )}
-          </div>
 
           {/* Featured Image Selection */}
           <div className="mb-6">
