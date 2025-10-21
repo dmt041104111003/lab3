@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getSession, isAdmin, clearSession } from '@/lib/session'
+import LoadingState from '@/components/LoadingState'
 
 interface AdminLayoutProps {
   children: React.ReactNode
@@ -41,10 +42,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-tech-blue"></div>
-          <p className="mt-4 text-gray-600">Đang kiểm tra quyền truy cập...</p>
-        </div>
+        <LoadingState message="Đang kiểm tra quyền truy cập..." />
       </div>
     )
   }
