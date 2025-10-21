@@ -74,3 +74,31 @@ export async function PUT(request: NextRequest) {
     )
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+
+    if (!id) {
+      return NextResponse.json(
+        { message: 'ID người dùng không được để trống' },
+        { status: 400 }
+      )
+    }
+
+    await prisma.user.delete({
+      where: { id }
+    })
+
+    return NextResponse.json({
+      message: 'Xóa người dùng thành công'
+    })
+  } catch (error) {
+    console.error('Delete user error:', error)
+    return NextResponse.json(
+      { message: 'Có lỗi xảy ra khi xóa người dùng' },
+      { status: 500 }
+    )
+  }
+}

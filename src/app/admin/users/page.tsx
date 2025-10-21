@@ -22,6 +22,9 @@ export default function AdminUsers() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [toast, setToast] = useState('')
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [userToDelete, setUserToDelete] = useState<User | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     fetchUsers()
@@ -63,6 +66,42 @@ export default function AdminUsers() {
       setToast('Không thể copy email')
       setTimeout(() => setToast(''), 2000)
     }
+  }
+
+  const handleDeleteClick = (user: User) => {
+    setUserToDelete(user)
+    setShowDeleteModal(true)
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!userToDelete) return
+
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/users?id=${userToDelete.id}`, {
+        method: 'DELETE',
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setToast('Xóa người dùng thành công')
+        setUsers(users.filter(user => user.id !== userToDelete.id))
+        setShowDeleteModal(false)
+        setUserToDelete(null)
+      } else {
+        setToast(data.message || 'Xóa thất bại')
+      }
+    } catch (error) {
+      setToast('Có lỗi xảy ra khi xóa người dùng')
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false)
+    setUserToDelete(null)
   }
 
   if (isLoading) {
@@ -191,7 +230,10 @@ export default function AdminUsers() {
                     >
                       Chỉnh sửa
                     </a>
-                    <button className="text-red-600 hover:text-red-900">
+                    <button 
+                      onClick={() => handleDeleteClick(user)}
+                      className="text-red-600 hover:text-red-900"
+                    >
                       Xóa
                     </button>
                   </td>
@@ -211,6 +253,48 @@ export default function AdminUsers() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && userToDelete && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div className="mt-3">
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+              </div>
+              <div className="text-center">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  Xác nhận xóa người dùng
+                </h3>
+                <p className="text-sm text-gray-500 mb-4">
+                  Bạn có chắc chắn muốn xóa người dùng <strong>{userToDelete.name}</strong> không?
+                </p>
+                <p className="text-xs text-red-600 mb-6">
+                  Hành động này không thể hoàn tác. Tất cả dữ liệu liên quan sẽ bị xóa vĩnh viễn.
+                </p>
+                <div className="flex justify-center space-x-3">
+                  <button
+                    onClick={handleDeleteCancel}
+                    disabled={isDeleting}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 disabled:opacity-50"
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    onClick={handleDeleteConfirm}
+                    disabled={isDeleting}
+                    className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 disabled:opacity-50"
+                  >
+                    {isDeleting ? 'Đang xóa...' : 'Xóa'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </AdminLayout>
   )
 }
