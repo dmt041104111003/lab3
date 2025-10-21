@@ -1,14 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import { getSession, isAdmin } from '@/lib/session'
+import { useState } from 'react'
+import AdminLayout from '@/components/AdminLayout'
 
 export default function AdminDashboard() {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(true)
   const [posts, setPosts] = useState([
     {
       id: '1',
@@ -33,47 +28,18 @@ export default function AdminDashboard() {
     excerpt: ''
   })
 
-  useEffect(() => {
-    const session = getSession()
-    if (!session) {
-      router.push('/auth/signin')
-      return
-    }
-
-    if (!isAdmin()) {
-      router.push('/')
-      return
-    }
-
-    setIsLoading(false)
-  }, [router])
-
   const handleCreatePost = (e: React.FormEvent) => {
     e.preventDefault()
     setShowCreateForm(false)
     setNewPost({ title: '', content: '', excerpt: '' })
   }
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-tech-blue"></div>
-          <p className="mt-4 text-gray-600">Đang kiểm tra quyền truy cập...</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Quản trị nội dung</h1>
-          <p className="mt-2 text-gray-600">Quản lý bài viết và nội dung trang web</p>
-        </div>
+    <AdminLayout>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <p className="mt-2 text-gray-600">Tổng quan hệ thống quản trị</p>
+      </div>
 
         <div className="bg-white shadow rounded-lg">
           <div className="px-6 py-4 border-b border-gray-200">
@@ -210,9 +176,6 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
-      </main>
-
-      <Footer />
-    </div>
+    </AdminLayout>
   )
 }

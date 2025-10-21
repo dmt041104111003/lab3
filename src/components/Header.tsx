@@ -70,14 +70,7 @@ export default function Header() {
                 <span className="text-gray-700 font-medium">
                   Xin chào, {user?.name}
                 </span>
-                {isAdmin() && (
-                  <Link 
-                    href="/admin" 
-                    className="text-gray-700 hover:text-tech-blue transition-colors font-medium"
-                  >
-                    Admin
-                  </Link>
-                )}
+  
                 <button
                   onClick={handleSignOut}
                   className="text-gray-700 hover:text-tech-blue transition-colors font-medium"
