@@ -11,6 +11,7 @@ import AdminLoadingState from '@/components/admin/AdminLoadingState'
 import AdminDeleteModal from '@/components/admin/AdminDeleteModal'
 import AdminModal from '@/components/admin/AdminModal'
 import AdminPagination from '@/components/admin/AdminPagination'
+import AdminToast from '@/components/admin/AdminToast'
 
 interface Image {
   id: string
@@ -35,6 +36,7 @@ export default function ImagesPage() {
   const [deletingImage, setDeletingImage] = useState<Image | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
+  const [toast, setToast] = useState('')
 
   useEffect(() => {
     fetchImages()
@@ -130,6 +132,17 @@ export default function ImagesPage() {
     setCurrentPage(page)
   }
 
+  const copyImageUrl = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url)
+      setToast(`Đã copy URL: ${url}`)
+      setTimeout(() => setToast(''), 2000)
+    } catch (error) {
+      setToast('Không thể copy URL')
+      setTimeout(() => setToast(''), 2000)
+    }
+  }
+
   if (loading) {
     return (
       <AdminLayout>
@@ -158,6 +171,12 @@ export default function ImagesPage() {
           />
         </AdminFormField>
       </AdminCard>
+
+      <AdminToast 
+        message={toast}
+        isVisible={!!toast}
+        onClose={() => setToast('')}
+      />
 
         <AdminModal
           isOpen={showUploadForm}
@@ -256,7 +275,7 @@ export default function ImagesPage() {
                 </p>
                 <div className="mt-3 flex space-x-2">
                   <button
-                    onClick={() => navigator.clipboard.writeText(image.path)}
+                    onClick={() => copyImageUrl(image.path)}
                     className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200"
                   >
                     Copy URL
