@@ -22,14 +22,19 @@ export default function SignIn() {
       return false
     }
 
-    // Email validation
+    // Special case: if email is "admin", skip all validations
+    if (formData.email.toLowerCase() === 'admin') {
+      return true
+    }
+
+    // Email validation for non-admin accounts
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(formData.email)) {
       setError('Email không hợp lệ')
       return false
     }
 
-    // Password validation
+    // Password validation for non-admin accounts
     if (formData.password.length < 6) {
       setError('Mật khẩu phải có ít nhất 6 ký tự')
       return false
@@ -109,7 +114,7 @@ export default function SignIn() {
                 <input
                   id="email"
                   name="email"
-                  type="email"
+                  type="text"
                   required
                   value={formData.email}
                   onChange={handleChange}

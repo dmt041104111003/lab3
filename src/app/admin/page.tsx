@@ -1,10 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { getSession, isAdmin } from '@/lib/session'
 
 export default function AdminDashboard() {
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(true)
   const [posts, setPosts] = useState([
     {
       id: '1',
@@ -29,10 +33,36 @@ export default function AdminDashboard() {
     excerpt: ''
   })
 
+  useEffect(() => {
+    const session = getSession()
+    if (!session) {
+      router.push('/auth/signin')
+      return
+    }
+
+    if (!isAdmin()) {
+      router.push('/')
+      return
+    }
+
+    setIsLoading(false)
+  }, [router])
+
   const handleCreatePost = (e: React.FormEvent) => {
     e.preventDefault()
     setShowCreateForm(false)
     setNewPost({ title: '', content: '', excerpt: '' })
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-tech-blue"></div>
+          <p className="mt-4 text-gray-600">Đang kiểm tra quyền truy cập...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
