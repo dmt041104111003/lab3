@@ -8,6 +8,8 @@ interface User {
   name: string
   email: string
   role: string
+  isBanned: boolean
+  bannedUntil: string | null
   createdAt: string
   updatedAt: string
   _count: {
@@ -19,6 +21,7 @@ export default function AdminUsers() {
   const [users, setUsers] = useState<User[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
+  const [toast, setToast] = useState('')
 
   useEffect(() => {
     fetchUsers()
@@ -51,6 +54,17 @@ export default function AdminUsers() {
     })
   }
 
+  const copyEmail = async (email: string) => {
+    try {
+      await navigator.clipboard.writeText(email)
+      setToast(`Đã copy: ${email}`)
+      setTimeout(() => setToast(''), 2000)
+    } catch (error) {
+      setToast('Không thể copy email')
+      setTimeout(() => setToast(''), 2000)
+    }
+  }
+
   if (isLoading) {
     return (
       <AdminLayout>
@@ -77,6 +91,12 @@ export default function AdminUsers() {
         </div>
       )}
 
+      {toast && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg z-50">
+          {toast}
+        </div>
+      )}
+
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-medium text-gray-900">
@@ -96,6 +116,9 @@ export default function AdminUsers() {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Vai trò
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Trạng thái
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Bài viết
@@ -127,7 +150,13 @@ export default function AdminUsers() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{user.email}</div>
+                    <button
+                      onClick={() => copyEmail(user.email)}
+                      className="text-sm text-gray-900 hover:text-tech-blue cursor-pointer max-w-32 truncate"
+                      title={user.email}
+                    >
+                      {user.email}
+                    </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -138,6 +167,17 @@ export default function AdminUsers() {
                       {user.role === 'ADMIN' ? 'Quản trị viên' : 'Người dùng'}
                     </span>
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {user.isBanned ? (
+                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                        {user.bannedUntil ? 'Bị cấm tạm thời' : 'Bị cấm vĩnh viễn'}
+                      </span>
+                    ) : (
+                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                        Hoạt động
+                      </span>
+                    )}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {user._count.posts} bài viết
                   </td>
@@ -145,9 +185,12 @@ export default function AdminUsers() {
                     {formatDate(user.createdAt)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button className="text-tech-blue hover:text-tech-dark-blue mr-4">
+                    <a
+                      href={`/admin/users/edit/${user.id}`}
+                      className="text-tech-blue hover:text-tech-dark-blue mr-4"
+                    >
                       Chỉnh sửa
-                    </button>
+                    </a>
                     <button className="text-red-600 hover:text-red-900">
                       Xóa
                     </button>
