@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import AdminLayout from '@/components/AdminLayout'
+import { CATEGORIES, getCategoryById, getSubcategoryById } from '@/lib/categories'
 
 interface Post {
   id: string
@@ -11,6 +12,8 @@ interface Post {
   slug: string
   published: boolean
   createdAt: string
+  category?: string
+  subcategory?: string
   author: {
     name: string
     email: string
@@ -138,6 +141,9 @@ export default function AdminPosts() {
                     Trạng thái
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Chuyên mục
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Tác giả
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -165,6 +171,20 @@ export default function AdminPosts() {
                       }`}>
                         {post.published ? 'Đã xuất bản' : 'Bản nháp'}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {post.category && post.subcategory ? (
+                        <div>
+                          <div className="font-medium text-gray-900">
+                            {getCategoryById(post.category)?.name || post.category}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {getSubcategoryById(post.subcategory)?.name || post.subcategory}
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="text-gray-400">Chưa phân loại</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {post.author.name}

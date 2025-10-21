@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import AdminLayout from '@/components/AdminLayout'
+import { CATEGORIES, type Category, type Subcategory } from '@/lib/categories'
 
 interface Tag {
   id: string
@@ -28,7 +29,9 @@ export default function CreatePost() {
     selectedImage: '',
     imageType: 'existing' as 'existing' | 'upload' | 'url',
     newImageFile: null as File | null,
-    imageUrl: ''
+    imageUrl: '',
+    category: '',
+    subcategory: ''
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -80,6 +83,8 @@ export default function CreatePost() {
           selectedImage: formData.selectedImage,
           imageType: formData.imageType,
           imageUrl: formData.imageUrl,
+          category: formData.category,
+          subcategory: formData.subcategory,
           authorId: '1' // In a real app, get from session
         }),
       })
@@ -193,6 +198,56 @@ export default function CreatePost() {
               required
             />
           </div>
+
+          {/* Category Selection */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Chuyên mục <span className="text-red-500">*</span>
+            </label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={(e) => {
+                setFormData({
+                  ...formData,
+                  category: e.target.value,
+                  subcategory: '' // Reset subcategory when category changes
+                })
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+              required
+            >
+              <option value="">Chọn chuyên mục</option>
+              {CATEGORIES.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Subcategory Selection */}
+          {formData.category && (
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Tiểu mục <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="subcategory"
+                value={formData.subcategory}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+                required
+              >
+                <option value="">Chọn tiểu mục</option>
+                {CATEGORIES.find(cat => cat.id === formData.category)?.subcategories.map((subcategory) => (
+                  <option key={subcategory.id} value={subcategory.id}>
+                    {subcategory.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {/* Tags Selection */}
           <div className="mb-6">

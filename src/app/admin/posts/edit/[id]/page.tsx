@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import AdminLayout from '@/components/AdminLayout'
+import { CATEGORIES, type Category, type Subcategory } from '@/lib/categories'
 
 interface Post {
   id: string
@@ -18,6 +19,8 @@ interface Post {
   }
   tags?: Array<{ id: string; name: string; color: string }>
   featuredImage?: { id: string; originalName: string; path: string; alt: string | null }
+  category?: string
+  subcategory?: string
 }
 
 interface Tag {
@@ -54,7 +57,9 @@ export default function EditPost() {
     selectedImage: '',
     imageType: 'existing' as 'existing' | 'upload' | 'url',
     newImageFile: null as File | null,
-    imageUrl: ''
+    imageUrl: '',
+    category: '',
+    subcategory: ''
   })
   const [tags, setTags] = useState<Tag[]>([])
   const [images, setImages] = useState<Image[]>([])
@@ -102,7 +107,9 @@ export default function EditPost() {
           excerpt: postData.excerpt,
           published: postData.published,
           selectedTags: postData.tags?.map(tag => tag.id) || [],
-          selectedImage: postData.featuredImage?.id || ''
+          selectedImage: postData.featuredImage?.id || '',
+          category: postData.category || '',
+          subcategory: postData.subcategory || ''
         })
       } else {
         setError('Không tìm thấy bài viết')
@@ -135,7 +142,9 @@ export default function EditPost() {
           selectedTags: formData.selectedTags,
           selectedImage: formData.selectedImage,
           imageType: formData.imageType,
-          imageUrl: formData.imageUrl
+          imageUrl: formData.imageUrl,
+          category: formData.category,
+          subcategory: formData.subcategory
         }),
       })
 
@@ -359,6 +368,56 @@ export default function EditPost() {
               />
             </div>
           </div>
+
+          {/* Category Selection */}
+          <div className="mt-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Chuyên mục <span className="text-red-500">*</span>
+            </label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={(e) => {
+                setFormData({
+                  ...formData,
+                  category: e.target.value,
+                  subcategory: '' // Reset subcategory when category changes
+                })
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+              required
+            >
+              <option value="">Chọn chuyên mục</option>
+              {CATEGORIES.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Subcategory Selection */}
+          {formData.category && (
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Tiểu mục <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="subcategory"
+                value={formData.subcategory}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+                required
+              >
+                <option value="">Chọn tiểu mục</option>
+                {CATEGORIES.find(cat => cat.id === formData.category)?.subcategories.map((subcategory) => (
+                  <option key={subcategory.id} value={subcategory.id}>
+                    {subcategory.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {/* Tags Selection */}
           <div className="mt-6">

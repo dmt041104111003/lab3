@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { title, content, excerpt, authorId } = await request.json()
+    const { title, content, excerpt, authorId, category, subcategory } = await request.json()
 
     // Generate slug from title
     const slug = title
@@ -44,7 +44,9 @@ export async function POST(request: NextRequest) {
         content,
         excerpt,
         slug,
-        authorId
+        authorId,
+        category,
+        subcategory
       },
       include: {
         author: {
@@ -71,7 +73,7 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const { id, title, content, excerpt, published } = await request.json()
+    const { id, title, content, excerpt, published, category, subcategory } = await request.json()
 
     // Generate slug from title
     const slug = title
@@ -87,7 +89,9 @@ export async function PUT(request: NextRequest) {
         content,
         excerpt,
         slug,
-        published
+        published,
+        category,
+        subcategory
       },
       include: {
         author: {
