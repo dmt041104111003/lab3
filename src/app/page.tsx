@@ -2,6 +2,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import ContentSection from '@/components/ContentSection'
 import Sidebar from '@/components/Sidebar'
+import AdminRedirect from '@/components/AdminRedirect'
 
 export default function Home() {
   const aiSection = {
@@ -32,6 +33,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <AdminRedirect />
       <Header />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

@@ -101,10 +101,27 @@ export default function SignUp() {
       const data = await response.json()
 
       if (response.ok) {
-        // Auto login after successful signup
+        // Auto login after successful signup with server-side cookie
         localStorage.setItem('user_session', JSON.stringify(data.user))
-        // Redirect to home page
-        window.location.href = '/'
+        
+        // Set cookie via API
+        try {
+          await fetch('/api/set-cookie', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user: data.user }),
+          })
+        } catch (error) {
+          console.log('Error setting cookie:', error)
+        }
+        
+        if (data.user.role === 'ADMIN') {
+          window.location.href = '/admin'
+        } else {
+          window.location.href = '/'
+        }
       } else {
         setError(data.message || 'Đăng ký thất bại')
       }

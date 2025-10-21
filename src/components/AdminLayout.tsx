@@ -33,6 +33,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   const handleSignOut = () => {
     clearSession()
+    document.cookie = 'user_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
     router.push('/')
   }
 
