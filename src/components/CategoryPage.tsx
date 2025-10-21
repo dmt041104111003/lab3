@@ -6,6 +6,7 @@ import Footer from '@/components/Footer'
 import ContentSection from '@/components/ContentSection'
 import ArticleCard from '@/components/ArticleCard'
 import LoadingState from '@/components/LoadingState'
+import Pagination from '@/components/Pagination'
 
 interface Post {
   id: string
@@ -33,6 +34,8 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true }
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 6
 
   useEffect(() => {
     fetchPosts()
@@ -49,6 +52,17 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true }
     } finally {
       setLoading(false)
     }
+  }
+
+  // Pagination logic
+  const totalPages = Math.ceil(posts.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const paginatedPosts = posts.slice(startIndex, endIndex)
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const sectionData = {
@@ -105,7 +119,7 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true }
             <div className="mt-12">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Tất cả bài viết {title}</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {posts.slice(4).map((post) => (
+                {paginatedPosts.map((post) => (
                   <ArticleCard
                     key={post.id}
                     title={post.title}
@@ -116,6 +130,17 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true }
                   />
                 ))}
               </div>
+              
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-8">
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
