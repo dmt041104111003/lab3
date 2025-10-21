@@ -1,3 +1,7 @@
+'use client'
+
+import Image from 'next/image'
+
 interface LoadingStateProps {
   message?: string
   className?: string
@@ -10,9 +14,11 @@ export default function LoadingState({
   return (
     <div className={`flex flex-col items-center justify-center h-64 ${className}`}>
       <div className="relative mb-8">
-        <img 
-          src="/logo.png" 
-          alt="Logo" 
+        <Image
+          src="/logo.png"
+          alt="Logo"
+          width={240}
+          height={240}
           className="h-60 w-60 object-contain animate-pulse"
         />
         <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 flex space-x-1">

@@ -17,8 +17,6 @@ export default function AdminToast({
   autoClose = true,
   duration = 3000
 }: AdminToastProps) {
-  if (!isVisible) return null
-
   const typeClasses = {
     success: 'bg-green-50 border border-green-200 text-green-800',
     error: 'bg-red-50 border border-red-200 text-red-800',
@@ -27,11 +25,13 @@ export default function AdminToast({
   }
 
   React.useEffect(() => {
-    if (autoClose && onClose) {
+    if (isVisible && autoClose && onClose) {
       const timer = setTimeout(onClose, duration)
       return () => clearTimeout(timer)
     }
-  }, [autoClose, onClose, duration])
+  }, [isVisible, autoClose, onClose, duration])
+
+  if (!isVisible) return null
 
   return (
     <div className={`fixed top-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 ${typeClasses[type]}`}>

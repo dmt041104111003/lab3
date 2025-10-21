@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import AdminLayout from '@/components/AdminLayout'
 import AdminPageHeader from '@/components/admin/AdminPageHeader'
@@ -45,13 +45,7 @@ export default function EditUser() {
     hasBannedUntil: false
   })
 
-  useEffect(() => {
-    if (userId) {
-      fetchUser()
-    }
-  }, [userId])
-
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
       const response = await fetch('/api/users')
       const users = await response.json()
@@ -73,7 +67,13 @@ export default function EditUser() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [userId])
+
+  useEffect(() => {
+    if (userId) {
+      fetchUser()
+    }
+  }, [userId, fetchUser])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -176,29 +176,32 @@ export default function EditUser() {
             {/* User Info */}
             <div className="space-y-4">
               <AdminFormField label="Tên người dùng">
-                <AdminInput
+                <input
                   type="text"
                   value={user.name}
                   disabled
-                  className="bg-gray-50 text-gray-500"
+                  className="w-full px-3 py-2 bg-gray-50 text-gray-500 border border-gray-300 rounded-md"
+                  aria-label="Tên người dùng"
                 />
               </AdminFormField>
 
               <AdminFormField label="Email">
-                <AdminInput
+                <input
                   type="email"
                   value={user.email}
                   disabled
-                  className="bg-gray-50 text-gray-500"
+                  className="w-full px-3 py-2 bg-gray-50 text-gray-500 border border-gray-300 rounded-md"
+                  aria-label="Email"
                 />
               </AdminFormField>
 
               <AdminFormField label="Số bài viết">
-                <AdminInput
+                <input
                   type="text"
                   value={`${user._count.posts} bài viết`}
                   disabled
-                  className="bg-gray-50 text-gray-500"
+                  className="w-full px-3 py-2 bg-gray-50 text-gray-500 border border-gray-300 rounded-md"
+                  aria-label="Số bài viết"
                 />
               </AdminFormField>
             </div>
@@ -236,11 +239,13 @@ export default function EditUser() {
 
                   {formData.hasBannedUntil && (
                     <AdminFormField label="Ngày hết hạn cấm">
-                      <AdminInput
+                      <input
                         type="datetime-local"
                         name="bannedUntil"
                         value={formData.bannedUntil}
                         onChange={handleChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+                        aria-label="Ngày hết hạn cấm"
                       />
                     </AdminFormField>
                   )}

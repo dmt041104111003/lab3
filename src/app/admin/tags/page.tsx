@@ -171,9 +171,18 @@ export default function TagsPage() {
         title="Quản lý thẻ"
         actionButton={{
           text: "Thêm thẻ mới",
-          onClick: () => setShowCreateForm(true)
+          href: "#"
         }}
       />
+      
+      <div className="mb-6">
+        <button
+          onClick={() => setShowCreateForm(true)}
+          className="bg-tech-blue text-white px-4 py-2 rounded-md hover:bg-tech-dark-blue"
+        >
+          Thêm thẻ mới
+        </button>
+      </div>
 
       <AdminFilter
         searchTerm={searchTerm}
@@ -205,6 +214,7 @@ export default function TagsPage() {
           <form onSubmit={handleCreateTag}>
             <AdminFormField label="Tên thẻ" required>
               <AdminInput
+                name="name"
                 type="text"
                 value={newTag.name}
                 onChange={(e) => setNewTag({ ...newTag, name: e.target.value })}
@@ -213,11 +223,12 @@ export default function TagsPage() {
             </AdminFormField>
             
             <AdminFormField label="Màu sắc">
-              <AdminInput
+              <input
                 type="color"
                 value={newTag.color}
                 onChange={(e) => setNewTag({ ...newTag, color: e.target.value })}
-                className="w-full h-10"
+                className="w-full h-10 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+                aria-label="Màu sắc"
               />
             </AdminFormField>
             
@@ -246,6 +257,7 @@ export default function TagsPage() {
             <form onSubmit={handleUpdateTag}>
               <AdminFormField label="Tên thẻ" required>
                 <AdminInput
+                  name="name"
                   type="text"
                   value={editingTag.name}
                   onChange={(e) => setEditingTag({ ...editingTag, name: e.target.value })}
@@ -254,11 +266,12 @@ export default function TagsPage() {
               </AdminFormField>
               
               <AdminFormField label="Màu sắc">
-                <AdminInput
+                <input
                   type="color"
                   value={editingTag.color}
                   onChange={(e) => setEditingTag({ ...editingTag, color: e.target.value })}
-                  className="w-full h-10"
+                  className="w-full h-10 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+                  aria-label="Màu sắc"
                 />
               </AdminFormField>
               
@@ -303,6 +316,8 @@ export default function TagsPage() {
                   <span
                     className="inline-block w-3 h-3 rounded-full mr-3"
                     style={{ backgroundColor: tag.color }}
+                    aria-label={`Màu ${tag.color}`}
+                    role="presentation"
                   ></span>
                   <div className="text-sm font-medium text-gray-900">
                     {tag.name}

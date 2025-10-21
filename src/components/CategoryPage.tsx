@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import ContentSection from '@/components/ContentSection'
@@ -37,11 +37,7 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true }
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
 
-  useEffect(() => {
-    fetchPosts()
-  }, [subcategory])
-
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     try {
       const response = await fetch(`/api/posts/subcategory/${subcategory}`)
       const data = await response.json()
@@ -52,7 +48,11 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true }
     } finally {
       setLoading(false)
     }
-  }
+  }, [subcategory])
+
+  useEffect(() => {
+    fetchPosts()
+  }, [fetchPosts])
 
   // Pagination logic
   const totalPages = Math.ceil(posts.length / itemsPerPage)

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import AdminLayout from '@/components/AdminLayout'
 import AdminPageHeader from '@/components/admin/AdminPageHeader'
@@ -83,7 +83,7 @@ export default function EditPost() {
     }
   }, [postId])
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [tagsRes, imagesRes] = await Promise.all([
         fetch('/api/tags'),
@@ -102,9 +102,9 @@ export default function EditPost() {
     } finally {
       setLoadingData(false)
     }
-  }
+  }, [])
 
-  const fetchPost = async () => {
+  const fetchPost = useCallback(async () => {
     try {
       const response = await fetch('/api/posts')
       const posts = await response.json()
@@ -117,10 +117,13 @@ export default function EditPost() {
           content: postData.content,
           excerpt: postData.excerpt,
           published: postData.published,
-          selectedTags: postData.tags?.map(tag => tag.id) || [],
+          selectedTags: postData.tags?.map((tag: any) => tag.id) || [],
           selectedImage: postData.featuredImage?.id || '',
           category: postData.category || '',
-          subcategory: postData.subcategory || ''
+          subcategory: postData.subcategory || '',
+          imageType: 'existing' as 'existing' | 'upload' | 'url',
+          newImageFile: null,
+          imageUrl: ''
         })
       } else {
         setError('Không tìm thấy bài viết')
@@ -130,7 +133,7 @@ export default function EditPost() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [postId])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -260,29 +263,32 @@ export default function EditPost() {
             {/* Post Info */}
             <div className="space-y-4">
               <AdminFormField label="Tác giả">
-                <AdminInput
+                <input
                   type="text"
                   value={post.author.name}
                   disabled
-                  className="bg-gray-50 text-gray-500"
+                  className="w-full px-3 py-2 bg-gray-50 text-gray-500 border border-gray-300 rounded-md"
+                  aria-label="Tác giả"
                 />
               </AdminFormField>
 
               <AdminFormField label="Email tác giả">
-                <AdminInput
+                <input
                   type="email"
                   value={post.author.email}
                   disabled
-                  className="bg-gray-50 text-gray-500"
+                  className="w-full px-3 py-2 bg-gray-50 text-gray-500 border border-gray-300 rounded-md"
+                  aria-label="Email tác giả"
                 />
               </AdminFormField>
 
               <AdminFormField label="Ngày tạo">
-                <AdminInput
+                <input
                   type="text"
                   value={new Date(post.createdAt).toLocaleDateString('vi-VN')}
                   disabled
-                  className="bg-gray-50 text-gray-500"
+                  className="w-full px-3 py-2 bg-gray-50 text-gray-500 border border-gray-300 rounded-md"
+                  aria-label="Ngày tạo"
                 />
               </AdminFormField>
             </div>
@@ -453,6 +459,7 @@ export default function EditPost() {
                     value={formData.selectedImage}
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+                    title="Chọn hình ảnh từ thư viện"
                   >
                     <option value="">Chọn hình ảnh (tùy chọn)</option>
                     {images.map((image) => (
@@ -494,6 +501,7 @@ export default function EditPost() {
                   accept="image/*"
                   onChange={handleFileSelect}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+                  title="Chọn file ảnh để tải lên"
                 />
                 {formData.newImageFile && (
                   <div className="mt-2">

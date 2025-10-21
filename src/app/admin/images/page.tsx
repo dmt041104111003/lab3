@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import AdminLayout from '@/components/AdminLayout'
 import AdminPageHeader from '@/components/admin/AdminPageHeader'
-import AdminCard from '@/components/admin/AdminCard'
 import AdminFormField from '@/components/admin/AdminFormField'
 import AdminInput from '@/components/admin/AdminInput'
 import AdminButton from '@/components/admin/AdminButton'
@@ -192,9 +191,18 @@ export default function ImagesPage() {
         title="Quản lý hình ảnh"
         actionButton={{
           text: "Tải lên hình ảnh",
-          onClick: () => setShowUploadForm(true)
+          href: "#"
         }}
       />
+      
+      <div className="mb-6">
+        <button
+          onClick={() => setShowUploadForm(true)}
+          className="bg-tech-blue text-white px-4 py-2 rounded-md hover:bg-tech-dark-blue"
+        >
+          Tải lên hình ảnh
+        </button>
+      </div>
 
       <AdminFilter
         searchTerm={searchTerm}
@@ -232,16 +240,19 @@ export default function ImagesPage() {
         >
           <form onSubmit={handleUpload}>
             <AdminFormField label="Chọn file" required>
-              <AdminInput
+              <input
                 type="file"
                 accept="image/*"
                 onChange={handleFileSelect}
                 required
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
+                aria-label="Chọn file hình ảnh"
               />
             </AdminFormField>
             
             <AdminFormField label="Alt text">
               <AdminInput
+                name="altText"
                 type="text"
                 value={altText}
                 onChange={(e) => setAltText(e.target.value)}
