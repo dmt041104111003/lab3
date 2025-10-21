@@ -33,8 +33,73 @@ model Post {
   updatedAt DateTime @updatedAt
   authorId  String
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  tags      PostTag[]
+  topics    PostTopic[]
 
   @@map("posts")
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  color     String?  @default("#3B82F6")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  posts     PostTag[]
+
+  @@map("tags")
+}
+
+model Topic {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  description String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  posts     PostTopic[]
+
+  @@map("topics")
+}
+
+model Image {
+  id        String   @id @default(cuid())
+  filename  String
+  originalName String
+  path      String
+  size      Int
+  mimeType  String
+  alt       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("images")
+}
+
+model PostTag {
+  postId String
+  tagId  String
+  
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@id([postId, tagId])
+  @@map("post_tags")
+}
+
+model PostTopic {
+  postId  String
+  topicId String
+  
+  post  Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  topic Topic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  
+  @@id([postId, topicId])
+  @@map("post_topics")
 }
 
 enum Role {
