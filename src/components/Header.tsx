@@ -8,6 +8,7 @@ import { getSession, clearSession, isAdmin, type User } from '@/lib/session'
 export default function Header() {
   const [user, setUser] = useState<User | null>(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const session = getSession()
@@ -28,6 +29,15 @@ export default function Header() {
     <header className="bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
           {/* Logo và Slogan */}
           <div className="flex items-center space-x-4">
             <Link href="/" className="flex flex-col items-center">
@@ -44,7 +54,7 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Navigation */}
+          {/* Navigation - Desktop */}
           <nav className="hidden md:flex space-x-8">
             <Link href="/tin-tuc" className="text-gray-700 hover:text-tech-blue transition-colors">
               Tin tức
@@ -101,6 +111,49 @@ export default function Header() {
             </button> */}
           </div>
         </div>
+
+        {/* Mobile Navigation */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+              <Link
+                href="/tin-tuc"
+                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-tech-blue hover:bg-gray-100 rounded-md"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Tin tức
+              </Link>
+              <Link
+                href="/ai-chuyen-doi-so"
+                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-tech-blue hover:bg-gray-100 rounded-md"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                AI – Chuyển đổi số
+              </Link>
+              <Link
+                href="/doi-moi-sang-tao"
+                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-tech-blue hover:bg-gray-100 rounded-md"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Đổi mới sáng tạo
+              </Link>
+              <Link
+                href="/san-pham-review"
+                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-tech-blue hover:bg-gray-100 rounded-md"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Sản phẩm & Review
+              </Link>
+              <Link
+                href="/xu-huong-tuong-lai"
+                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-tech-blue hover:bg-gray-100 rounded-md"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Xu hướng tương lai
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   )
