@@ -56,6 +56,7 @@ export default function AdminFilter({
       <div className="flex flex-col sm:flex-row gap-4 items-center">
         <div className="flex-1 w-full">
           <AdminInput
+            name="search"
             type="text"
             placeholder={searchPlaceholder}
             value={searchTerm}
@@ -74,13 +75,13 @@ export default function AdminFilter({
           </AdminButton>
           
           {onReset && (
-            <AdminButton
-              variant="outline"
-              size="sm"
-              onClick={handleReset}
-            >
-              Reset
-            </AdminButton>
+          <AdminButton
+            variant="secondary"
+            size="sm"
+            onClick={handleReset}
+          >
+            Reset
+          </AdminButton>
           )}
         </div>
       </div>
@@ -96,6 +97,7 @@ export default function AdminFilter({
                   Sắp xếp theo
                 </label>
                 <AdminSelect
+                  name="sortBy"
                   value={sortBy || ''}
                   onChange={(e) => onSortChange?.(e.target.value)}
                   options={[
@@ -113,6 +115,7 @@ export default function AdminFilter({
                   Lọc theo
                 </label>
                 <AdminSelect
+                  name="filterBy"
                   value={filterBy || ''}
                   onChange={(e) => onFilterChange?.(e.target.value)}
                   options={[

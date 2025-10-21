@@ -123,9 +123,6 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true }
                   <ArticleCard
                     key={post.id}
                     title={post.title}
-                    excerpt={post.excerpt}
-                    author={post.author.name}
-                    date={new Date(post.createdAt).toLocaleDateString('vi-VN')}
                     href={`/bai-viet/${post.slug}`}
                   />
                 ))}

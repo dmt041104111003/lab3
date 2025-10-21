@@ -117,6 +117,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
+            aria-label="Toggle mobile menu"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -205,6 +206,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                  aria-label="Close mobile menu"
                 >
                   <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
