@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import AdminLayout from '@/components/AdminLayout'
 import { CATEGORIES, type Category, type Subcategory } from '@/lib/categories'
+import { generateSlug } from '@/lib/slug'
 
 interface Tag {
   id: string
@@ -166,6 +167,14 @@ export default function CreatePost() {
               placeholder="Nhập tiêu đề bài viết"
               required
             />
+            {formData.title && (
+              <div className="mt-2 text-sm text-gray-600">
+                <span className="font-medium">URL sẽ là:</span> 
+                <span className="ml-2 text-tech-blue font-mono">
+                  /{generateSlug(formData.title)}
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="mb-6">

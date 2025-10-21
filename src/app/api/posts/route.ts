@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { generateSlug, generateUniqueSlug } from '@/lib/slug'
 
 export async function GET(request: NextRequest) {
   try {
@@ -31,19 +32,22 @@ export async function POST(request: NextRequest) {
   try {
     const { title, content, excerpt, authorId, category, subcategory } = await request.json()
 
-    // Generate slug from title
-    const slug = title
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .trim()
+    // Generate slug from title with Vietnamese character support
+    const baseSlug = generateSlug(title)
+    
+    // Check for existing slugs to ensure uniqueness
+    const existingPosts = await prisma.post.findMany({
+      select: { slug: true }
+    })
+    const existingSlugs = existingPosts.map(post => post.slug)
+    const uniqueSlug = await generateUniqueSlug(baseSlug, existingSlugs)
 
     const post = await prisma.post.create({
       data: {
         title,
         content,
         excerpt,
-        slug,
+        slug: uniqueSlug,
         authorId,
         category,
         subcategory
@@ -75,12 +79,16 @@ export async function PUT(request: NextRequest) {
   try {
     const { id, title, content, excerpt, published, category, subcategory } = await request.json()
 
-    // Generate slug from title
-    const slug = title
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .trim()
+    // Generate slug from title with Vietnamese character support
+    const baseSlug = generateSlug(title)
+    
+    // Check for existing slugs to ensure uniqueness (excluding current post)
+    const existingPosts = await prisma.post.findMany({
+      select: { slug: true },
+      where: { id: { not: id } }
+    })
+    const existingSlugs = existingPosts.map(post => post.slug)
+    const uniqueSlug = await generateUniqueSlug(baseSlug, existingSlugs)
 
     const post = await prisma.post.update({
       where: { id },
@@ -88,7 +96,7 @@ export async function PUT(request: NextRequest) {
         title,
         content,
         excerpt,
-        slug,
+        slug: uniqueSlug,
         published,
         category,
         subcategory
