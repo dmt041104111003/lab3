@@ -5,7 +5,7 @@ import Head from 'next/head'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import ContentSection from '@/components/ContentSection'
-import Sidebar from '@/components/Sidebar'
+import HomeSidebar from '@/components/HomeSidebar'
 import AdminRedirect from '@/components/AdminRedirect'
 import LoadingState from '@/components/LoadingState'
 
@@ -312,7 +312,7 @@ export default function Home() {
 
           {/* Sidebar - Right Column */}
           <div className="lg:col-span-1">
-            <Sidebar quickNews={quickNews} techToday={aiPosts} mostRead={newsPosts} />
+            <HomeSidebar quickNews={quickNews} techToday={aiPosts} mostRead={newsPosts} />
           </div>
         </div>
       </main>

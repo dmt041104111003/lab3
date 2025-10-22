@@ -38,23 +38,13 @@ function SidebarSection({ title, items }: SidebarSectionProps) {
   )
 }
 
-interface Subcategory {
-  id: string
-  name: string
-  slug: string
-  parentId: string
-}
-
-interface SidebarProps {
+interface HomeSidebarProps {
   quickNews?: Post[]
   techToday?: Post[]
   mostRead?: Post[]
-  subcategories?: Subcategory[]
-  basePath?: string
-  title?: string
 }
 
-export default function Sidebar({ quickNews = [], techToday = [], mostRead = [], subcategories = [], basePath = '', title = '' }: SidebarProps) {
+export default function HomeSidebar({ quickNews = [], techToday = [], mostRead = [] }: HomeSidebarProps) {
   const mostReadItems = mostRead.length > 0 ? mostRead.slice(0, 3).map(post => ({
     title: post.title,
     href: `/tin-tuc/${post.subcategory || 'cong-nghe-viet-nam'}/${post.slug}`
@@ -79,37 +69,11 @@ export default function Sidebar({ quickNews = [], techToday = [], mostRead = [],
     { title: "Công nghệ sắp ra mắt", href: "#" }
   ]
 
-  const subcategoryItems = subcategories.length > 0 ? subcategories.map(sub => ({
-    title: sub.name,
-    href: `/${basePath}/${sub.slug}`
-  })) : []
-
   return (
     <aside className="w-full lg:w-80 space-y-6">
-      {/* Subcategories Section */}
-      {subcategories.length > 0 && (
-        <div className="mb-8">
-          <h3 className="text-lg font-bold text-gray-800 mb-4 uppercase tracking-wide">
-            Tiểu mục
-          </h3>
-          <div className="space-y-3">
-            {subcategories.map((subcategory) => (
-              <a
-                key={subcategory.id}
-                href={`/${basePath}/${subcategory.slug}`}
-                className="block bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 hover:border-blue-500"
-              >
-                <div className="text-center">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-1">
-                    {subcategory.name}
-                  </h4>
-
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
+      <SidebarSection title="ĐỌC NHIỀU NHẤT" items={mostReadItems} />
+      <SidebarSection title="TIN NHANH" items={quickNewsItems} />
+      <SidebarSection title="CÔNG NGHỆ HÔM NAY" items={techTodayItems} />
     </aside>
   )
 }

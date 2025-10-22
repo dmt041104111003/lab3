@@ -5,6 +5,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import ContentSection from '@/components/ContentSection'
 import LoadingState from '@/components/LoadingState'
+import Sidebar from '@/components/Sidebar'
 import { CATEGORIES } from '@/lib/categories'
 
 interface Post {
@@ -50,19 +51,36 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
       // Lấy danh sách tiểu mục của category
       const category = CATEGORIES.find(cat => cat.id === categoryId)
       const subcategories = category?.subcategories || []
+      
+      console.log('Category:', categoryId)
+      console.log('Subcategories:', subcategories)
+
+      if (subcategories.length === 0) {
+        console.log('No subcategories found')
+        setPosts([])
+        setLoading(false)
+        return
+      }
 
       // Lấy bài viết từ tất cả tiểu mục
       const promises = subcategories.map(sub => 
-        fetch(`/api/posts/subcategory/${sub.id}`).then(res => res.json())
+        fetch(`/api/posts/subcategory/${sub.id}?limit=1`).then(res => res.json())
       )
 
       const allSubcategoryPosts = await Promise.all(promises)
+      console.log('API responses:', allSubcategoryPosts)
 
       // Gộp và sắp xếp theo ngày tạo
-      const allPosts = allSubcategoryPosts.flat()
+      const allPosts = allSubcategoryPosts
+        .map(response => {
+          console.log('Processing response:', response)
+          return response.posts || response
+        }) // Handle both new and old API format
+        .flat()
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
         .slice(0, 1) // Chỉ lấy 1 bài mới nhất
 
+      console.log('Final posts:', allPosts)
       setPosts(allPosts)
     } catch (error) {
       console.error('Error fetching posts:', error)
@@ -122,35 +140,19 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
       <Header />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="space-y-8">
-          <ContentSection {...sectionData} />
-          
-          {/* Danh sách tiểu mục */}
-          <div className="mt-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Chuyên mục {title}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {subcategories.map((subcategory) => (
-                <a
-                  key={subcategory.id}
-                  href={`/${basePath}/${subcategory.slug}`}
-                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 border border-gray-200 hover:border-tech-blue"
-                >
-                  <div className="text-center">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      {subcategory.name}
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      Khám phá về {subcategory.name.toLowerCase()}
-                    </p>
-                    <div className="mt-4">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-tech-blue text-white">
-                        Xem bài viết
-                      </span>
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Main Content - Left Column */}
+          <div className="lg:col-span-3">
+            <ContentSection {...sectionData} />
+          </div>
+
+          {/* Sidebar - Right Column */}
+          <div className="lg:col-span-1">
+            <Sidebar 
+              subcategories={subcategories}
+              basePath={basePath}
+              title={title}
+            />
           </div>
         </div>
       </main>
