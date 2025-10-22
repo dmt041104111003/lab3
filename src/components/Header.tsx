@@ -90,6 +90,25 @@ export default function Header() {
       setUser(session)
       setIsLoggedIn(true)
     }
+
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === 'user_session') {
+        const s = getSession()
+        setUser(s)
+        setIsLoggedIn(!!s)
+      }
+    }
+    const handleSessionUpdate = () => {
+      const s = getSession()
+      setUser(s)
+      setIsLoggedIn(!!s)
+    }
+    window.addEventListener('storage', handleStorage)
+    window.addEventListener('session:update', handleSessionUpdate as EventListener)
+    return () => {
+      window.removeEventListener('storage', handleStorage)
+      window.removeEventListener('session:update', handleSessionUpdate as EventListener)
+    }
   }, [])
 
   // Close menus when clicking outside
