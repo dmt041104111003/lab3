@@ -54,11 +54,11 @@ export default function Footer() {
               <div className="mb-4">
                 <h3 className="font-bold text-sm mb-2">LIÊN HỆ</h3>
                 <p className="text-sm leading-relaxed">
-                  Tầng 22, Tòa nhà Center Building, Hapulico Complex, Số 01, phố Nguyễn Huy Tưởng, phường Thanh Xuân, thành phố Hà Nội
+                  Tầng 2, Tòa nhà A2 Học viện Báo chí và Tuyên truyền, số 36, đường Xuân Thủy, phường Cầu Giấy, thành phố Hà Nội
                 </p>
-                <p className="text-sm">Điện thoại: 024 7309 5555</p>
+                <p className="text-sm">Đường dây nóng: +84942017238</p>
                 <p className="text-sm">
-                  Email: <span className="text-blue-400">info@technova.vn</span>
+                  Email: <span className="text-blue-400">technovatintuc@gmail.com</span>
                 </p>
               </div>
               
@@ -73,13 +73,26 @@ export default function Footer() {
             </div>
           </div>
           
-          {/* Right Column - About & Social */}
+          {/* Right Column - About & Licensing */}
           <div className="space-y-6">
             <div>
               <h3 className="font-bold text-sm mb-3">VỀ TECHNOVA</h3>
               <p className="text-sm leading-relaxed mb-4">
                 TechNova là trang tin công nghệ hàng đầu, tập trung vào xu hướng công nghệ mới và tác động của chúng tới đời sống con người.
               </p>
+              
+              <div className="mb-4">
+                <h4 className="font-bold text-sm mb-2">THÔNG TIN PHÁP LÝ</h4>
+                <p className="text-xs leading-relaxed mb-2">
+                  <strong>Cơ quan chủ quản:</strong> Hội Tin học Việt Nam
+                </p>
+                <p className="text-xs leading-relaxed mb-2">
+                  <strong>Giấy phép:</strong> Số 207/GP-TTĐT (31/10/2019) - Số 93/GP-TTĐT (10/05/2024)
+                </p>
+                <p className="text-xs leading-relaxed mb-2">
+                  <strong>Chịu trách nhiệm chính:</strong> Tổng biên tập Tạp chí Công nghệ TechNova: Dương Trương Quỳnh Trang
+                </p>
+              </div>
               
               <div className="flex space-x-4">
                 <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">

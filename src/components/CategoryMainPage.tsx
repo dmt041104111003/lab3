@@ -179,52 +179,6 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
               </div>
             )}
 
-            <div className="mb-8">
-              <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                <div className="w-full h-64 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                  <div className="text-center">
-                    <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    <span className="text-gray-500 text-lg">Sắp ra mắt</span>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center text-sm text-gray-500 mb-4">
-                    <span>Chuyên mục</span>
-                    <span className="mx-2">•</span>
-                    <span>Ngày đăng</span>
-                    <span className="mx-2">•</span>
-                    <span>Tác giả</span>
-                  </div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                    Bài viết nổi bật sắp ra mắt
-                  </h1>
-                  <p className="text-lg text-gray-600 leading-relaxed">
-                    Nội dung thú vị và hấp dẫn đang được chuẩn bị. Hãy quay lại sau để đọc những bài viết mới nhất!
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 3 }, (_, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-sm border border-gray-200">
-                  <div className="w-full h-32 bg-gradient-to-br from-gray-100 to-gray-200 rounded-t-lg flex items-center justify-center">
-                    <div className="text-center">
-                      <svg className="w-8 h-8 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                      </svg>
-                      <span className="text-gray-500 text-xs">Sắp ra mắt</span>
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h4 className="text-gray-800 text-sm font-medium mb-2">Bài viết sắp ra mắt</h4>
-                    <p className="text-gray-600 text-xs">Nội dung thú vị đang được chuẩn bị...</p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
 
           <div className="lg:col-span-1">
