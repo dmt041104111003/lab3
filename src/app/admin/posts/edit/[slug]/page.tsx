@@ -7,6 +7,7 @@ import AdminPageHeader from '@/components/admin/AdminPageHeader'
 import AdminCard from '@/components/admin/AdminCard'
 import AdminFormField from '@/components/admin/AdminFormField'
 import AdminInput from '@/components/admin/AdminInput'
+import TiptapEditor from '@/components/TiptapEditor'
 import AdminTextarea from '@/components/admin/AdminTextarea'
 import AdminSelect from '@/components/admin/AdminSelect'
 import AdminCheckbox from '@/components/admin/AdminCheckbox'
@@ -58,6 +59,7 @@ export default function EditPost() {
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [titleError, setTitleError] = useState('')
 
   const [formData, setFormData] = useState({
     title: '',
@@ -141,6 +143,15 @@ export default function EditPost() {
     setIsSaving(true)
     setError('')
     setSuccess('')
+    setTitleError('')
+
+    // Validate title before submit
+    const titleValidationError = await validateTitle(formData.title)
+    if (titleValidationError) {
+      setTitleError(titleValidationError)
+      setIsSaving(false)
+      return
+    }
 
     try {
       const response = await fetch('/api/posts', {
@@ -180,6 +191,30 @@ export default function EditPost() {
     }
   }
 
+  const validateTitle = async (title: string) => {
+    if (!title.trim()) {
+      return 'Tiêu đề không được để trống'
+    }
+    
+    // Check for duplicate title (excluding current post)
+    try {
+      const response = await fetch('/api/posts')
+      const posts = await response.json()
+      const isDuplicate = posts.some((p: any) => 
+        p.id !== post?.id && 
+        p.title.toLowerCase().trim() === title.toLowerCase().trim()
+      )
+      
+      if (isDuplicate) {
+        return 'Tiêu đề này đã tồn tại, vui lòng chọn tiêu đề khác'
+      }
+    } catch (error) {
+      console.error('Error checking title:', error)
+    }
+    
+    return ''
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
     
@@ -194,6 +229,20 @@ export default function EditPost() {
         ...prev,
         [name]: value
       }))
+      
+      // Validate title when it changes (with debounce)
+      if (name === 'title') {
+        setTitleError('') // Clear previous error
+        if (value.trim()) {
+          // Debounce the validation
+          const timeoutId = setTimeout(async () => {
+            const error = await validateTitle(value)
+            setTitleError(error)
+          }, 500)
+          
+          return () => clearTimeout(timeoutId)
+        }
+      }
     }
   }
 
@@ -315,7 +364,12 @@ export default function EditPost() {
                 placeholder="Nhập tiêu đề bài viết"
                 required
               />
-              {formData.title && (
+              {titleError && (
+                <div className="mt-1 text-sm text-red-600">
+                  {titleError}
+                </div>
+              )}
+              {formData.title && !titleError && (
                 <div className="mt-2 text-sm text-gray-600">
                   <span className="font-medium">URL sẽ là:</span> 
                   <span className="ml-2 text-tech-blue font-mono">
@@ -336,13 +390,11 @@ export default function EditPost() {
             </AdminFormField>
 
             <AdminFormField label="Nội dung bài viết" required>
-              <AdminTextarea
-                name="content"
-                value={formData.content}
-                onChange={handleChange}
+              <TiptapEditor
+                content={formData.content}
+                onChange={(content) => setFormData(prev => ({ ...prev, content }))}
                 placeholder="Viết nội dung bài viết..."
-                rows={12}
-                required
+                className="min-h-[400px]"
               />
             </AdminFormField>
           </div>

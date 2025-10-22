@@ -47,6 +47,7 @@ export default function CreatePost() {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [titleError, setTitleError] = useState('')
   const [tags, setTags] = useState<Tag[]>([])
   const [images, setImages] = useState<Image[]>([])
   const [loadingData, setLoadingData] = useState(true)
@@ -103,6 +104,15 @@ export default function CreatePost() {
     e.preventDefault()
     setIsLoading(true)
     setError('')
+    setTitleError('')
+
+    // Validate title before submit
+    const titleValidationError = await validateTitle(formData.title)
+    if (titleValidationError) {
+      setTitleError(titleValidationError)
+      setIsLoading(false)
+      return
+    }
 
     try {
       // Convert file to base64 if uploading new image
@@ -152,6 +162,29 @@ export default function CreatePost() {
     }
   }
 
+  const validateTitle = async (title: string) => {
+    if (!title.trim()) {
+      return 'Tiêu đề không được để trống'
+    }
+    
+    // Check for duplicate title
+    try {
+      const response = await fetch('/api/posts')
+      const posts = await response.json()
+      const isDuplicate = posts.some((post: any) => 
+        post.title.toLowerCase().trim() === title.toLowerCase().trim()
+      )
+      
+      if (isDuplicate) {
+        return 'Tiêu đề này đã tồn tại, vui lòng chọn tiêu đề khác'
+      }
+    } catch (error) {
+      console.error('Error checking title:', error)
+    }
+    
+    return ''
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
     
@@ -166,6 +199,20 @@ export default function CreatePost() {
         ...prev,
         [name]: value
       }))
+      
+      // Validate title when it changes (with debounce)
+      if (name === 'title') {
+        setTitleError('') // Clear previous error
+        if (value.trim()) {
+          // Debounce the validation
+          const timeoutId = setTimeout(async () => {
+            const error = await validateTitle(value)
+            setTitleError(error)
+          }, 500)
+          
+          return () => clearTimeout(timeoutId)
+        }
+      }
     }
   }
 
@@ -210,7 +257,12 @@ export default function CreatePost() {
               placeholder="Nhập tiêu đề bài viết"
               required
             />
-            {formData.title && (
+            {titleError && (
+              <div className="mt-1 text-sm text-red-600">
+                {titleError}
+              </div>
+            )}
+            {formData.title && !titleError && (
               <div className="mt-2 text-sm text-gray-600">
                 <span className="font-medium">URL sẽ là:</span> 
                 <span className="ml-2 text-tech-blue font-mono">
