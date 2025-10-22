@@ -8,7 +8,6 @@ import AdminCard from '@/components/admin/AdminCard'
 import AdminFormField from '@/components/admin/AdminFormField'
 import AdminInput from '@/components/admin/AdminInput'
 import AdminTextarea from '@/components/admin/AdminTextarea'
-import TiptapEditor from '@/components/TiptapEditor'
 import AdminSelect from '@/components/admin/AdminSelect'
 import AdminCheckbox from '@/components/admin/AdminCheckbox'
 import AdminButton from '@/components/admin/AdminButton'
@@ -52,7 +51,7 @@ interface Image {
 export default function EditPost() {
   const router = useRouter()
   const params = useParams()
-  const postId = params.id as string
+  const postSlug = params.slug as string
 
   const [post, setPost] = useState<Post | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -78,11 +77,11 @@ export default function EditPost() {
   const [loadingData, setLoadingData] = useState(true)
 
   useEffect(() => {
-    if (postId) {
+    if (postSlug) {
       fetchPost()
       fetchData()
     }
-  }, [postId])
+  }, [postSlug])
 
   const fetchData = useCallback(async () => {
     try {
@@ -109,7 +108,7 @@ export default function EditPost() {
     try {
       const response = await fetch('/api/posts')
       const posts = await response.json()
-      const postData = posts.find((p: Post) => p.id === postId)
+      const postData = posts.find((p: Post) => p.slug === postSlug)
       
       if (postData) {
         setPost(postData)
@@ -135,7 +134,7 @@ export default function EditPost() {
     } finally {
       setIsLoading(false)
     }
-  }, [postId])
+  }, [postSlug])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -150,7 +149,7 @@ export default function EditPost() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          id: postId,
+          id: post?.id,
           title: formData.title,
           content: formData.content,
           excerpt: formData.excerpt,
@@ -337,11 +336,13 @@ export default function EditPost() {
             </AdminFormField>
 
             <AdminFormField label="Nội dung bài viết" required>
-              <TiptapEditor
-                content={formData.content}
-                onChange={(content) => setFormData(prev => ({ ...prev, content }))}
+              <AdminTextarea
+                name="content"
+                value={formData.content}
+                onChange={handleChange}
                 placeholder="Viết nội dung bài viết..."
-                className="min-h-[400px]"
+                rows={12}
+                required
               />
             </AdminFormField>
           </div>

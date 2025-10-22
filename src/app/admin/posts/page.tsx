@@ -238,7 +238,7 @@ export default function AdminPosts() {
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                 <a
-                  href={`/admin/posts/edit/${post.id}`}
+                  href={`/admin/posts/edit/${post.slug}`}
                   className="text-tech-blue hover:text-tech-dark-blue"
                 >
                   Sửa

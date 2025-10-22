@@ -13,7 +13,9 @@ import Highlight from '@tiptap/extension-highlight'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import { createLowlight } from 'lowlight'
 import { useState, useEffect } from 'react'
-import TiptapPreview from './TiptapPreview'
+import AdminModal from './admin/AdminModal'
+import AdminInput from './admin/AdminInput'
+import AdminButton from './admin/AdminButton'
 
 interface TiptapEditorProps {
   content: string
@@ -23,8 +25,11 @@ interface TiptapEditorProps {
 }
 
 export default function TiptapEditor({ content, onChange, placeholder = "Nhập nội dung bài viết...", className = "" }: TiptapEditorProps) {
-  const [isPreview, setIsPreview] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  const [showImageModal, setShowImageModal] = useState(false)
+  const [showLinkModal, setShowLinkModal] = useState(false)
+  const [imageUrl, setImageUrl] = useState('')
+  const [linkUrl, setLinkUrl] = useState('')
 
   useEffect(() => {
     setIsMounted(true)
@@ -84,16 +89,28 @@ export default function TiptapEditor({ content, onChange, placeholder = "Nhập 
   }
 
   const addImage = () => {
-    const url = window.prompt('Nhập URL ảnh:')
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run()
-    }
+    setImageUrl('')
+    setShowImageModal(true)
   }
 
   const addLink = () => {
-    const url = window.prompt('Nhập URL liên kết:')
-    if (url) {
-      editor.chain().focus().setLink({ href: url }).run()
+    setLinkUrl('')
+    setShowLinkModal(true)
+  }
+
+  const handleAddImage = () => {
+    if (imageUrl.trim()) {
+      editor.chain().focus().setImage({ src: imageUrl.trim() }).run()
+      setShowImageModal(false)
+      setImageUrl('')
+    }
+  }
+
+  const handleAddLink = () => {
+    if (linkUrl.trim()) {
+      editor.chain().focus().setLink({ href: linkUrl.trim() }).run()
+      setShowLinkModal(false)
+      setLinkUrl('')
     }
   }
 
@@ -229,30 +246,94 @@ export default function TiptapEditor({ content, onChange, placeholder = "Nhập 
           Right
         </button>
 
-        <div className="w-px h-6 bg-gray-300 mx-1"></div>
-
-        {/* Preview toggle */}
-        <button
-          onClick={() => setIsPreview(!isPreview)}
-          className={`px-3 py-2 rounded-md text-sm font-medium ${
-            isPreview ? 'bg-tech-dark-blue text-white shadow-sm' : 'bg-white text-gray-600 hover:bg-tech-blue/10 hover:text-tech-blue border border-gray-200'
-          }`}
-        >
-          {isPreview ? 'Edit' : 'Preview'}
-        </button>
       </div>
 
       {/* Editor content */}
       <div className="min-h-[300px]">
-        {isPreview ? (
-          <TiptapPreview 
-            content={editor.getHTML()} 
-            className="min-h-[300px]"
-          />
-        ) : (
-          <EditorContent editor={editor} />
-        )}
+        <EditorContent editor={editor} />
       </div>
+
+      {/* Image Modal */}
+      <AdminModal
+        isOpen={showImageModal}
+        title="Thêm ảnh"
+        onClose={() => setShowImageModal(false)}
+        size="md"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              URL ảnh
+            </label>
+            <AdminInput
+              name="imageUrl"
+              type="url"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              placeholder="Nhập URL ảnh..."
+              required
+            />
+          </div>
+          
+          <div className="flex justify-end space-x-2">
+            <AdminButton
+              type="button"
+              variant="secondary"
+              onClick={() => setShowImageModal(false)}
+            >
+              Hủy
+            </AdminButton>
+            <AdminButton
+              type="button"
+              onClick={handleAddImage}
+              disabled={!imageUrl.trim()}
+            >
+              Thêm ảnh
+            </AdminButton>
+          </div>
+        </div>
+      </AdminModal>
+
+      {/* Link Modal */}
+      <AdminModal
+        isOpen={showLinkModal}
+        title="Thêm liên kết"
+        onClose={() => setShowLinkModal(false)}
+        size="md"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              URL liên kết
+            </label>
+            <AdminInput
+              name="linkUrl"
+              type="url"
+              value={linkUrl}
+              onChange={(e) => setLinkUrl(e.target.value)}
+              placeholder="Nhập URL liên kết..."
+              required
+            />
+          </div>
+          
+          <div className="flex justify-end space-x-2">
+            <AdminButton
+              type="button"
+              variant="secondary"
+              onClick={() => setShowLinkModal(false)}
+            >
+              Hủy
+            </AdminButton>
+            <AdminButton
+              type="button"
+              onClick={handleAddLink}
+              disabled={!linkUrl.trim()}
+            >
+              Thêm liên kết
+            </AdminButton>
+          </div>
+        </div>
+      </AdminModal>
     </div>
   )
 }
