@@ -61,7 +61,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
       // Gộp và sắp xếp theo ngày tạo
       const allPosts = allSubcategoryPosts.flat()
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        .slice(0, 5) // Lấy 5 bài mới nhất
+        .slice(0, 1) // Chỉ lấy 1 bài mới nhất
 
       setPosts(allPosts)
     } catch (error) {
@@ -88,13 +88,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
       title: "Chưa có bài viết nào",
       href: "#"
     },
-    subArticles: posts.slice(1, 4).map(post => ({
-      title: post.title,
-      href: `/${basePath}/${post.subcategory}/${post.slug}`,
-      imageUrl: post.images?.[0]?.image?.path,
-      imageAlt: post.images?.[0]?.image?.alt || post.title,
-      excerpt: post.excerpt
-    }))
+    subArticles: [] // Không hiển thị bài phụ, chỉ có 1 bài chính
   }
 
   if (loading) {
