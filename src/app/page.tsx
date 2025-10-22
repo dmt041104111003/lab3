@@ -55,10 +55,10 @@ export default function Home() {
   const fetchHomeData = async () => {
     try {
       const [aiRes, innovationRes, productRes, trendRes] = await Promise.all([
-        fetch('/api/posts/category/ai-chuyen-doi-so'),
-        fetch('/api/posts/category/doi-moi-sang-tao'),
-        fetch('/api/posts/category/san-pham-review'),
-        fetch('/api/posts/category/xu-huong-tuong-lai')
+        fetch('/api/posts/category/ai-chuyen-doi-so?limit=4'),
+        fetch('/api/posts/category/doi-moi-sang-tao?limit=4'),
+        fetch('/api/posts/category/san-pham-review?limit=4'),
+        fetch('/api/posts/category/xu-huong-tuong-lai?limit=4')
       ])
 
       const [aiData, innovationData, productData, trendData] = await Promise.all([
@@ -84,60 +84,136 @@ export default function Home() {
     title: "AI – CHUYỂN ĐỔI SỐ",
     mainArticle: aiPosts.length > 0 ? {
       title: aiPosts[0].title,
-      href: `/bai-viet/${aiPosts[0].slug}`
+      href: `/bai-viet/${aiPosts[0].slug}`,
+      imageUrl: aiPosts[0].images?.[0]?.image?.path || aiPosts[0].imageUrl,
+      imageAlt: aiPosts[0].images?.[0]?.image?.alt || aiPosts[0].title,
+      excerpt: aiPosts[0].excerpt
     } : {
       title: "Chưa có bài viết nào",
       href: "#"
     },
-    subArticles: aiPosts.slice(1, 4).map(post => ({
-      title: post.title,
-      href: `/bai-viet/${post.slug}`
-    }))
+    subArticles: Array.from({ length: 3 }, (_, index) => {
+      const post = aiPosts[index + 1]
+      if (post) {
+        return {
+          title: post.title,
+          href: `/bai-viet/${post.slug}`,
+          imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
+          imageAlt: post.images?.[0]?.image?.alt || post.title,
+          excerpt: post.excerpt
+        }
+      } else {
+        return {
+          title: "Bài viết sắp ra mắt",
+          href: "#",
+          imageUrl: undefined,
+          imageAlt: "Bài viết sắp ra mắt",
+          excerpt: "Nội dung thú vị đang được chuẩn bị..."
+        }
+      }
+    })
   }
 
   const innovationSection = {
     title: "ĐỔI MỚI SÁNG TẠO",
     mainArticle: innovationPosts.length > 0 ? {
       title: innovationPosts[0].title,
-      href: `/bai-viet/${innovationPosts[0].slug}`
+      href: `/bai-viet/${innovationPosts[0].slug}`,
+      imageUrl: innovationPosts[0].images?.[0]?.image?.path || innovationPosts[0].imageUrl,
+      imageAlt: innovationPosts[0].images?.[0]?.image?.alt || innovationPosts[0].title,
+      excerpt: innovationPosts[0].excerpt
     } : {
       title: "Chưa có bài viết nào",
       href: "#"
     },
-    subArticles: innovationPosts.slice(1, 4).map(post => ({
-      title: post.title,
-      href: `/bai-viet/${post.slug}`
-    }))
+    subArticles: Array.from({ length: 3 }, (_, index) => {
+      const post = innovationPosts[index + 1]
+      if (post) {
+        return {
+          title: post.title,
+          href: `/bai-viet/${post.slug}`,
+          imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
+          imageAlt: post.images?.[0]?.image?.alt || post.title,
+          excerpt: post.excerpt
+        }
+      } else {
+        return {
+          title: "Bài viết sắp ra mắt",
+          href: "#",
+          imageUrl: undefined,
+          imageAlt: "Bài viết sắp ra mắt",
+          excerpt: "Nội dung thú vị đang được chuẩn bị..."
+        }
+      }
+    })
   }
 
   const productSection = {
     title: "SẢN PHẨM & REVIEW",
     mainArticle: productPosts.length > 0 ? {
       title: productPosts[0].title,
-      href: `/bai-viet/${productPosts[0].slug}`
+      href: `/bai-viet/${productPosts[0].slug}`,
+      imageUrl: productPosts[0].images?.[0]?.image?.path || productPosts[0].imageUrl,
+      imageAlt: productPosts[0].images?.[0]?.image?.alt || productPosts[0].title,
+      excerpt: productPosts[0].excerpt
     } : {
       title: "Chưa có bài viết nào",
       href: "#"
     },
-    subArticles: productPosts.slice(1, 4).map(post => ({
-      title: post.title,
-      href: `/bai-viet/${post.slug}`
-    }))
+    subArticles: Array.from({ length: 3 }, (_, index) => {
+      const post = productPosts[index + 1]
+      if (post) {
+        return {
+          title: post.title,
+          href: `/bai-viet/${post.slug}`,
+          imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
+          imageAlt: post.images?.[0]?.image?.alt || post.title,
+          excerpt: post.excerpt
+        }
+      } else {
+        return {
+          title: "Bài viết sắp ra mắt",
+          href: "#",
+          imageUrl: undefined,
+          imageAlt: "Bài viết sắp ra mắt",
+          excerpt: "Nội dung thú vị đang được chuẩn bị..."
+        }
+      }
+    })
   }
 
   const trendSection = {
     title: "XU HƯỚNG TƯƠNG LAI",
     mainArticle: trendPosts.length > 0 ? {
       title: trendPosts[0].title,
-      href: `/bai-viet/${trendPosts[0].slug}`
+      href: `/bai-viet/${trendPosts[0].slug}`,
+      imageUrl: trendPosts[0].images?.[0]?.image?.path || trendPosts[0].imageUrl,
+      imageAlt: trendPosts[0].images?.[0]?.image?.alt || trendPosts[0].title,
+      excerpt: trendPosts[0].excerpt
     } : {
       title: "Chưa có bài viết nào",
       href: "#"
     },
-    subArticles: trendPosts.slice(1, 4).map(post => ({
-      title: post.title,
-      href: `/bai-viet/${post.slug}`
-    }))
+    subArticles: Array.from({ length: 3 }, (_, index) => {
+      const post = trendPosts[index + 1]
+      if (post) {
+        return {
+          title: post.title,
+          href: `/bai-viet/${post.slug}`,
+          imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
+          imageAlt: post.images?.[0]?.image?.alt || post.title,
+          excerpt: post.excerpt
+        }
+      } else {
+        return {
+          title: "Bài viết sắp ra mắt",
+          href: "#",
+          imageUrl: undefined,
+          imageAlt: "Bài viết sắp ra mắt",
+          excerpt: "Nội dung thú vị đang được chuẩn bị..."
+        }
+      }
+    })
   }
 
   if (loading) {

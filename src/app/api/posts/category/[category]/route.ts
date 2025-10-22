@@ -6,6 +6,9 @@ export async function GET(
   { params }: { params: { category: string } }
 ) {
   try {
+    const { searchParams } = new URL(request.url)
+    const limit = searchParams.get('limit')
+    
     const posts = await prisma.post.findMany({
       where: {
         category: params.category,
@@ -31,7 +34,8 @@ export async function GET(
       },
       orderBy: {
         createdAt: 'desc'
-      }
+      },
+      ...(limit && { take: parseInt(limit) })
     })
 
     return NextResponse.json(posts)
