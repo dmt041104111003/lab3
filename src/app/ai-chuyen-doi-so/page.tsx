@@ -1,10 +1,10 @@
-import CategoryPage from '@/components/CategoryPage'
+import CategoryMainPage from '@/components/CategoryMainPage'
 
 export default function AiChuyenDoiSoPage() {
   return (
-    <CategoryPage 
-      title="AI – Chuyển đổi số" 
-      subcategory="ai-chuyen-doi-so"
+    <CategoryMainPage 
+      categoryId="ai-chuyen-doi-so"
+      title="AI – Chuyển đổi số"
       basePath="ai-chuyen-doi-so"
     />
   )

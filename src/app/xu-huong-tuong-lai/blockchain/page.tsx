@@ -4,7 +4,8 @@ export default function BlockchainPage() {
   return (
     <CategoryPage 
       title="Blockchain" 
-      subcategory="blockchain" 
+      subcategory="blockchain"
+      basePath="xu-huong-tuong-lai"
     />
   )
 }

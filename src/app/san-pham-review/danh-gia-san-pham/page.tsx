@@ -4,7 +4,8 @@ export default function DanhGiaSanPhamPage() {
   return (
     <CategoryPage 
       title="Đánh giá sản phẩm" 
-      subcategory="danh-gia-san-pham" 
+      subcategory="danh-gia-san-pham"
+      basePath="san-pham-review"
     />
   )
 }

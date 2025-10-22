@@ -4,7 +4,8 @@ export default function CongNgheXanhPage() {
   return (
     <CategoryPage 
       title="Công nghệ xanh (GreenTech)" 
-      subcategory="cong-nghe-xanh" 
+      subcategory="cong-nghe-xanh"
+      basePath="xu-huong-tuong-lai"
     />
   )
 }

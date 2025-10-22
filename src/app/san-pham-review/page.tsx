@@ -1,10 +1,10 @@
-import CategoryPage from '@/components/CategoryPage'
+import CategoryMainPage from '@/components/CategoryMainPage'
 
 export default function SanPhamReviewPage() {
   return (
-    <CategoryPage 
-      title="Sản phẩm & Review" 
-      subcategory="san-pham-review"
+    <CategoryMainPage 
+      categoryId="san-pham-review"
+      title="Sản phẩm & Review"
       basePath="san-pham-review"
     />
   )
