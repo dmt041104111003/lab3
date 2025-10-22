@@ -6,6 +6,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import LoadingState from '@/components/LoadingState'
 import TiptapPreview from '@/components/TiptapPreview'
+import ArticleCard from '@/components/ArticleCard'
 
 interface Post {
   id: string
@@ -42,6 +43,7 @@ export default function PostDetail() {
   const slug = params.slug as string
   
   const [post, setPost] = useState<Post | null>(null)
+  const [relatedPosts, setRelatedPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -51,6 +53,29 @@ export default function PostDetail() {
       if (response.ok) {
         const data = await response.json()
         setPost(data)
+        
+        // Fetch related posts from same category and subcategory with matching tags
+        if (data.category && data.subcategory && data.tags && data.tags.length > 0) {
+          const relatedResponse = await fetch(`/api/posts/category/${data.category}?limit=10`)
+          if (relatedResponse.ok) {
+            const relatedData = await relatedResponse.json()
+            
+            // Filter posts that match criteria:
+            // 1. Same subcategory
+            // 2. At least one matching tag
+            // 3. Not the current post
+            const currentPostTags = data.tags.map(tag => tag.id)
+            const filtered = relatedData
+              .filter((p: Post) => 
+                p.id !== data.id && 
+                p.subcategory === data.subcategory &&
+                p.tags && p.tags.some((tag: any) => currentPostTags.includes(tag.id))
+              )
+              .slice(0, 3)
+            
+            setRelatedPosts(filtered)
+          }
+        }
       } else {
         setError('Không tìm thấy bài viết')
       }
@@ -191,6 +216,29 @@ export default function PostDetail() {
             </div>
           </div>
         </article>
+
+        {/* Bài viết liên quan */}
+        {relatedPosts.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              Bài viết liên quan
+            </h2>
+            <div className="space-y-4">
+              {relatedPosts.map((relatedPost) => (
+                <ArticleCard
+                  key={relatedPost.id}
+                  title={relatedPost.title}
+                  href={`/bai-viet/${relatedPost.slug}`}
+                  imageUrl={relatedPost.images?.[0]?.image?.path || relatedPost.imageUrl}
+                  imageAlt={relatedPost.images?.[0]?.image?.alt || relatedPost.title}
+                  excerpt={relatedPost.excerpt}
+                  layout="horizontal"
+                  comments={Math.floor(Math.random() * 50) + 1}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </main>
       
       <Footer />
