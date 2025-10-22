@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import LoadingState from '@/components/LoadingState'
+import TiptapPreview from '@/components/TiptapPreview'
 
 interface Post {
   id: string
@@ -145,9 +146,9 @@ export default function PostDetailPage() {
               </div>
             )}
             
-            <div 
-              className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+            <TiptapPreview 
+              content={post.content}
+              className=""
             />
           </div>
         </article>

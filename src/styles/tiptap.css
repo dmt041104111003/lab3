@@ -1,0 +1,229 @@
+/* Tiptap Editor Styles */
+.ProseMirror {
+  outline: none;
+  text-align: justify;
+}
+
+/* Preview styles */
+.tiptap-preview {
+  line-height: 1.7;
+  font-size: 16px;
+  color: #374151;
+  text-align: justify;
+}
+
+/* Apply same styles to preview content */
+.tiptap-preview p {
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
+
+.tiptap-preview p:first-child {
+  margin-top: 0;
+}
+
+.tiptap-preview p:last-child {
+  margin-bottom: 0;
+}
+
+.tiptap-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1rem auto;
+  display: block;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.tiptap-preview h1,
+.tiptap-preview h2,
+.tiptap-preview h3,
+.tiptap-preview h4,
+.tiptap-preview h5,
+.tiptap-preview h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.tiptap-preview h1:first-child,
+.tiptap-preview h2:first-child,
+.tiptap-preview h3:first-child,
+.tiptap-preview h4:first-child,
+.tiptap-preview h5:first-child,
+.tiptap-preview h6:first-child {
+  margin-top: 0;
+}
+
+.tiptap-preview ul,
+.tiptap-preview ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.tiptap-preview li {
+  margin-bottom: 0.25rem;
+}
+
+.tiptap-preview blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: #6b7280;
+}
+
+.tiptap-preview code {
+  background-color: #f3f4f6;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-family: 'Courier New', monospace;
+}
+
+.tiptap-preview pre {
+  background-color: #1f2937;
+  color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.tiptap-preview pre code {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+.tiptap-preview a {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.tiptap-preview a:hover {
+  color: #1d4ed8;
+}
+
+.ProseMirror p {
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
+
+.ProseMirror p:first-child {
+  margin-top: 0;
+}
+
+.ProseMirror p:last-child {
+  margin-bottom: 0;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1rem auto;
+  display: block;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.ProseMirror h1:first-child,
+.ProseMirror h2:first-child,
+.ProseMirror h3:first-child,
+.ProseMirror h4:first-child,
+.ProseMirror h5:first-child,
+.ProseMirror h6:first-child {
+  margin-top: 0;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.ProseMirror li {
+  margin-bottom: 0.25rem;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: #6b7280;
+}
+
+.ProseMirror code {
+  background-color: #f3f4f6;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-family: 'Courier New', monospace;
+}
+
+.ProseMirror pre {
+  background-color: #1f2937;
+  color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.ProseMirror pre code {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+.ProseMirror a {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.ProseMirror a:hover {
+  color: #1d4ed8;
+}
+
+/* Text alignment */
+.ProseMirror [data-text-align="center"] {
+  text-align: center;
+}
+
+.ProseMirror [data-text-align="right"] {
+  text-align: right;
+}
+
+.ProseMirror [data-text-align="left"] {
+  text-align: left;
+}
+
+/* Image alignment */
+.ProseMirror img[data-text-align="center"] {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ProseMirror img[data-text-align="right"] {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.ProseMirror img[data-text-align="left"] {
+  margin-left: 0;
+  margin-right: auto;
+}
