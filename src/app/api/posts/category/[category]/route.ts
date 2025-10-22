@@ -17,6 +17,11 @@ export async function GET(
             name: true,
             email: true
           }
+        },
+        tags: {
+          include: {
+            tag: true
+          }
         }
       },
       orderBy: {

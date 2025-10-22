@@ -112,12 +112,13 @@ export default function EditPost() {
       
       if (postData) {
         setPost(postData)
+        
         setFormData({
           title: postData.title,
           content: postData.content,
           excerpt: postData.excerpt,
           published: postData.published,
-          selectedTags: postData.tags?.map((tag: any) => tag.id) || [],
+          selectedTags: postData.tags?.map((tag: any) => tag.tag?.id || tag.id) || [],
           selectedImage: postData.featuredImage?.id || '',
           category: postData.category || '',
           subcategory: postData.subcategory || '',

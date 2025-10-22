@@ -49,9 +49,11 @@ export default function CreatePost() {
   const [tags, setTags] = useState<Tag[]>([])
   const [images, setImages] = useState<Image[]>([])
   const [loadingData, setLoadingData] = useState(true)
+  const [currentUser, setCurrentUser] = useState<{id: string} | null>(null)
 
   useEffect(() => {
     fetchData()
+    fetchCurrentUser()
   }, [])
 
   const fetchData = async () => {
@@ -75,12 +77,45 @@ export default function CreatePost() {
     }
   }
 
+  const fetchCurrentUser = async () => {
+    try {
+      const response = await fetch('/api/check-admin')
+      const data = await response.json()
+      if (data.isAdmin) {
+        // Get user info from session cookie
+        const userSession = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('user_session='))
+          ?.split('=')[1]
+        
+        if (userSession) {
+          const user = JSON.parse(decodeURIComponent(userSession))
+          setCurrentUser({ id: user.id })
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching current user:', error)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError('')
 
     try {
+      // Convert file to base64 if uploading new image
+      let newImageFileBase64 = null
+      if (formData.imageType === 'upload' && formData.newImageFile) {
+        newImageFileBase64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onload = () => resolve(reader.result as string)
+          reader.onerror = reject
+          reader.readAsDataURL(formData.newImageFile!)
+        })
+      }
+
+
       const response = await fetch('/api/posts', {
         method: 'POST',
         headers: {
@@ -95,9 +130,10 @@ export default function CreatePost() {
           selectedImage: formData.selectedImage,
           imageType: formData.imageType,
           imageUrl: formData.imageUrl,
+          newImageFile: newImageFileBase64,
           category: formData.category,
           subcategory: formData.subcategory,
-          authorId: '1' // In a real app, get from session
+          authorId: currentUser?.id || 'cmh10oekw0001x8rjt3cati7w' // Get from session or fallback
         }),
       })
 
