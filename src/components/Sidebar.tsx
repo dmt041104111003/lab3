@@ -52,9 +52,11 @@ interface SidebarProps {
   subcategories?: Subcategory[]
   basePath?: string
   title?: string
+  subcategoryCounts?: Record<string, number>
+  subcategoryPosts?: Record<string, any[]>
 }
 
-export default function Sidebar({ quickNews = [], techToday = [], mostRead = [], subcategories = [], basePath = '', title = '' }: SidebarProps) {
+export default function Sidebar({ quickNews = [], techToday = [], mostRead = [], subcategories = [], basePath = '', title = '', subcategoryCounts = {}, subcategoryPosts = {} }: SidebarProps) {
   const mostReadItems = mostRead.length > 0 ? mostRead.slice(0, 3).map(post => ({
     title: post.title,
     href: `/tin-tuc/${post.subcategory || 'cong-nghe-viet-nam'}/${post.slug}`
@@ -92,20 +94,51 @@ export default function Sidebar({ quickNews = [], techToday = [], mostRead = [],
           <h3 className="text-lg font-bold text-gray-800 mb-4 uppercase tracking-wide">
             Tiểu mục
           </h3>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {subcategories.map((subcategory) => (
-              <a
-                key={subcategory.id}
-                href={`/${basePath}/${subcategory.slug}`}
-                className="block bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 hover:border-blue-500"
-              >
-                <div className="text-center">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-1">
+              <div key={subcategory.id} className="bg-white rounded-lg shadow-sm border border-gray-200">
+                <a
+                  href={`/${basePath}/${subcategory.slug}`}
+                  className="flex items-center justify-between px-4 py-3 hover:bg-gray-50"
+                >
+                  <h4 className="text-sm font-semibold text-gray-900">
                     {subcategory.name}
                   </h4>
+                  {typeof subcategoryCounts[subcategory.id] === 'number' && (
+                    <span className="ml-3 inline-flex items-center justify-center px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-700">
+                      {subcategoryCounts[subcategory.id]}
+                    </span>
+                  )}
+                </a>
 
-                </div>
-              </a>
+                {Array.isArray(subcategoryPosts[subcategory.id]) && subcategoryPosts[subcategory.id].length > 0 && (
+                  <div className="px-4 pb-3 space-y-3">
+                    {subcategoryPosts[subcategory.id].slice(0, 2).map((post: any) => (
+                      <a
+                        key={post.id}
+                        href={`/${post.category || basePath}/${post.subcategory}/${post.slug}`}
+                        className="flex space-x-3 group"
+                      >
+                        {post.images?.[0]?.image?.path && (
+                          <img
+                            src={post.images[0].image.path}
+                            alt={post.images[0].image.alt || post.title}
+                            className="w-14 h-14 object-cover rounded"
+                          />
+                        )}
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-gray-700 group-hover:text-gray-900 line-clamp-2">
+                              {post.title}
+                            </span>
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-red-500 text-white text-[10px] uppercase">New</span>
+                          </div>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>

@@ -301,7 +301,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-3 space-y-8">
             <ContentSection {...newsSection} />
-            <ContentSection {...aiSection} />
+            <ContentSection {...aiSection} variant="split" />
             <ContentSection {...innovationSection} />
             <ContentSection {...productSection} />
             <ContentSection {...trendSection} />

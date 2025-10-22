@@ -41,6 +41,8 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [subcategoryCounts, setSubcategoryCounts] = useState<Record<string, number>>({})
+  const [subcategoryPosts, setSubcategoryPosts] = useState<Record<string, Post[]>>({})
 
   useEffect(() => {
     fetchPosts()
@@ -62,6 +64,19 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
       )
 
       const allSubcategoryPosts = await Promise.all(promises)
+
+      const counts: Record<string, number> = {}
+      const postsBySub: Record<string, Post[]> = {}
+      subcategories.forEach((sub, index) => {
+        const response = allSubcategoryPosts[index]
+        if (response && response.pagination && typeof response.pagination.totalCount === 'number') {
+          counts[sub.id] = response.pagination.totalCount
+        }
+        const list: Post[] = (response?.posts || response || []) as Post[]
+        postsBySub[sub.id] = (list || []).slice(0, 2)
+      })
+      setSubcategoryCounts(counts)
+      setSubcategoryPosts(postsBySub)
       const allPosts = allSubcategoryPosts
         .map(response => {
           return response.posts || response
@@ -188,6 +203,8 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
               subcategories={subcategories}
               basePath={basePath}
               title={title}
+              subcategoryCounts={subcategoryCounts}
+              subcategoryPosts={subcategoryPosts}
             />
           </div>
         </div>
