@@ -1,5 +1,12 @@
 import Link from 'next/link'
 
+interface Post {
+  id: string
+  title: string
+  slug: string
+  subcategory?: string
+}
+
 interface SidebarSectionProps {
   title: string
   items: Array<{
@@ -31,20 +38,35 @@ function SidebarSection({ title, items }: SidebarSectionProps) {
   )
 }
 
-export default function Sidebar() {
-  const mostReadItems = [
-    { title: "Bài phụ 1", href: "/bai-viet/1" },
-    { title: "Bài phụ 2", href: "/bai-viet/2" },
-    { title: "Bài phụ 3", href: "/bai-viet/3" }
+interface SidebarProps {
+  quickNews?: Post[]
+  techToday?: Post[]
+  mostRead?: Post[]
+}
+
+export default function Sidebar({ quickNews = [], techToday = [], mostRead = [] }: SidebarProps) {
+  const mostReadItems = mostRead.length > 0 ? mostRead.slice(0, 3).map(post => ({
+    title: post.title,
+    href: `/tin-tuc/${post.subcategory || 'cong-nghe-viet-nam'}/${post.slug}`
+  })) : [
+    { title: "Bài viết sắp ra mắt", href: "#" },
+    { title: "Bài viết sắp ra mắt", href: "#" },
+    { title: "Bài viết sắp ra mắt", href: "#" }
   ]
 
-  const quickNewsItems = [
-    { title: "Bài phụ 1", href: "/bai-viet/4" },
-    { title: "Bài phụ 2", href: "/bai-viet/5" }
+  const quickNewsItems = quickNews.length > 0 ? quickNews.slice(0, 2).map(post => ({
+    title: post.title,
+    href: `/xu-huong-tuong-lai/${post.subcategory || 'blockchain'}/${post.slug}`
+  })) : [
+    { title: "Tin nhanh sắp ra mắt", href: "#" },
+    { title: "Tin nhanh sắp ra mắt", href: "#" }
   ]
 
-  const techTodayItems = [
-    { title: "Bài phụ 1", href: "/bai-viet/6" }
+  const techTodayItems = techToday.length > 0 ? techToday.slice(0, 1).map(post => ({
+    title: post.title,
+    href: `/ai-chuyen-doi-so/${post.subcategory || 'tri-tue-nhan-tao'}/${post.slug}`
+  })) : [
+    { title: "Công nghệ sắp ra mắt", href: "#" }
   ]
 
   return (

@@ -39,6 +39,7 @@ export default function Home() {
   const [innovationPosts, setInnovationPosts] = useState<Post[]>([])
   const [productPosts, setProductPosts] = useState<Post[]>([])
   const [trendPosts, setTrendPosts] = useState<Post[]>([])
+  const [quickNews, setQuickNews] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -63,20 +64,22 @@ export default function Home() {
 
   const fetchHomeData = async () => {
     try {
-      const [newsRes, aiRes, innovationRes, productRes, trendRes] = await Promise.all([
+      const [newsRes, aiRes, innovationRes, productRes, trendRes, quickNewsRes] = await Promise.all([
         fetch('/api/posts/category/tin-tuc?limit=4'),
         fetch('/api/posts/category/ai-chuyen-doi-so?limit=4'),
         fetch('/api/posts/category/doi-moi-sang-tao?limit=4'),
         fetch('/api/posts/category/san-pham-review?limit=4'),
-        fetch('/api/posts/category/xu-huong-tuong-lai?limit=4')
+        fetch('/api/posts/category/xu-huong-tuong-lai?limit=4'),
+        fetch('/api/posts/category/xu-huong-tuong-lai?limit=2')
       ])
 
-      const [newsData, aiData, innovationData, productData, trendData] = await Promise.all([
+      const [newsData, aiData, innovationData, productData, trendData, quickNewsData] = await Promise.all([
         newsRes.json(),
         aiRes.json(),
         innovationRes.json(),
         productRes.json(),
-        trendRes.json()
+        trendRes.json(),
+        quickNewsRes.json()
       ])
 
       setNewsPosts(newsData)
@@ -84,6 +87,7 @@ export default function Home() {
       setInnovationPosts(innovationData)
       setProductPosts(productData)
       setTrendPosts(trendData)
+      setQuickNews(quickNewsData)
     } catch (error) {
       console.error('Error fetching home data:', error)
       setError('Có lỗi xảy ra khi tải dữ liệu')
@@ -308,7 +312,7 @@ export default function Home() {
 
           {/* Sidebar - Right Column */}
           <div className="lg:col-span-1">
-            <Sidebar />
+            <Sidebar quickNews={quickNews} techToday={aiPosts} mostRead={newsPosts} />
           </div>
         </div>
       </main>
