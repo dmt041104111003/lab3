@@ -168,16 +168,13 @@ export default function TagsPage() {
     <AdminLayout>
       <AdminPageHeader 
         title="Quản lý thẻ"
-        actionButton={{
-          text: "Thêm thẻ mới",
-          href: "#"
-        }}
+
       />
       
       <div className="mb-6">
         <button
           onClick={() => setShowCreateForm(true)}
-          className="bg-tech-blue text-white px-4 py-2 rounded-md hover:bg-tech-dark-blue"
+          className="bg-tech-blue text-white px-4 py-2 rounded-md hover:bg-tech-dark-blue transition-colors"
         >
           Thêm thẻ mới
         </button>

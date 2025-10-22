@@ -189,10 +189,7 @@ export default function ImagesPage() {
     <AdminLayout>
       <AdminPageHeader 
         title="Quản lý hình ảnh"
-        actionButton={{
-          text: "Tải lên hình ảnh",
-          href: "#"
-        }}
+  
       />
       
       <div className="mb-6">

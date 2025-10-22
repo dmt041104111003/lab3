@@ -18,14 +18,7 @@ export default function AdminPageHeader({ title, description, actionButton }: Ad
             <p className="mt-2 text-gray-600">{description}</p>
           )}
         </div>
-        {actionButton && (
-          <a
-            href={actionButton.href}
-            className={`bg-tech-blue text-white px-4 py-2 rounded-md hover:bg-tech-dark-blue transition-colors ${actionButton.className || ''}`}
-          >
-            {actionButton.text}
-          </a>
-        )}
+        
       </div>
     </div>
   )

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Head from 'next/head'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import ContentSection from '@/components/ContentSection'
@@ -37,6 +38,32 @@ export default function TinTucPage() {
 
   useEffect(() => {
     fetchPosts()
+  }, [])
+
+  useEffect(() => {
+    document.title = 'Tin tức công nghệ - TechNova'
+    
+    // Update meta description
+    const metaDescription = document.querySelector('meta[name="description"]')
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Cập nhật tin tức công nghệ mới nhất từ Việt Nam và thế giới. Theo dõi xu hướng công nghệ, phát minh mới và tác động của chúng tới đời sống.')
+    } else {
+      const meta = document.createElement('meta')
+      meta.name = 'description'
+      meta.content = 'Cập nhật tin tức công nghệ mới nhất từ Việt Nam và thế giới. Theo dõi xu hướng công nghệ, phát minh mới và tác động của chúng tới đời sống.'
+      document.head.appendChild(meta)
+    }
+
+    // Update Open Graph title
+    const ogTitle = document.querySelector('meta[property="og:title"]')
+    if (ogTitle) {
+      ogTitle.setAttribute('content', 'Tin tức công nghệ - TechNova')
+    } else {
+      const meta = document.createElement('meta')
+      meta.setAttribute('property', 'og:title')
+      meta.content = 'Tin tức công nghệ - TechNova'
+      document.head.appendChild(meta)
+    }
   }, [])
 
   const fetchPosts = async () => {
@@ -94,7 +121,6 @@ export default function TinTucPage() {
       excerpt: post.excerpt
     }))
   }
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -123,9 +149,9 @@ export default function TinTucPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Header />
+        
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">
           <ContentSection {...tinTucSection} />
           

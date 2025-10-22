@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Head from 'next/head'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import ContentSection from '@/components/ContentSection'
@@ -34,6 +35,21 @@ export default function Home() {
 
   useEffect(() => {
     fetchHomeData()
+  }, [])
+
+  useEffect(() => {
+    document.title = 'TechNova - Công nghệ & Đời sống'
+    
+    // Update meta description
+    const metaDescription = document.querySelector('meta[name="description"]')
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Trang tin công nghệ hàng đầu Việt Nam, cập nhật xu hướng công nghệ mới và tác động của chúng tới đời sống con người.')
+    } else {
+      const meta = document.createElement('meta')
+      meta.name = 'description'
+      meta.content = 'Trang tin công nghệ hàng đầu Việt Nam, cập nhật xu hướng công nghệ mới và tác động của chúng tới đời sống con người.'
+      document.head.appendChild(meta)
+    }
   }, [])
 
   const fetchHomeData = async () => {
@@ -154,10 +170,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <AdminRedirect />
-      <Header />
-      
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <AdminRedirect />
+        <Header />
+        
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Main Content - Left Column */}
           <div className="lg:col-span-3 space-y-8">

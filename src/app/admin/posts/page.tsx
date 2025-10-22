@@ -202,9 +202,13 @@ export default function AdminPosts() {
           renderRow={(post) => (
             <tr key={post.id}>
               <td className="px-6 py-4">
-                <div className="text-sm font-medium text-gray-900">{post.title}</div>
+                <div className="text-sm font-medium text-gray-900 truncate max-w-xs" title={post.title}>
+                  {post.title}
+                </div>
                 {post.excerpt && (
-                  <div className="text-sm text-gray-500 mt-1">{post.excerpt}</div>
+                  <div className="text-sm text-gray-500 mt-1 truncate max-w-xs" title={post.excerpt}>
+                    {post.excerpt}
+                  </div>
                 )}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
