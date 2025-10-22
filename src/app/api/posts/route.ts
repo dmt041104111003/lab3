@@ -198,7 +198,6 @@ export async function PUT(request: NextRequest) {
 
     const baseSlug = generateSlug(title)
     
- (excluding current post)
     const existingPosts = await prisma.post.findMany({
       select: { slug: true },
       where: { id: { not: id } }

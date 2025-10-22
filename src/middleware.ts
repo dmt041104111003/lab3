@@ -23,20 +23,7 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // if (pathname === '/') {
-  //   const userSession = request.cookies.get('user_session')?.value
-  //   if (userSession) {
-  //     try {
-  //       const user = JSON.parse(userSession)
-  //       if (user.role === 'ADMIN') {
-  //         return NextResponse.redirect(new URL('/admin', request.url))
-  //       }
-  //     } catch (error) {
-  //     }
-  //   }
-  // }
-
-  // return NextResponse.next()
+  return NextResponse.next()
 }
 
 export const config = {
