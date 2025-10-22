@@ -43,30 +43,37 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true, 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalCount, setTotalCount] = useState(0)
   const itemsPerPage = 6
 
-  const fetchPosts = useCallback(async () => {
+  const fetchPosts = useCallback(async (page: number = 1) => {
     try {
-      const response = await fetch(`/api/posts/subcategory/${subcategory}`)
+      setLoading(true)
+      const response = await fetch(`/api/posts/subcategory/${subcategory}?page=${page}&limit=${itemsPerPage}`)
       const data = await response.json()
-      setPosts(data)
+      
+      if (data.posts) {
+        setPosts(data.posts)
+        setTotalPages(data.pagination.totalPages)
+        setTotalCount(data.pagination.totalCount)
+      } else {
+        // Fallback for old API format
+        setPosts(data)
+        setTotalPages(Math.ceil(data.length / itemsPerPage))
+        setTotalCount(data.length)
+      }
     } catch (error) {
       console.error('Error fetching posts:', error)
       setError('Có lỗi xảy ra khi tải bài viết')
     } finally {
       setLoading(false)
     }
-  }, [subcategory])
+  }, [subcategory, itemsPerPage])
 
   useEffect(() => {
-    fetchPosts()
-  }, [fetchPosts])
-
-  // Pagination logic
-  const totalPages = Math.ceil(posts.length / itemsPerPage)
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const endIndex = startIndex + itemsPerPage
-  const paginatedPosts = posts.slice(startIndex, endIndex)
+    fetchPosts(currentPage)
+  }, [fetchPosts, currentPage])
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
@@ -129,17 +136,22 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true, 
           <ContentSection {...sectionData} />
           
           {/* Danh sách tất cả bài viết */}
-          {showAllPosts && posts.length > 4 && (
+          {showAllPosts && posts.length > 0 && (
             <div className="mt-12">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Tất cả bài viết {title}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {paginatedPosts.map((post) => (
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                Tất cả bài viết {title} ({totalCount} bài)
+              </h2>
+              <div className="space-y-4">
+                {posts.map((post) => (
                   <ArticleCard
                     key={post.id}
                     title={post.title}
                     href={`/${basePath}/${post.subcategory}/${post.slug}`}
                     imageUrl={post.images?.[0]?.image?.path}
                     imageAlt={post.images?.[0]?.image?.alt || post.title}
+                    excerpt={post.excerpt}
+                    layout="horizontal"
+                    comments={Math.floor(Math.random() * 50) + 1} // Random comments for demo
                   />
                 ))}
               </div>

@@ -22,7 +22,8 @@ export default function MetaversePage() {
   return (
     <CategoryPage 
       title="Metaverse" 
-      subcategory="metaverse" 
+      subcategory="metaverse"
+      basePath="xu-huong-tuong-lai"
     />
   )
 }

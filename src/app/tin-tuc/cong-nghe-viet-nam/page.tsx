@@ -23,6 +23,7 @@ export default function CongNgheVietNamPage() {
     <CategoryPage 
       title="Công nghệ Việt Nam"
       subcategory="cong-nghe-viet-nam"
+      basePath="tin-tuc"
     />
   )
 }
