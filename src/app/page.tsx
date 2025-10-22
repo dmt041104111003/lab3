@@ -176,7 +176,7 @@ export default function Home() {
       title: "Chưa có bài viết nào",
       href: "#"
     },
-    subArticles: Array.from({ length: 3 }, (_, index) => {
+    subArticles: Array.from({ length: 2 }, (_, index) => {
       const post = innovationPosts[index + 1]
       if (post) {
         return {
@@ -216,7 +216,7 @@ export default function Home() {
       title: "Chưa có bài viết nào",
       href: "#"
     },
-    subArticles: Array.from({ length: 3 }, (_, index) => {
+    subArticles: Array.from({ length: 2 }, (_, index) => {
       const post = productPosts[index + 1]
       if (post) {
         return {
@@ -256,7 +256,7 @@ export default function Home() {
       title: "Chưa có bài viết nào",
       href: "#"
     },
-    subArticles: Array.from({ length: 3 }, (_, index) => {
+    subArticles: Array.from({ length: 2 }, (_, index) => {
       const post = trendPosts[index + 1]
       if (post) {
         return {

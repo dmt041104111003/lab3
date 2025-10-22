@@ -147,6 +147,11 @@ export default function Header() {
     setUser(updated)
     setSession(updated)
     setIsEditingName(false)
+    fetch('/api/users/me', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: updated.id, name: updated.name })
+    }).catch(() => {})
   }
 
   const isActive = (path: string) => {
