@@ -68,7 +68,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
         })
         .flat()
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        .slice(0, 7)
+        .slice(0, 3)
       setPosts(allPosts)
     } catch (error) {
       setError('Có lỗi xảy ra khi tải bài viết')
@@ -129,7 +129,8 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-3">
             {posts.length > 0 && (
-              <div className="mb-8">
+              <div className="space-y-6">
+                {/* Bài viết chính - 1 cái to */}
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                   {posts[0].images?.[0]?.image?.path && (
                     <div className="aspect-w-16 aspect-h-9">
@@ -160,22 +161,23 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                     )}
                   </div>
                 </div>
-              </div>
-            )}
 
-            {posts.length > 1 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {posts.slice(1, 7).map((post) => (
-                  <ArticleCard
-                    key={post.id}
-                    title={post.title}
-                    href={`/${basePath}/${post.subcategory}/${post.slug}`}
-                    imageUrl={post.images?.[0]?.image?.path}
-                    imageAlt={post.images?.[0]?.image?.alt || post.title}
-                    excerpt={post.excerpt}
-                    layout="vertical"
-                  />
-                ))}
+                {/* 2 bài viết nhỏ bên dưới */}
+                {posts.length > 1 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {posts.slice(1, 3).map((post) => (
+                      <ArticleCard
+                        key={post.id}
+                        title={post.title}
+                        href={`/${basePath}/${post.subcategory}/${post.slug}`}
+                        imageUrl={post.images?.[0]?.image?.path}
+                        imageAlt={post.images?.[0]?.image?.alt || post.title}
+                        excerpt={post.excerpt}
+                        layout="vertical"
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
