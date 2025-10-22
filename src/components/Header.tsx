@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-import { getSession, clearSession, isAdmin, type User } from '@/lib/session'
+import { getSession, setSession, clearSession, isAdmin, type User } from '@/lib/session'
 
 export default function Header() {
   const pathname = usePathname()
@@ -13,6 +13,8 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
+  const [isEditingName, setIsEditingName] = useState(false)
+  const [nameInput, setNameInput] = useState('')
   const [mounted, setMounted] = useState(false)
 
   // TechNova mega menu categories
@@ -132,6 +134,19 @@ export default function Header() {
     setUser(null)
     setIsLoggedIn(false)
     window.location.href = '/'
+  }
+
+  const startEditName = () => {
+    setNameInput(user?.name || '')
+    setIsEditingName(true)
+  }
+
+  const saveEditedName = () => {
+    if (!user) return
+    const updated: User = { ...user, name: nameInput.trim() || user.name }
+    setUser(updated)
+    setSession(updated)
+    setIsEditingName(false)
   }
 
   const isActive = (path: string) => {
@@ -271,11 +286,37 @@ export default function Header() {
                   {isProfileMenuOpen && (
                     <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                       <div className="px-4 py-3 border-b border-gray-100">
-                        <div className="text-sm font-semibold text-gray-900">{user?.name}</div>
-                        <div className="text-xs text-gray-600 truncate">{user?.email}</div>
-                        <div className="text-xs text-gray-500 mt-1">Vai trò: {user?.role}</div>
+                        {!isEditingName ? (
+                          <>
+                            <div className="text-sm font-semibold text-gray-900">{user?.name}</div>
+                            <div className="text-xs text-gray-600 truncate">{user?.email}</div>
+                            <div className="text-xs text-gray-500 mt-1">Vai trò: {user?.role}</div>
+                          </>
+                        ) : (
+                          <div className="space-y-2">
+                            <label className="block text-xs text-gray-600">Chỉnh sửa tên</label>
+                            <input
+                              value={nameInput}
+                              onChange={(e) => setNameInput(e.target.value)}
+                              className="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-tech-blue"
+                              placeholder="Nhập tên mới"
+                            />
+                            <div className="flex justify-end space-x-2 pt-1">
+                              <button onClick={() => setIsEditingName(false)} className="px-2 py-1 text-xs text-gray-600 hover:text-gray-900">Hủy</button>
+                              <button onClick={saveEditedName} className="px-2 py-1 text-xs bg-tech-blue text-white rounded hover:bg-tech-dark-blue">Lưu</button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                       <div className="py-1">
+                        {!isEditingName && (
+                          <button
+                            onClick={startEditName}
+                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          >
+                            Chỉnh sửa tên
+                          </button>
+                        )}
                         {isAdmin() && (
                           <Link
                             href="/admin"

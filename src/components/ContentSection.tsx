@@ -9,6 +9,8 @@ interface ContentSectionProps {
     imageUrl?: string
     imageAlt?: string
     excerpt?: string
+    timestamp?: string
+    category?: string
   }
   subArticles: Array<{
     title: string
@@ -16,9 +18,11 @@ interface ContentSectionProps {
     imageUrl?: string
     imageAlt?: string
     excerpt?: string
+    timestamp?: string
+    category?: string
   }>
   className?: string
-  variant?: 'default' | 'split'
+  variant?: 'default' | 'split' | 'list'
 }
 
 export default function ContentSection({ title, mainArticle, subArticles, className = "", variant = 'default' }: ContentSectionProps) {
@@ -50,6 +54,35 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
               />
             ))}
           </div>
+        </div>
+      ) : variant === 'list' ? (
+        <div className="space-y-4">
+          {/* Main Article */}
+          <ArticleCard
+            title={mainArticle.title}
+            href={mainArticle.href}
+            imageUrl={mainArticle.imageUrl}
+            imageAlt={mainArticle.imageAlt}
+            excerpt={mainArticle.excerpt}
+            timestamp={mainArticle.timestamp}
+            category={mainArticle.category}
+            layout='list'
+          />
+          
+          {/* Sub Articles */}
+          {subArticles.map((article, index) => (
+            <ArticleCard
+              key={index}
+              title={article.title}
+              href={article.href}
+              imageUrl={article.imageUrl}
+              imageAlt={article.imageAlt}
+              excerpt={article.excerpt}
+              timestamp={article.timestamp}
+              category={article.category}
+              layout='list'
+            />
+          ))}
         </div>
       ) : (
         <>

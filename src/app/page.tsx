@@ -169,7 +169,9 @@ export default function Home() {
       href: `/doi-moi-sang-tao/${innovationPosts[0].subcategory || 'startup-viet'}/${innovationPosts[0].slug}`,
       imageUrl: innovationPosts[0].images?.[0]?.image?.path || innovationPosts[0].imageUrl,
       imageAlt: innovationPosts[0].images?.[0]?.image?.alt || innovationPosts[0].title,
-      excerpt: innovationPosts[0].excerpt
+      excerpt: innovationPosts[0].excerpt,
+      timestamp: "18 giờ trước",
+      category: "Đổi mới sáng tạo"
     } : {
       title: "Chưa có bài viết nào",
       href: "#"
@@ -182,7 +184,9 @@ export default function Home() {
           href: `/doi-moi-sang-tao/${post.subcategory || 'startup-viet'}/${post.slug}`,
           imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
           imageAlt: post.images?.[0]?.image?.alt || post.title,
-          excerpt: post.excerpt
+          excerpt: post.excerpt,
+          timestamp: "19 giờ trước",
+          category: "Mobile"
         }
       } else {
         return {
@@ -190,7 +194,9 @@ export default function Home() {
           href: "#",
           imageUrl: undefined,
           imageAlt: "Bài viết sắp ra mắt",
-          excerpt: "Nội dung thú vị đang được chuẩn bị..."
+          excerpt: "Nội dung thú vị đang được chuẩn bị...",
+          timestamp: "20 giờ trước",
+          category: "Đồ chơi số"
         }
       }
     })
@@ -203,7 +209,9 @@ export default function Home() {
       href: `/san-pham-review/${productPosts[0].subcategory || 'thiet-bi-moi'}/${productPosts[0].slug}`,
       imageUrl: productPosts[0].images?.[0]?.image?.path || productPosts[0].imageUrl,
       imageAlt: productPosts[0].images?.[0]?.image?.alt || productPosts[0].title,
-      excerpt: productPosts[0].excerpt
+      excerpt: productPosts[0].excerpt,
+      timestamp: "18 giờ trước",
+      category: "Sản phẩm"
     } : {
       title: "Chưa có bài viết nào",
       href: "#"
@@ -216,7 +224,9 @@ export default function Home() {
           href: `/san-pham-review/${post.subcategory || 'thiet-bi-moi'}/${post.slug}`,
           imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
           imageAlt: post.images?.[0]?.image?.alt || post.title,
-          excerpt: post.excerpt
+          excerpt: post.excerpt,
+          timestamp: "19 giờ trước",
+          category: "Mobile"
         }
       } else {
         return {
@@ -224,7 +234,9 @@ export default function Home() {
           href: "#",
           imageUrl: undefined,
           imageAlt: "Bài viết sắp ra mắt",
-          excerpt: "Nội dung thú vị đang được chuẩn bị..."
+          excerpt: "Nội dung thú vị đang được chuẩn bị...",
+          timestamp: "20 giờ trước",
+          category: "Đồ chơi số"
         }
       }
     })
@@ -237,7 +249,9 @@ export default function Home() {
       href: `/xu-huong-tuong-lai/${trendPosts[0].subcategory || 'blockchain'}/${trendPosts[0].slug}`,
       imageUrl: trendPosts[0].images?.[0]?.image?.path || trendPosts[0].imageUrl,
       imageAlt: trendPosts[0].images?.[0]?.image?.alt || trendPosts[0].title,
-      excerpt: trendPosts[0].excerpt
+      excerpt: trendPosts[0].excerpt,
+      timestamp: "18 giờ trước",
+      category: "Xu hướng"
     } : {
       title: "Chưa có bài viết nào",
       href: "#"
@@ -250,7 +264,9 @@ export default function Home() {
           href: `/xu-huong-tuong-lai/${post.subcategory || 'blockchain'}/${post.slug}`,
           imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
           imageAlt: post.images?.[0]?.image?.alt || post.title,
-          excerpt: post.excerpt
+          excerpt: post.excerpt,
+          timestamp: "19 giờ trước",
+          category: "Mobile"
         }
       } else {
         return {
@@ -258,7 +274,9 @@ export default function Home() {
           href: "#",
           imageUrl: undefined,
           imageAlt: "Bài viết sắp ra mắt",
-          excerpt: "Nội dung thú vị đang được chuẩn bị..."
+          excerpt: "Nội dung thú vị đang được chuẩn bị...",
+          timestamp: "20 giờ trước",
+          category: "Đồ chơi số"
         }
       }
     })
@@ -302,9 +320,9 @@ export default function Home() {
           <div className="lg:col-span-3 space-y-8">
             <ContentSection {...newsSection} />
             <ContentSection {...aiSection} variant="split" />
-            <ContentSection {...innovationSection} />
-            <ContentSection {...productSection} />
-            <ContentSection {...trendSection} />
+            <ContentSection {...innovationSection} variant="list" />
+            <ContentSection {...productSection} variant="list" />
+            <ContentSection {...trendSection} variant="list" />
           </div>
 
           <div className="lg:col-span-1">

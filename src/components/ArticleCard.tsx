@@ -8,11 +8,13 @@ interface ArticleCardProps {
   imageUrl?: string
   imageAlt?: string
   excerpt?: string
-  layout?: 'vertical' | 'horizontal'
+  layout?: 'vertical' | 'horizontal' | 'list'
   comments?: number
+  timestamp?: string
+  category?: string
 }
 
-export default function ArticleCard({ title, href, isMain = false, className = "", imageUrl, imageAlt, excerpt, layout = 'vertical', comments }: ArticleCardProps) {
+export default function ArticleCard({ title, href, isMain = false, className = "", imageUrl, imageAlt, excerpt, layout = 'vertical', comments, timestamp, category }: ArticleCardProps) {
   if (isMain) {
     return (
       <Link href={href} className={`block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 ${className}`}>
@@ -81,6 +83,48 @@ export default function ArticleCard({ title, href, isMain = false, className = "
                 </svg>
                 <span>{comments}</span>
               </div>
+            )}
+          </div>
+        </div>
+      </Link>
+    )
+  }
+
+  if (layout === 'list') {
+    return (
+      <Link href={href} className={`block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 ${className}`}>
+        <div className="flex p-4">
+          {/* Image Section */}
+          <div className="flex-shrink-0 w-20 h-20">
+            {imageUrl ? (
+              <img 
+                src={imageUrl} 
+                alt={imageAlt || title}
+                className="w-full h-full object-cover rounded-lg"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
+                <div className="text-center">
+                  <svg className="w-6 h-6 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                  <span className="text-gray-500 text-xs">Sắp ra mắt</span>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          {/* Content Section */}
+          <div className="flex-1 ml-4">
+            {category && (
+              <div className="text-xs text-blue-600 font-medium mb-1">{category}</div>
+            )}
+            <h4 className="text-gray-800 text-sm font-bold mb-2 line-clamp-2">{title}</h4>
+            {excerpt && (
+              <p className="text-gray-600 text-xs line-clamp-3 mb-2">{excerpt}</p>
+            )}
+            {timestamp && (
+              <div className="text-gray-400 text-xs">{timestamp}</div>
             )}
           </div>
         </div>
