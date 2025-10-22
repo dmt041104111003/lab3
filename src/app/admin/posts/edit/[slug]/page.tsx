@@ -145,6 +145,31 @@ export default function EditPost() {
     setSuccess('')
     setTitleError('')
 
+    // Basic validation
+    if (!formData.title.trim()) {
+      setTitleError('Tiêu đề không được để trống')
+      setIsSaving(false)
+      return
+    }
+
+    if (!formData.content.trim()) {
+      setError('Nội dung bài viết không được để trống')
+      setIsSaving(false)
+      return
+    }
+
+    if (!formData.category) {
+      setError('Vui lòng chọn chuyên mục')
+      setIsSaving(false)
+      return
+    }
+
+    if (!formData.subcategory) {
+      setError('Vui lòng chọn tiểu mục')
+      setIsSaving(false)
+      return
+    }
+
     // Validate title before submit
     const titleValidationError = await validateTitle(formData.title)
     if (titleValidationError) {
@@ -235,12 +260,10 @@ export default function EditPost() {
         setTitleError('') // Clear previous error
         if (value.trim()) {
           // Debounce the validation
-          const timeoutId = setTimeout(async () => {
+          setTimeout(async () => {
             const error = await validateTitle(value)
             setTitleError(error)
           }, 500)
-          
-          return () => clearTimeout(timeoutId)
         }
       }
     }
