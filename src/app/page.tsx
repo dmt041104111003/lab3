@@ -19,13 +19,22 @@ interface Post {
   createdAt: string
   category?: string
   subcategory?: string
+  imageUrl?: string
   author: {
     name: string
     email: string
   }
+  images?: Array<{
+    image: {
+      id: string
+      path: string
+      alt?: string
+    }
+  }>
 }
 
 export default function Home() {
+  const [newsPosts, setNewsPosts] = useState<Post[]>([])
   const [aiPosts, setAiPosts] = useState<Post[]>([])
   const [innovationPosts, setInnovationPosts] = useState<Post[]>([])
   const [productPosts, setProductPosts] = useState<Post[]>([])
@@ -54,20 +63,23 @@ export default function Home() {
 
   const fetchHomeData = async () => {
     try {
-      const [aiRes, innovationRes, productRes, trendRes] = await Promise.all([
+      const [newsRes, aiRes, innovationRes, productRes, trendRes] = await Promise.all([
+        fetch('/api/posts/category/tin-tuc?limit=4'),
         fetch('/api/posts/category/ai-chuyen-doi-so?limit=4'),
         fetch('/api/posts/category/doi-moi-sang-tao?limit=4'),
         fetch('/api/posts/category/san-pham-review?limit=4'),
         fetch('/api/posts/category/xu-huong-tuong-lai?limit=4')
       ])
 
-      const [aiData, innovationData, productData, trendData] = await Promise.all([
+      const [newsData, aiData, innovationData, productData, trendData] = await Promise.all([
+        newsRes.json(),
         aiRes.json(),
         innovationRes.json(),
         productRes.json(),
         trendRes.json()
       ])
 
+      setNewsPosts(newsData)
       setAiPosts(aiData)
       setInnovationPosts(innovationData)
       setProductPosts(productData)
@@ -80,11 +92,45 @@ export default function Home() {
     }
   }
 
+  const newsSection = {
+    title: "TIN TỨC",
+    mainArticle: newsPosts.length > 0 ? {
+      title: newsPosts[0].title,
+      href: `/tin-tuc/${newsPosts[0].subcategory || 'cong-nghe-viet-nam'}/${newsPosts[0].slug}`,
+      imageUrl: newsPosts[0].images?.[0]?.image?.path || newsPosts[0].imageUrl,
+      imageAlt: newsPosts[0].images?.[0]?.image?.alt || newsPosts[0].title,
+      excerpt: newsPosts[0].excerpt
+    } : {
+      title: "Chưa có bài viết nào",
+      href: "#"
+    },
+    subArticles: Array.from({ length: 3 }, (_, index) => {
+      const post = newsPosts[index + 1]
+      if (post) {
+        return {
+          title: post.title,
+          href: `/tin-tuc/${post.subcategory || 'cong-nghe-viet-nam'}/${post.slug}`,
+          imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
+          imageAlt: post.images?.[0]?.image?.alt || post.title,
+          excerpt: post.excerpt
+        }
+      } else {
+        return {
+          title: "Bài viết sắp ra mắt",
+          href: "#",
+          imageUrl: undefined,
+          imageAlt: "Bài viết sắp ra mắt",
+          excerpt: "Nội dung thú vị đang được chuẩn bị..."
+        }
+      }
+    })
+  }
+
   const aiSection = {
     title: "AI – CHUYỂN ĐỔI SỐ",
     mainArticle: aiPosts.length > 0 ? {
       title: aiPosts[0].title,
-      href: `/bai-viet/${aiPosts[0].slug}`,
+      href: `/ai-chuyen-doi-so/${aiPosts[0].subcategory || 'tri-tue-nhan-tao'}/${aiPosts[0].slug}`,
       imageUrl: aiPosts[0].images?.[0]?.image?.path || aiPosts[0].imageUrl,
       imageAlt: aiPosts[0].images?.[0]?.image?.alt || aiPosts[0].title,
       excerpt: aiPosts[0].excerpt
@@ -97,7 +143,7 @@ export default function Home() {
       if (post) {
         return {
           title: post.title,
-          href: `/bai-viet/${post.slug}`,
+          href: `/ai-chuyen-doi-so/${post.subcategory || 'tri-tue-nhan-tao'}/${post.slug}`,
           imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
           imageAlt: post.images?.[0]?.image?.alt || post.title,
           excerpt: post.excerpt
@@ -118,7 +164,7 @@ export default function Home() {
     title: "ĐỔI MỚI SÁNG TẠO",
     mainArticle: innovationPosts.length > 0 ? {
       title: innovationPosts[0].title,
-      href: `/bai-viet/${innovationPosts[0].slug}`,
+      href: `/doi-moi-sang-tao/${innovationPosts[0].subcategory || 'startup-viet'}/${innovationPosts[0].slug}`,
       imageUrl: innovationPosts[0].images?.[0]?.image?.path || innovationPosts[0].imageUrl,
       imageAlt: innovationPosts[0].images?.[0]?.image?.alt || innovationPosts[0].title,
       excerpt: innovationPosts[0].excerpt
@@ -131,7 +177,7 @@ export default function Home() {
       if (post) {
         return {
           title: post.title,
-          href: `/bai-viet/${post.slug}`,
+          href: `/doi-moi-sang-tao/${post.subcategory || 'startup-viet'}/${post.slug}`,
           imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
           imageAlt: post.images?.[0]?.image?.alt || post.title,
           excerpt: post.excerpt
@@ -152,7 +198,7 @@ export default function Home() {
     title: "SẢN PHẨM & REVIEW",
     mainArticle: productPosts.length > 0 ? {
       title: productPosts[0].title,
-      href: `/bai-viet/${productPosts[0].slug}`,
+      href: `/san-pham-review/${productPosts[0].subcategory || 'thiet-bi-moi'}/${productPosts[0].slug}`,
       imageUrl: productPosts[0].images?.[0]?.image?.path || productPosts[0].imageUrl,
       imageAlt: productPosts[0].images?.[0]?.image?.alt || productPosts[0].title,
       excerpt: productPosts[0].excerpt
@@ -165,7 +211,7 @@ export default function Home() {
       if (post) {
         return {
           title: post.title,
-          href: `/bai-viet/${post.slug}`,
+          href: `/san-pham-review/${post.subcategory || 'thiet-bi-moi'}/${post.slug}`,
           imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
           imageAlt: post.images?.[0]?.image?.alt || post.title,
           excerpt: post.excerpt
@@ -186,7 +232,7 @@ export default function Home() {
     title: "XU HƯỚNG TƯƠNG LAI",
     mainArticle: trendPosts.length > 0 ? {
       title: trendPosts[0].title,
-      href: `/bai-viet/${trendPosts[0].slug}`,
+      href: `/xu-huong-tuong-lai/${trendPosts[0].subcategory || 'blockchain'}/${trendPosts[0].slug}`,
       imageUrl: trendPosts[0].images?.[0]?.image?.path || trendPosts[0].imageUrl,
       imageAlt: trendPosts[0].images?.[0]?.image?.alt || trendPosts[0].title,
       excerpt: trendPosts[0].excerpt
@@ -199,7 +245,7 @@ export default function Home() {
       if (post) {
         return {
           title: post.title,
-          href: `/bai-viet/${post.slug}`,
+          href: `/xu-huong-tuong-lai/${post.subcategory || 'blockchain'}/${post.slug}`,
           imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
           imageAlt: post.images?.[0]?.image?.alt || post.title,
           excerpt: post.excerpt
@@ -253,6 +299,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Main Content - Left Column */}
           <div className="lg:col-span-3 space-y-8">
+            <ContentSection {...newsSection} />
             <ContentSection {...aiSection} />
             <ContentSection {...innovationSection} />
             <ContentSection {...productSection} />
