@@ -13,6 +13,7 @@ interface Post {
   title: string
   content: string
   excerpt: string
+  slug: string
   published: boolean
   createdAt: string
   updatedAt: string
@@ -64,7 +65,7 @@ export default function PostDetail() {
             // 1. Same subcategory
             // 2. At least one matching tag
             // 3. Not the current post
-            const currentPostTags = data.tags.map(tag => tag.id)
+            const currentPostTags = data.tags.map((tag: any) => tag.id)
             const filtered = relatedData
               .filter((p: Post) => 
                 p.id !== data.id && 
@@ -228,7 +229,7 @@ export default function PostDetail() {
                 <ArticleCard
                   key={relatedPost.id}
                   title={relatedPost.title}
-                  href={`/bai-viet/${relatedPost.slug}`}
+                  href={`/${relatedPost.category}/${relatedPost.subcategory}/${relatedPost.slug}`}
                   imageUrl={relatedPost.images?.[0]?.image?.path || relatedPost.imageUrl}
                   imageAlt={relatedPost.images?.[0]?.image?.alt || relatedPost.title}
                   excerpt={relatedPost.excerpt}
