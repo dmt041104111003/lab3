@@ -4,7 +4,8 @@ export default function StartupVietPage() {
   return (
     <CategoryPage 
       title="Startup Việt" 
-      subcategory="startup-viet" 
+      subcategory="startup-viet"
+      basePath="doi-moi-sang-tao"
     />
   )
 }

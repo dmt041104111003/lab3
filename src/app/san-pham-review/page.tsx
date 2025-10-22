@@ -4,7 +4,8 @@ export default function SanPhamReviewPage() {
   return (
     <CategoryPage 
       title="Sản phẩm & Review" 
-      subcategory="san-pham-review" 
+      subcategory="san-pham-review"
+      basePath="san-pham-review"
     />
   )
 }

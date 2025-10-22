@@ -28,9 +28,10 @@ interface CategoryPageProps {
   title: string
   subcategory: string
   showAllPosts?: boolean
+  basePath?: string // Đường dẫn gốc cho category
 }
 
-export default function CategoryPage({ title, subcategory, showAllPosts = true }: CategoryPageProps) {
+export default function CategoryPage({ title, subcategory, showAllPosts = true, basePath = 'tin-tuc' }: CategoryPageProps) {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -69,14 +70,14 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true }
     title: title.toUpperCase(),
     mainArticle: posts.length > 0 ? {
       title: posts[0].title,
-      href: `/bai-viet/${posts[0].slug}`
+      href: `/${basePath}/${posts[0].subcategory}/${posts[0].slug}`
     } : {
       title: "Chưa có bài viết nào",
       href: "#"
     },
     subArticles: posts.slice(1, 4).map(post => ({
       title: post.title,
-      href: `/bai-viet/${post.slug}`
+      href: `/${basePath}/${post.subcategory}/${post.slug}`
     }))
   }
 
@@ -123,7 +124,7 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true }
                   <ArticleCard
                     key={post.id}
                     title={post.title}
-                    href={`/bai-viet/${post.slug}`}
+                    href={`/${basePath}/${post.subcategory}/${post.slug}`}
                   />
                 ))}
               </div>

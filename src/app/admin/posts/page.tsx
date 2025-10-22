@@ -138,23 +138,6 @@ export default function AdminPosts() {
     setCurrentPage(1)
   }
 
-  const togglePublish = async (postId: string, published: boolean) => {
-    try {
-      const response = await fetch(`/api/posts/${postId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ published: !published }),
-      })
-
-      if (response.ok) {
-        fetchPosts() // Refresh posts list
-      }
-    } catch (error) {
-      console.error('Error updating post:', error)
-    }
-  }
 
   if (loading) {
     return (
@@ -254,23 +237,13 @@ export default function AdminPosts() {
                 {new Date(post.createdAt).toLocaleDateString('vi-VN')}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                <button 
-                  onClick={() => togglePublish(post.id, post.published)}
-                  className={`${
-                    post.published 
-                      ? 'text-yellow-600 hover:text-yellow-900' 
-                      : 'text-green-600 hover:text-green-900'
-                  }`}
-                >
-                  {post.published ? 'Ẩn' : 'Xuất bản'}
-                </button>
                 <a
                   href={`/admin/posts/edit/${post.id}`}
                   className="text-tech-blue hover:text-tech-dark-blue"
                 >
                   Sửa
                 </a>
-                <button 
+                <button
                   onClick={() => handleDeleteClick(post)}
                   className="text-red-600 hover:text-red-900"
                 >
