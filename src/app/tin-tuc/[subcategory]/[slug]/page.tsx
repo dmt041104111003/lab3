@@ -45,6 +45,17 @@ export default function PostDetailPage() {
     }
   }, [slug])
 
+  // Set title dynamically
+  useEffect(() => {
+    if (post) {
+      const newTitle = `${post.title} - TechNova`
+      document.title = newTitle
+      console.log('Setting title to:', newTitle)
+    } else if (!loading) {
+      document.title = 'Đang tải bài viết... - TechNova'
+    }
+  }, [post, loading])
+
   const fetchPost = async () => {
     try {
       const response = await fetch(`/api/posts/slug/${slug}`)

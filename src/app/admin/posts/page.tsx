@@ -152,10 +152,6 @@ export default function AdminPosts() {
       <AdminPageHeader 
         title="Quản lý bài viết"
         description="Tạo, chỉnh sửa và quản lý nội dung bài viết"
-        actionButton={{
-          text: "Tạo bài viết mới",
-          href: "/admin/posts/create"
-        }}
       />
 
       <div className="bg-white shadow rounded-lg">
@@ -164,6 +160,15 @@ export default function AdminPosts() {
         </div>
 
         <div className="p-6">
+          <div className="mb-6">
+            <a
+              href="/admin/posts/create"
+              className="bg-tech-blue text-white px-4 py-2 rounded-md hover:bg-tech-dark-blue transition-colors inline-block"
+            >
+              Thêm bài viết mới
+            </a>
+          </div>
+
           <AdminFilter
             searchTerm={searchTerm}
             onSearchChange={setSearchTerm}
