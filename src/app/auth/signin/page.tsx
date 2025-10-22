@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { getSession } from "@/lib/session"
+import { GoogleLogin } from "@react-oauth/google"
 
 export default function SignIn() {
   const [formData, setFormData] = useState({
@@ -29,27 +30,22 @@ export default function SignIn() {
       setError('Email là bắt buộc')
       return false
     }
-    
     if (!formData.password.trim()) {
       setError('Mật khẩu là bắt buộc')
       return false
     }
-
     if (formData.email.toLowerCase() === 'admin') {
       return true
     }
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(formData.email)) {
       setError('Email không hợp lệ')
       return false
     }
-
     if (formData.password.length < 6) {
       setError('Mật khẩu phải có ít nhất 6 ký tự')
       return false
     }
-
     return true
   }
 
@@ -66,9 +62,7 @@ export default function SignIn() {
     try {
       const response = await fetch('/api/auth/signin', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
 
@@ -76,23 +70,16 @@ export default function SignIn() {
 
       if (response.ok) {
         localStorage.setItem('user_session', JSON.stringify(data.user))
-        
         try {
           await fetch('/api/set-cookie', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user: data.user }),
           })
-        } catch (error) {
-        }
-        
-        if (data.user.role === 'ADMIN') {
-          window.location.href = '/admin'
-        } else {
-          window.location.href = '/'
-        }
+        } catch (error) {}
+
+        if (data.user.role === 'ADMIN') window.location.href = '/admin'
+        else window.location.href = '/'
       } else {
         setError(data.message || 'Đăng nhập thất bại')
       }
@@ -108,6 +95,30 @@ export default function SignIn() {
       ...formData,
       [e.target.name]: e.target.value
     })
+  }
+
+  // ✅ Hàm xử lý Google Login
+  const handleGoogleLogin = async (credentialResponse: any) => {
+    try {
+      const token = credentialResponse.credential
+      const res = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider: 'google', token }),
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        localStorage.setItem('user_session', JSON.stringify(data.user))
+        if (data.user.role === 'ADMIN') window.location.href = '/admin'
+        else window.location.href = '/'
+      } else {
+        setError(data.message || 'Đăng nhập Google thất bại')
+      }
+    } catch (err) {
+      setError('Có lỗi khi đăng nhập Google')
+    }
   }
 
   return (
@@ -182,7 +193,7 @@ export default function SignIn() {
                     </svg>
                   ) : (
                     <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
                   )}
@@ -198,6 +209,23 @@ export default function SignIn() {
               >
                 {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
               </button>
+            </div>
+
+            {/* Divider */}
+            <div className="flex items-center my-4">
+              <div className="flex-grow border-t border-gray-300"></div>
+              <span className="mx-2 text-gray-500 text-sm">hoặc</span>
+              <div className="flex-grow border-t border-gray-300"></div>
+            </div>
+
+            <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={handleGoogleLogin}
+                onError={() => setError('Đăng nhập Google thất bại')}
+                shape="pill"
+                text="signin_with"
+                theme="outline"
+              />
             </div>
 
             <div className="text-center">
