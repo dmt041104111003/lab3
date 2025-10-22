@@ -7,7 +7,6 @@ export default function CongNgheVietNamPage() {
   useEffect(() => {
     document.title = 'Công nghệ Việt Nam - Tin tức - TechNova'
     
-    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Cập nhật tin tức công nghệ Việt Nam mới nhất. Theo dõi các startup, doanh nghiệp công nghệ và xu hướng đổi mới trong nước.')

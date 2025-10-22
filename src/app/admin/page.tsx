@@ -73,7 +73,6 @@ export default function AdminDashboard() {
         recentUsers: users.slice(0, 5)
       })
     } catch (error) {
-      console.error('Error fetching stats:', error)
       setError('Có lỗi xảy ra khi tải thống kê')
     } finally {
       setLoading(false)

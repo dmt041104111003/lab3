@@ -16,7 +16,6 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const validateForm = () => {
-    // Check required fields
     if (!formData.name.trim()) {
       setError('Họ và tên là bắt buộc')
       return false
@@ -37,20 +36,17 @@ export default function SignUp() {
       return false
     }
 
-    // Name validation
     if (formData.name.trim().length < 2) {
       setError('Họ và tên phải có ít nhất 2 ký tự')
       return false
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(formData.email)) {
       setError('Email không hợp lệ')
       return false
     }
 
-    // Password validation
     if (formData.password.length < 6) {
       setError('Mật khẩu phải có ít nhất 6 ký tự')
       return false
@@ -61,14 +57,12 @@ export default function SignUp() {
       return false
     }
 
-    // Password strength validation
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).+$/
     if (!passwordRegex.test(formData.password)) {
       setError('Mật khẩu phải chứa ít nhất 1 chữ cái và 1 số')
       return false
     }
 
-    // Confirm password validation
     if (formData.password !== formData.confirmPassword) {
       setError('Mật khẩu xác nhận không khớp')
       return false
@@ -103,10 +97,8 @@ export default function SignUp() {
       const data = await response.json()
 
       if (response.ok) {
-        // Auto login after successful signup with server-side cookie
         localStorage.setItem('user_session', JSON.stringify(data.user))
         
-        // Set cookie via API
         try {
           await fetch('/api/set-cookie', {
             method: 'POST',
@@ -116,7 +108,6 @@ export default function SignUp() {
             body: JSON.stringify({ user: data.user }),
           })
         } catch (error) {
-          console.log('Error setting cookie:', error)
         }
         
         if (data.user.role === 'ADMIN') {

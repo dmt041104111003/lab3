@@ -7,7 +7,6 @@ export default function XuHuongTuongLaiPage() {
   useEffect(() => {
     document.title = 'Xu hướng tương lai - TechNova'
     
-    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Khám phá blockchain, công nghệ xanh, metaverse và các xu hướng công nghệ tương lai. Dự đoán và phân tích công nghệ của ngày mai.')

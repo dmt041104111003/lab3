@@ -51,7 +51,6 @@ export async function GET(
 
     return NextResponse.json(post)
   } catch (error) {
-    console.error('Error fetching post:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

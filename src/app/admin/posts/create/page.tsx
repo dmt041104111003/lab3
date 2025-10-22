@@ -73,7 +73,6 @@ export default function CreatePost() {
       setTags(tagsData)
       setImages(imagesData)
     } catch (error) {
-      console.error('Error fetching data:', error)
     } finally {
       setLoadingData(false)
     }
@@ -84,7 +83,6 @@ export default function CreatePost() {
       const response = await fetch('/api/check-admin')
       const data = await response.json()
       if (data.isAdmin) {
-        // Get user info from session cookie
         const userSession = document.cookie
           .split('; ')
           .find(row => row.startsWith('user_session='))
@@ -96,7 +94,6 @@ export default function CreatePost() {
         }
       }
     } catch (error) {
-      console.error('Error fetching current user:', error)
     }
   }
 
@@ -106,7 +103,6 @@ export default function CreatePost() {
     setError('')
     setTitleError('')
 
-    // Basic validation
     if (!formData.title.trim()) {
       setTitleError('Tiêu đề không được để trống')
       setIsLoading(false)
@@ -131,7 +127,6 @@ export default function CreatePost() {
       return
     }
 
-    // Validate title before submit
     const titleValidationError = await validateTitle(formData.title)
     if (titleValidationError) {
       setTitleError(titleValidationError)
@@ -140,7 +135,6 @@ export default function CreatePost() {
     }
 
     try {
-      // Convert file to base64 if uploading new image
       let newImageFileBase64 = null
       if (formData.imageType === 'upload' && formData.newImageFile) {
         newImageFileBase64 = await new Promise<string>((resolve, reject) => {
@@ -169,7 +163,7 @@ export default function CreatePost() {
           newImageFile: newImageFileBase64,
           category: formData.category,
           subcategory: formData.subcategory,
-          authorId: currentUser?.id || 'cmh10oekw0001x8rjt3cati7w' // Get from session or fallback
+          authorId: currentUser?.id || 'cmh10oekw0001x8rjt3cati7w'
         }),
       })
 
@@ -192,7 +186,6 @@ export default function CreatePost() {
       return 'Tiêu đề không được để trống'
     }
     
-    // Check for duplicate title
     try {
       const response = await fetch('/api/posts')
       const posts = await response.json()
@@ -204,7 +197,6 @@ export default function CreatePost() {
         return 'Tiêu đề này đã tồn tại, vui lòng chọn tiêu đề khác'
       }
     } catch (error) {
-      console.error('Error checking title:', error)
     }
     
     return ''
@@ -225,11 +217,9 @@ export default function CreatePost() {
         [name]: value
       }))
       
-      // Validate title when it changes (with debounce)
       if (name === 'title') {
-        setTitleError('') // Clear previous error
+        setTitleError('')
         if (value.trim()) {
-          // Debounce the validation
           setTimeout(async () => {
             const error = await validateTitle(value)
             setTitleError(error)
@@ -334,7 +324,7 @@ export default function CreatePost() {
                 setFormData({
                   ...formData,
                   category: e.target.value,
-                  subcategory: '' // Reset subcategory when category changes
+                  subcategory: ''
                 })
               }}
               options={CATEGORIES.map(cat => ({ value: cat.id, label: cat.name }))}

@@ -55,16 +55,11 @@ export default function PostDetail() {
         const data = await response.json()
         setPost(data)
         
-        // Fetch related posts from same category and subcategory with matching tags
         if (data.category && data.subcategory && data.tags && data.tags.length > 0) {
           const relatedResponse = await fetch(`/api/posts/category/${data.category}?limit=10`)
           if (relatedResponse.ok) {
             const relatedData = await relatedResponse.json()
             
-            // Filter posts that match criteria:
-            // 1. Same subcategory
-            // 2. At least one matching tag
-            // 3. Not the current post
             const currentPostTags = data.tags.map((tag: any) => tag.id)
             const filtered = relatedData
               .filter((p: Post) => 
@@ -81,7 +76,6 @@ export default function PostDetail() {
         setError('Không tìm thấy bài viết')
       }
     } catch (error) {
-      console.error('Error fetching post:', error)
       setError('Có lỗi xảy ra khi tải bài viết')
     } finally {
       setLoading(false)

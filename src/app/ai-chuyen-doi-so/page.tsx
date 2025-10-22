@@ -7,7 +7,6 @@ export default function AiChuyenDoiSoPage() {
   useEffect(() => {
     document.title = 'AI & Chuyển đổi số - TechNova'
     
-    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Khám phá trí tuệ nhân tạo, dữ liệu lớn, IoT và chuyển đổi số trong doanh nghiệp, giáo dục. Cập nhật xu hướng AI mới nhất.')

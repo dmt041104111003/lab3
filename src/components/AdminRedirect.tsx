@@ -14,17 +14,13 @@ export default function AdminRedirect() {
         const response = await fetch('/api/check-admin')
         const data = await response.json()
         
-        console.log('AdminRedirect - API response:', data)
-        
         if (data.isAdmin) {
-          console.log('AdminRedirect - Redirecting to admin')
           window.location.href = '/admin'
           return
         }
         
         setIsChecking(false)
       } catch (error) {
-        console.log('AdminRedirect - Error:', error)
         setIsChecking(false)
       }
     }

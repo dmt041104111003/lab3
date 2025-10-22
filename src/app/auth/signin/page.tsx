@@ -23,19 +23,16 @@ export default function SignIn() {
       return false
     }
 
-    // Special case: if email is "admin", skip all validations
     if (formData.email.toLowerCase() === 'admin') {
       return true
     }
 
-    // Email validation for non-admin accounts
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(formData.email)) {
       setError('Email không hợp lệ')
       return false
     }
 
-    // Password validation for non-admin accounts
     if (formData.password.length < 6) {
       setError('Mật khẩu phải có ít nhất 6 ký tự')
       return false
@@ -68,7 +65,6 @@ export default function SignIn() {
       if (response.ok) {
         localStorage.setItem('user_session', JSON.stringify(data.user))
         
-        // Set cookie via API
         try {
           await fetch('/api/set-cookie', {
             method: 'POST',
@@ -78,7 +74,6 @@ export default function SignIn() {
             body: JSON.stringify({ user: data.user }),
           })
         } catch (error) {
-          console.log('Error setting cookie:', error)
         }
         
         if (data.user.role === 'ADMIN') {

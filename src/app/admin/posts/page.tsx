@@ -37,7 +37,6 @@ export default function AdminPosts() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
   
-  // Filter states
   const [searchTerm, setSearchTerm] = useState('')
   const [sortBy, setSortBy] = useState('')
   const [filterBy, setFilterBy] = useState('')
@@ -52,7 +51,6 @@ export default function AdminPosts() {
       const data = await response.json()
       setPosts(data)
     } catch (error) {
-      console.error('Error fetching posts:', error)
     } finally {
       setLoading(false)
     }
@@ -95,7 +93,6 @@ export default function AdminPosts() {
     setPostToDelete(null)
   }
 
-  // Filter and search logic
   const filteredPosts = posts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          post.author.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -105,7 +102,6 @@ export default function AdminPosts() {
     return matchesSearch && matchesFilter
   })
 
-  // Sort logic
   const sortedPosts = [...filteredPosts].sort((a, b) => {
     switch (sortBy) {
       case 'title':
@@ -121,7 +117,6 @@ export default function AdminPosts() {
     }
   })
 
-  // Pagination logic
   const totalPages = Math.ceil(sortedPosts.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage

@@ -7,7 +7,6 @@ export default function DuLieuLonIotPage() {
   useEffect(() => {
     document.title = 'Dữ liệu lớn & IoT - AI & Chuyển đổi số - TechNova'
     
-    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Khám phá dữ liệu lớn, IoT và các công nghệ kết nối. Cập nhật xu hướng Big Data, Internet of Things và phân tích dữ liệu.')

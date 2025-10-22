@@ -33,7 +33,6 @@ export default function TagsPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
   
-  // Additional filter states
   const [sortBy, setSortBy] = useState('')
   const [filterBy, setFilterBy] = useState('')
 
@@ -49,7 +48,6 @@ export default function TagsPage() {
         setTags(data)
       }
     } catch (error) {
-      console.error('Error fetching tags:', error)
     } finally {
       setLoading(false)
     }
@@ -70,7 +68,6 @@ export default function TagsPage() {
         fetchTags()
       }
     } catch (error) {
-      console.error('Error creating tag:', error)
     }
   }
 
@@ -93,7 +90,6 @@ export default function TagsPage() {
         fetchTags()
       }
     } catch (error) {
-      console.error('Error updating tag:', error)
     }
   }
 
@@ -110,11 +106,9 @@ export default function TagsPage() {
         fetchTags()
       }
     } catch (error) {
-      console.error('Error deleting tag:', error)
     }
   }
 
-  // Filter and search logic
   const filteredTags = tags.filter(tag => {
     const matchesSearch = tag.name.toLowerCase().includes(searchTerm.toLowerCase())
     
@@ -125,7 +119,6 @@ export default function TagsPage() {
     return matchesSearch && matchesFilter
   })
 
-  // Sort logic
   const sortedTags = [...filteredTags].sort((a, b) => {
     switch (sortBy) {
       case 'name':
@@ -139,7 +132,6 @@ export default function TagsPage() {
     }
   })
 
-  // Pagination logic
   const totalPages = Math.ceil(sortedTags.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage

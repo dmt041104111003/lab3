@@ -35,7 +35,7 @@ interface CategoryPageProps {
   title: string
   subcategory: string
   showAllPosts?: boolean
-  basePath?: string // Đường dẫn gốc cho category
+  basePath?: string
 }
 
 export default function CategoryPage({ title, subcategory, showAllPosts = true, basePath = 'tin-tuc' }: CategoryPageProps) {
@@ -58,13 +58,11 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true, 
         setTotalPages(data.pagination.totalPages)
         setTotalCount(data.pagination.totalCount)
       } else {
-        // Fallback for old API format
         setPosts(data)
         setTotalPages(Math.ceil(data.length / itemsPerPage))
         setTotalCount(data.length)
       }
     } catch (error) {
-      console.error('Error fetching posts:', error)
       setError('Có lỗi xảy ra khi tải bài viết')
     } finally {
       setLoading(false)
@@ -135,7 +133,6 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true, 
         <div className="space-y-8">
           <ContentSection {...sectionData} />
           
-          {/* Danh sách tất cả bài viết */}
           {showAllPosts && posts.length > 0 && (
             <div className="mt-12">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
@@ -151,12 +148,11 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true, 
                     imageAlt={post.images?.[0]?.image?.alt || post.title}
                     excerpt={post.excerpt}
                     layout="horizontal"
-                    comments={Math.floor(Math.random() * 50) + 1} // Random comments for demo
+                    comments={Math.floor(Math.random() * 50) + 1}
                   />
                 ))}
               </div>
               
-              {/* Pagination */}
               {totalPages > 1 && (
                 <div className="mt-8">
                   <Pagination

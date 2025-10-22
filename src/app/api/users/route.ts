@@ -26,7 +26,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(users)
   } catch (error) {
-    console.error('Get users error:', error)
     return NextResponse.json(
       { message: 'Có lỗi xảy ra khi lấy danh sách người dùng' },
       { status: 500 }
@@ -67,7 +66,6 @@ export async function PUT(request: NextRequest) {
       user: updatedUser
     })
   } catch (error) {
-    console.error('Update user error:', error)
     return NextResponse.json(
       { message: 'Có lỗi xảy ra khi cập nhật người dùng' },
       { status: 500 }
@@ -95,7 +93,6 @@ export async function DELETE(request: NextRequest) {
       message: 'Xóa người dùng thành công'
     })
   } catch (error) {
-    console.error('Delete user error:', error)
     return NextResponse.json(
       { message: 'Có lỗi xảy ra khi xóa người dùng' },
       { status: 500 }

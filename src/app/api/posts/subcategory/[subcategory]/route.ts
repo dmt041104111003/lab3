@@ -62,7 +62,6 @@ export async function GET(
       }
     })
   } catch (error) {
-    console.error('Get posts by subcategory error:', error)
     return NextResponse.json(
       { message: 'Có lỗi xảy ra khi lấy bài viết theo tiểu mục' },
       { status: 500 }

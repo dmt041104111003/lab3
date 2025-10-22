@@ -6,7 +6,6 @@ export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json()
 
-    // Find user by email
     const user = await prisma.user.findUnique({
       where: {
         email: email
@@ -20,7 +19,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check password
     const isValidPassword = await bcrypt.compare(password, user.password)
     if (!isValidPassword) {
       return NextResponse.json(
@@ -29,7 +27,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // In a real app, you would set a JWT token or session here
     return NextResponse.json({
       message: 'Đăng nhập thành công',
       user: {
@@ -41,7 +38,6 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Sign in error:', error)
     return NextResponse.json(
       { message: 'Có lỗi xảy ra' },
       { status: 500 }

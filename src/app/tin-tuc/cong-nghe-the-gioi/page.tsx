@@ -7,7 +7,6 @@ export default function CongNgheTheGioiPage() {
   useEffect(() => {
     document.title = 'Công nghệ thế giới - Tin tức - TechNova'
     
-    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Cập nhật tin tức công nghệ thế giới mới nhất. Theo dõi các xu hướng công nghệ toàn cầu, phát minh mới và tác động của chúng.')

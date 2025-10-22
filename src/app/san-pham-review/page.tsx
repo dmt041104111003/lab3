@@ -7,7 +7,6 @@ export default function SanPhamReviewPage() {
   useEffect(() => {
     document.title = 'Sản phẩm & Review - TechNova'
     
-    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Đánh giá thiết bị mới, ứng dụng phần mềm và sản phẩm công nghệ. Review chi tiết, so sánh và hướng dẫn sử dụng.')

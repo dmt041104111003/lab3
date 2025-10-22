@@ -7,7 +7,6 @@ export default function DanhGiaSanPhamPage() {
   useEffect(() => {
     document.title = 'Đánh giá sản phẩm - Sản phẩm & Review - TechNova'
     
-    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Đánh giá chi tiết các sản phẩm công nghệ mới nhất. Review chuyên sâu, so sánh và hướng dẫn lựa chọn sản phẩm phù hợp.')

@@ -48,49 +48,35 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
 
   const fetchPosts = async () => {
     try {
-      // Lấy danh sách tiểu mục của category
       const category = CATEGORIES.find(cat => cat.id === categoryId)
       const subcategories = category?.subcategories || []
       
-      console.log('Category:', categoryId)
-      console.log('Subcategories:', subcategories)
-
       if (subcategories.length === 0) {
-        console.log('No subcategories found')
         setPosts([])
         setLoading(false)
         return
       }
 
-      // Lấy bài viết từ tất cả tiểu mục
       const promises = subcategories.map(sub => 
         fetch(`/api/posts/subcategory/${sub.id}?limit=3`).then(res => res.json())
       )
 
       const allSubcategoryPosts = await Promise.all(promises)
-      console.log('API responses:', allSubcategoryPosts)
-
-      // Gộp và sắp xếp theo ngày tạo
       const allPosts = allSubcategoryPosts
         .map(response => {
-          console.log('Processing response:', response)
           return response.posts || response
-        }) // Handle both new and old API format
+        })
         .flat()
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        .slice(0, 7) // Lấy 7 bài mới nhất (1 chính + 6 phụ)
-
-      console.log('Final posts:', allPosts)
+        .slice(0, 7)
       setPosts(allPosts)
     } catch (error) {
-      console.error('Error fetching posts:', error)
       setError('Có lỗi xảy ra khi tải bài viết')
     } finally {
       setLoading(false)
     }
   }
 
-  // Lấy danh sách tiểu mục
   const category = CATEGORIES.find(cat => cat.id === categoryId)
   const subcategories = category?.subcategories || []
 
@@ -106,7 +92,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
       title: "Chưa có bài viết nào",
       href: "#"
     },
-    subArticles: [] // Không hiển thị bài phụ, chỉ có 1 bài chính
+    subArticles: []
   }
 
   if (loading) {
@@ -141,9 +127,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Main Content - Left Column */}
           <div className="lg:col-span-3">
-            {/* Featured Article - Large */}
             {posts.length > 0 && (
               <div className="mb-8">
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -179,7 +163,6 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
               </div>
             )}
 
-            {/* Sub Articles - Grid Layout */}
             {posts.length > 1 && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {posts.slice(1, 7).map((post) => (
@@ -196,7 +179,6 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
               </div>
             )}
 
-            {/* Featured Article Placeholder */}
             <div className="mb-8">
               <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="w-full h-64 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
@@ -225,7 +207,6 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
               </div>
             </div>
 
-            {/* Sub Articles Placeholder - Grid Layout */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {Array.from({ length: 3 }, (_, index) => (
                 <div key={index} className="bg-white rounded-lg shadow-sm border border-gray-200">
@@ -246,7 +227,6 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
             </div>
           </div>
 
-          {/* Sidebar - Right Column */}
           <div className="lg:col-span-1">
             <Sidebar 
               subcategories={subcategories}

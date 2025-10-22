@@ -43,7 +43,6 @@ export default function TinTucPage() {
   useEffect(() => {
     document.title = 'Tin tức công nghệ - TechNova'
     
-    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Cập nhật tin tức công nghệ mới nhất từ Việt Nam và thế giới. Theo dõi xu hướng công nghệ, phát minh mới và tác động của chúng tới đời sống.')
@@ -54,7 +53,6 @@ export default function TinTucPage() {
       document.head.appendChild(meta)
     }
 
-    // Update Open Graph title
     const ogTitle = document.querySelector('meta[property="og:title"]')
     if (ogTitle) {
       ogTitle.setAttribute('content', 'Tin tức công nghệ - TechNova')
@@ -68,7 +66,6 @@ export default function TinTucPage() {
 
   const fetchPosts = async () => {
     try {
-      // Lấy bài viết từ cả 2 tiểu mục
       const [vietnamRes, worldRes] = await Promise.all([
         fetch('/api/posts/subcategory/cong-nghe-viet-nam'),
         fetch('/api/posts/subcategory/cong-nghe-the-gioi')
@@ -79,24 +76,18 @@ export default function TinTucPage() {
         worldRes.json()
       ])
 
-      // Gộp và sắp xếp theo ngày tạo
       const allPosts = [...vietnamPosts, ...worldPosts]
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        .slice(0, 5) // Lấy 5 bài mới nhất
+        .slice(0, 5)
 
       setPosts(allPosts)
-      console.log('Fetched posts:', allPosts)
-      console.log('First post images:', allPosts[0]?.images)
     } catch (error) {
-      console.error('Error fetching posts:', error)
-      // Không set error để vẫn hiển thị danh sách tiểu mục
       setPosts([])
     } finally {
       setLoading(false)
     }
   }
 
-  // Lấy danh sách tiểu mục của "Tin tức"
   const tinTucCategory = CATEGORIES.find(cat => cat.id === 'tin-tuc')
   const subcategories = tinTucCategory?.subcategories || []
   
@@ -155,7 +146,6 @@ export default function TinTucPage() {
         <div className="space-y-8">
           <ContentSection {...tinTucSection} />
           
-          {/* Danh sách tiểu mục */}
           <div className="mt-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Chuyên mục tin tức</h2>
             {subcategories.length > 0 ? (

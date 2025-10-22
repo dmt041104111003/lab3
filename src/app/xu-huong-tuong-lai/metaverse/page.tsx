@@ -7,7 +7,6 @@ export default function MetaversePage() {
   useEffect(() => {
     document.title = 'Metaverse - Xu hướng tương lai - TechNova'
     
-    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Khám phá metaverse, thế giới ảo 3D và tương lai của internet. Cập nhật xu hướng metaverse mới nhất.')

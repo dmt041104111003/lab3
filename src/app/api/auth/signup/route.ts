@@ -6,7 +6,6 @@ export async function POST(request: NextRequest) {
   try {
     const { name, email, password } = await request.json()
 
-    // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: {
         email: email
@@ -20,10 +19,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    // Create new user
     const newUser = await prisma.user.create({
       data: {
         name,
@@ -44,7 +41,6 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Sign up error:', error)
     return NextResponse.json(
       { message: 'Có lỗi xảy ra' },
       { status: 500 }

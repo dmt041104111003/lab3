@@ -7,7 +7,6 @@ export default function ThietBiMoiPage() {
   useEffect(() => {
     document.title = 'Thiết bị mới - Sản phẩm & Review - TechNova'
     
-    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Khám phá các thiết bị công nghệ mới nhất. Cập nhật sản phẩm mới, tính năng nổi bật và xu hướng thiết bị công nghệ.')

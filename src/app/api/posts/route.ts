@@ -30,7 +30,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(posts)
   } catch (error) {
-    console.error('Get posts error:', error)
     return NextResponse.json(
       { message: 'Có lỗi xảy ra khi lấy danh sách bài viết' },
       { status: 500 }
@@ -56,20 +55,16 @@ export async function POST(request: NextRequest) {
     } = await request.json()
 
 
-    // Generate slug from title with Vietnamese character support
     const baseSlug = generateSlug(title)
     
-    // Check for existing slugs to ensure uniqueness
     const existingPosts = await prisma.post.findMany({
       select: { slug: true }
     })
     const existingSlugs = existingPosts.map((post: { slug: string }) => post.slug)
     const uniqueSlug = await generateUniqueSlug(baseSlug, existingSlugs)
 
-    // Handle image upload if needed
     let imageId = null
     if (imageType === 'upload' && newImageFile) {
-      // Upload new image to Cloudinary and save to database
       const { v2: cloudinary } = require('cloudinary')
       cloudinary.config({
         cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -78,7 +73,6 @@ export async function POST(request: NextRequest) {
       })
 
       try {
-        // Convert base64 to buffer
         const base64Data = newImageFile.replace(/^data:image\/[a-z]+;base64,/, '')
         const buffer = Buffer.from(base64Data, 'base64')
 
@@ -108,13 +102,10 @@ export async function POST(request: NextRequest) {
         })
         imageId = image.id
       } catch (uploadError) {
-        console.error('Image upload error:', uploadError)
-        // Continue without image if upload fails
       }
     } else if (imageType === 'existing' && selectedImage) {
       imageId = selectedImage
     } else if (imageType === 'url' && imageUrl) {
-      // Save external image URL to database
       const image = await prisma.image.create({
         data: {
           filename: `external_${Date.now()}`,
@@ -128,7 +119,6 @@ export async function POST(request: NextRequest) {
       imageId = image.id
     }
 
-    // Create post with tags and image
     const post = await prisma.post.create({
       data: {
         title,
@@ -140,7 +130,6 @@ export async function POST(request: NextRequest) {
         category,
         subcategory,
 
-        // Connect tags if provided
         tags: selectedTags.length > 0 ? {
           create: selectedTags.map((tagId: string) => ({
             tag: {
@@ -149,7 +138,6 @@ export async function POST(request: NextRequest) {
           }))
         } : undefined,
 
-        // Connect image if provided
         images: imageId ? {
           create: {
             image: {
@@ -183,7 +171,6 @@ export async function POST(request: NextRequest) {
       post
     })
   } catch (error) {
-    console.error('Create post error:', error)
     return NextResponse.json(
       { message: 'Có lỗi xảy ra khi tạo bài viết' },
       { status: 500 }
@@ -209,10 +196,9 @@ export async function PUT(request: NextRequest) {
     } = await request.json()
 
 
-    // Generate slug from title with Vietnamese character support
     const baseSlug = generateSlug(title)
     
-    // Check for existing slugs to ensure uniqueness (excluding current post)
+ (excluding current post)
     const existingPosts = await prisma.post.findMany({
       select: { slug: true },
       where: { id: { not: id } }
@@ -220,10 +206,8 @@ export async function PUT(request: NextRequest) {
     const existingSlugs = existingPosts.map((post: { slug: string }) => post.slug)
     const uniqueSlug = await generateUniqueSlug(baseSlug, existingSlugs)
 
-    // Handle image upload if needed
     let imageId = null
     if (imageType === 'upload' && newImageFile) {
-      // Upload new image to Cloudinary and save to database
       const { v2: cloudinary } = require('cloudinary')
       cloudinary.config({
         cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -232,7 +216,6 @@ export async function PUT(request: NextRequest) {
       })
 
       try {
-        // Convert base64 to buffer
         const base64Data = newImageFile.replace(/^data:image\/[a-z]+;base64,/, '')
         const buffer = Buffer.from(base64Data, 'base64')
 
@@ -262,13 +245,10 @@ export async function PUT(request: NextRequest) {
         })
         imageId = image.id
       } catch (uploadError) {
-        console.error('Image upload error:', uploadError)
-        // Continue without image if upload fails
       }
     } else if (imageType === 'existing' && selectedImage) {
       imageId = selectedImage
     } else if (imageType === 'url' && imageUrl) {
-      // Save external image URL to database
       const image = await prisma.image.create({
         data: {
           filename: `external_${Date.now()}`,
@@ -282,7 +262,6 @@ export async function PUT(request: NextRequest) {
       imageId = image.id
     }
 
-    // First, delete existing tags and images
     await prisma.postTag.deleteMany({
       where: { postId: id }
     })
@@ -290,7 +269,6 @@ export async function PUT(request: NextRequest) {
       where: { postId: id }
     })
 
-    // Update post with new data
     const post = await prisma.post.update({
       where: { id },
       data: {
@@ -302,7 +280,6 @@ export async function PUT(request: NextRequest) {
         category,
         subcategory,
 
-        // Connect new tags if provided
         tags: selectedTags.length > 0 ? {
           create: selectedTags.map((tagId: string) => ({
             tag: {
@@ -311,7 +288,6 @@ export async function PUT(request: NextRequest) {
           }))
         } : undefined,
 
-        // Connect new image if provided
         images: imageId ? {
           create: {
             image: {
@@ -345,7 +321,6 @@ export async function PUT(request: NextRequest) {
       post
     })
   } catch (error) {
-    console.error('Update post error:', error)
     return NextResponse.json(
       { message: 'Có lỗi xảy ra khi cập nhật bài viết' },
       { status: 500 }
@@ -373,7 +348,6 @@ export async function DELETE(request: NextRequest) {
       message: 'Xóa bài viết thành công'
     })
   } catch (error) {
-    console.error('Delete post error:', error)
     return NextResponse.json(
       { message: 'Có lỗi xảy ra khi xóa bài viết' },
       { status: 500 }

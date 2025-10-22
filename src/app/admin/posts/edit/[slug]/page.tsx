@@ -100,7 +100,6 @@ export default function EditPost() {
       setTags(tagsData)
       setImages(imagesData)
     } catch (error) {
-      console.error('Error fetching data:', error)
     } finally {
       setLoadingData(false)
     }
@@ -145,7 +144,6 @@ export default function EditPost() {
     setSuccess('')
     setTitleError('')
 
-    // Basic validation
     if (!formData.title.trim()) {
       setTitleError('Tiêu đề không được để trống')
       setIsSaving(false)
@@ -170,7 +168,6 @@ export default function EditPost() {
       return
     }
 
-    // Validate title before submit
     const titleValidationError = await validateTitle(formData.title)
     if (titleValidationError) {
       setTitleError(titleValidationError)
@@ -221,7 +218,6 @@ export default function EditPost() {
       return 'Tiêu đề không được để trống'
     }
     
-    // Check for duplicate title (excluding current post)
     try {
       const response = await fetch('/api/posts')
       const posts = await response.json()
@@ -234,7 +230,6 @@ export default function EditPost() {
         return 'Tiêu đề này đã tồn tại, vui lòng chọn tiêu đề khác'
       }
     } catch (error) {
-      console.error('Error checking title:', error)
     }
     
     return ''
@@ -255,11 +250,9 @@ export default function EditPost() {
         [name]: value
       }))
       
-      // Validate title when it changes (with debounce)
       if (name === 'title') {
-        setTitleError('') // Clear previous error
+        setTitleError('')
         if (value.trim()) {
-          // Debounce the validation
           setTimeout(async () => {
             const error = await validateTitle(value)
             setTitleError(error)
@@ -434,7 +427,7 @@ export default function EditPost() {
                 setFormData({
                   ...formData,
                   category: e.target.value,
-                  subcategory: '' // Reset subcategory when category changes
+                  subcategory: ''
                 })
               }}
               options={CATEGORIES.map(cat => ({ value: cat.id, label: cat.name }))}

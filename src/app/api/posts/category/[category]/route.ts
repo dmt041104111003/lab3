@@ -40,7 +40,6 @@ export async function GET(
 
     return NextResponse.json(posts)
   } catch (error) {
-    console.error('Get posts by category error:', error)
     return NextResponse.json(
       { message: 'Có lỗi xảy ra khi lấy bài viết theo chuyên mục' },
       { status: 500 }

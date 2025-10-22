@@ -38,7 +38,6 @@ export default function ImagesPage() {
   const itemsPerPage = 6
   const [toast, setToast] = useState('')
   
-  // Additional filter states
   const [sortBy, setSortBy] = useState('')
   const [filterBy, setFilterBy] = useState('')
 
@@ -54,7 +53,6 @@ export default function ImagesPage() {
         setImages(data)
       }
     } catch (error) {
-      console.error('Error fetching images:', error)
     } finally {
       setLoading(false)
     }
@@ -64,7 +62,7 @@ export default function ImagesPage() {
     const file = e.target.files?.[0]
     if (file) {
       setSelectedFile(file)
-      setAltText(file.name.split('.')[0]) // Use filename as default alt text
+      setAltText(file.name.split('.')[0])
     }
   }
 
@@ -90,7 +88,6 @@ export default function ImagesPage() {
         fetchImages()
       }
     } catch (error) {
-      console.error('Error uploading image:', error)
     } finally {
       setUploading(false)
     }
@@ -109,7 +106,6 @@ export default function ImagesPage() {
         fetchImages()
       }
     } catch (error) {
-      console.error('Error deleting image:', error)
     }
   }
 
@@ -121,7 +117,6 @@ export default function ImagesPage() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }
 
-  // Filter and search logic
   const filteredImages = images.filter(image => {
     const matchesSearch = image.originalName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (image.alt && image.alt.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -133,7 +128,6 @@ export default function ImagesPage() {
     return matchesSearch && matchesFilter
   })
 
-  // Sort logic
   const sortedImages = [...filteredImages].sort((a, b) => {
     switch (sortBy) {
       case 'name':
@@ -149,7 +143,6 @@ export default function ImagesPage() {
     }
   })
 
-  // Pagination logic
   const totalPages = Math.ceil(sortedImages.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage

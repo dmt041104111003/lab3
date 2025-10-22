@@ -45,12 +45,10 @@ export default function PostDetailPage() {
     }
   }, [slug])
 
-  // Set title dynamically
   useEffect(() => {
     if (post) {
       const newTitle = `${post.title} - TechNova`
       document.title = newTitle
-      console.log('Setting title to:', newTitle)
     } else if (!loading) {
       document.title = 'Đang tải bài viết... - TechNova'
     }
@@ -62,7 +60,6 @@ export default function PostDetailPage() {
       const data = await response.json()
       
       if (response.ok) {
-        // Kiểm tra xem bài viết có đúng chuyên mục và tiểu mục không
         if (data.category === category && data.subcategory === subcategory) {
           setPost(data)
         } else {
@@ -72,7 +69,6 @@ export default function PostDetailPage() {
         setError('Không tìm thấy bài viết')
       }
     } catch (error) {
-      console.error('Error fetching post:', error)
       setError('Có lỗi xảy ra khi tải bài viết')
     } finally {
       setLoading(false)

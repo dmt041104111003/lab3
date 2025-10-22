@@ -7,7 +7,6 @@ export default function DoiMoiSangTaoPage() {
   useEffect(() => {
     document.title = 'Đổi mới sáng tạo - TechNova'
     
-    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Khám phá startup Việt Nam, ý tưởng hay, doanh nghiệp sáng tạo. Cập nhật xu hướng đổi mới và sáng tạo trong công nghệ.')

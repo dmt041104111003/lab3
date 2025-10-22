@@ -7,7 +7,6 @@ export default function StartupVietPage() {
   useEffect(() => {
     document.title = 'Startup Việt - Đổi mới sáng tạo - TechNova'
     
-    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Khám phá startup Việt Nam, các dự án khởi nghiệp và tinh thần đổi mới sáng tạo. Cập nhật câu chuyện thành công và xu hướng startup.')
