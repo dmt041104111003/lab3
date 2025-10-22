@@ -297,6 +297,10 @@ export default function EditPost() {
       <AdminPageHeader 
         title="Chỉnh sửa bài viết"
         description="Cập nhật thông tin bài viết"
+        backButton={{
+          text: "Quay lại danh sách bài viết",
+          href: "/admin/posts"
+        }}
       />
 
       <AdminErrorAlert message={error} />

@@ -160,6 +160,10 @@ export default function EditUser() {
       <AdminPageHeader 
         title="Chỉnh sửa người dùng"
         description="Cập nhật thông tin và quyền hạn của người dùng"
+        backButton={{
+          text: "Quay lại danh sách người dùng",
+          href: "/admin/users"
+        }}
       />
 
       <AdminErrorAlert message={error} />

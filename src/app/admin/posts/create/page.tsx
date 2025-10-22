@@ -243,6 +243,10 @@ export default function CreatePost() {
       <AdminPageHeader 
         title="Tạo bài viết mới"
         description="Viết và xuất bản bài viết mới"
+        backButton={{
+          text: "Quay lại danh sách bài viết",
+          href: "/admin/posts"
+        }}
       />
 
       <AdminCard title="Thông tin bài viết">
