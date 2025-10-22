@@ -141,17 +141,32 @@ export default function Header() {
     setIsEditingName(true)
   }
 
-  const saveEditedName = () => {
+  const saveEditedName = async () => {
     if (!user) return
-    const updated: User = { ...user, name: nameInput.trim() || user.name }
-    setUser(updated)
-    setSession(updated)
-    setIsEditingName(false)
-    fetch('/api/users/me', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: updated.id, name: updated.name })
-    }).catch(() => {})
+    const newName = nameInput.trim() || user.name
+    try {
+      const res = await fetch('/api/users/me', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: user.id, name: newName })
+      })
+      if (res.ok) {
+        const data = await res.json()
+        const updated: User = { ...user, ...data.user }
+        setUser(updated)
+        setSession(updated)
+      } else {
+        const updated: User = { ...user, name: newName }
+        setUser(updated)
+        setSession(updated)
+      }
+    } catch {
+      const updated: User = { ...user, name: newName }
+      setUser(updated)
+      setSession(updated)
+    } finally {
+      setIsEditingName(false)
+    }
   }
 
   const isActive = (path: string) => {
