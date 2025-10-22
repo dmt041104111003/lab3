@@ -12,12 +12,14 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false)
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   // TechNova mega menu categories
   const megaMenuCategories = [
     {
       title: 'TIN TỨC',
+      baseHref: '/tin-tuc',
       subcategories: [
         { name: 'Công nghệ Việt Nam', href: '/tin-tuc/cong-nghe-viet-nam' },
         { name: 'Công nghệ thế giới', href: '/tin-tuc/cong-nghe-the-gioi' }
@@ -25,6 +27,7 @@ export default function Header() {
     },
     {
       title: 'AI - CHUYỂN ĐỔI SỐ',
+      baseHref: '/ai-chuyen-doi-so',
       subcategories: [
         { name: 'Trí tuệ nhân tạo', href: '/ai-chuyen-doi-so/tri-tue-nhan-tao' },
         { name: 'Dữ liệu lớn & IoT', href: '/ai-chuyen-doi-so/du-lieu-lon-iot' },
@@ -33,6 +36,7 @@ export default function Header() {
     },
     {
       title: 'ĐỔI MỚI SÁNG TẠO',
+      baseHref: '/doi-moi-sang-tao',
       subcategories: [
         { name: 'Startup Việt', href: '/doi-moi-sang-tao/startup-viet' },
         { name: 'Ý tưởng hay', href: '/doi-moi-sang-tao/y-tuong-hay' },
@@ -41,6 +45,7 @@ export default function Header() {
     },
     {
       title: 'SẢN PHẨM & REVIEW',
+      baseHref: '/san-pham-review',
       subcategories: [
         { name: 'Thiết bị mới', href: '/san-pham-review/thiet-bi-moi' },
         { name: 'Ứng dụng & phần mềm', href: '/san-pham-review/ung-dung-phan-mem' },
@@ -49,10 +54,29 @@ export default function Header() {
     },
     {
       title: 'XU HƯỚNG TƯƠNG LAI',
+      baseHref: '/xu-huong-tuong-lai',
       subcategories: [
         { name: 'Blockchain', href: '/xu-huong-tuong-lai/blockchain' },
         { name: 'Công nghệ xanh', href: '/xu-huong-tuong-lai/cong-nghe-xanh' },
         { name: 'Metaverse', href: '/xu-huong-tuong-lai/metaverse' }
+      ]
+    },
+    {
+      title: 'NHÂN VẬT & GÓC NHÌN',
+      baseHref: '/nhan-vat-goc-nhin',
+      subcategories: [
+        { name: 'Chân dung nhà sáng tạo', href: '/nhan-vat-goc-nhin/chan-dung-nha-sang-tao' },
+        { name: 'Phỏng vấn chuyên gia', href: '/nhan-vat-goc-nhin/phong-van-chuyen-gia' },
+        { name: 'Bình luận công nghệ', href: '/nhan-vat-goc-nhin/binh-luan-cong-nghe' }
+      ]
+    },
+    {
+      title: 'MULTIMEDIA',
+      baseHref: '/multimedia',
+      subcategories: [
+        { name: 'Video', href: '/multimedia/video' },
+        { name: 'Ảnh', href: '/multimedia/anh' },
+        { name: 'Infographic', href: '/multimedia/infographic' }
       ]
     }
   ]
@@ -66,14 +90,15 @@ export default function Header() {
     }
   }, [])
 
-  // Close mega menu when clicking outside
+  // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (isMegaMenuOpen) {
-        const target = event.target as HTMLElement
-        if (!target.closest('[data-mega-menu]')) {
-          setIsMegaMenuOpen(false)
-        }
+      const target = event.target as HTMLElement
+      if (isMegaMenuOpen && !target.closest('[data-mega-menu]')) {
+        setIsMegaMenuOpen(false)
+      }
+      if (isProfileMenuOpen && !target.closest('[data-profile-menu]')) {
+        setIsProfileMenuOpen(false)
       }
     }
 
@@ -81,7 +106,7 @@ export default function Header() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isMegaMenuOpen])
+  }, [isMegaMenuOpen, isProfileMenuOpen])
 
   // Prevent hydration mismatch
   if (!mounted) {
@@ -125,11 +150,36 @@ export default function Header() {
   }
 
   const getMobileNavLinkClasses = (path: string) => {
-    const baseClasses = "block px-3 py-2 text-base font-medium rounded-md transition-colors"
+    const baseClasses = "block px-3 py-2 text-sm rounded-md transition-colors"
     const activeClasses = "text-tech-blue bg-tech-blue/10 font-semibold"
     const inactiveClasses = "text-gray-700 hover:text-tech-blue hover:bg-gray-100"
-    
     return `${baseClasses} ${isActive(path) ? activeClasses : inactiveClasses}`
+  }
+
+  const getMegaMenuLinkClasses = (path: string) => {
+    const baseClasses = "block text-sm px-2 py-1 rounded transition-colors"
+    const activeClasses = "text-tech-blue bg-blue-50 font-medium"
+    const inactiveClasses = "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+    return `${baseClasses} ${isActive(path) ? activeClasses : inactiveClasses}`
+  }
+
+  const getMegaMenuTitleClasses = (path: string) => {
+    const baseClasses = "font-bold text-lg"
+    const activeClasses = "text-tech-blue"
+    const inactiveClasses = "text-gray-900"
+    return `${baseClasses} ${isActive(path) ? activeClasses : inactiveClasses}`
+  }
+
+  const getMobileMenuTitleClasses = (path: string) => {
+    const baseClasses = "font-bold px-3 py-2"
+    const activeClasses = "text-tech-blue"
+    const inactiveClasses = "text-gray-900"
+    return `${baseClasses} ${isActive(path) ? activeClasses : inactiveClasses}`
+  }
+
+  const getUserInitial = () => {
+    const name = user?.name?.trim() || ''
+    return name ? name.charAt(0).toUpperCase() : 'U'
   }
 
   return (
@@ -142,9 +192,12 @@ export default function Header() {
             className="md:hidden p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
             aria-label="Toggle mobile menu"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            <span className="sr-only">Menu</span>
+            <div className="w-6 h-6 flex flex-col items-center justify-center space-y-1">
+              <span className={`block h-0.5 w-6 bg-current transition-transform duration-200 ${isMobileMenuOpen ? 'translate-y-1.5 rotate-45' : ''}`}></span>
+              <span className={`block h-0.5 w-6 bg-current transition-opacity duration-200 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+              <span className={`block h-0.5 w-6 bg-current transition-transform duration-200 ${isMobileMenuOpen ? '-translate-y-1.5 -rotate-45' : ''}`}></span>
+            </div>
           </button>
           {/* Logo và Slogan */}
           <div className="flex items-center space-x-4">
@@ -179,16 +232,25 @@ export default function Header() {
             <Link href="/xu-huong-tuong-lai" className={getNavLinkClasses('/xu-huong-tuong-lai')}>
               Xu hướng tương lai
             </Link>
+            {/* <Link href="/nhan-vat-goc-nhin" className={getNavLinkClasses('/nhan-vat-goc-nhin')}>
+              Nhân vật & Góc nhìn
+            </Link>
+            <Link href="/multimedia" className={getNavLinkClasses('/multimedia')}>
+              Multimedia
+            </Link> */}
             
             {/* Hamburger Menu Button */}
             <button
               onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)}
-              className="flex items-center space-x-1 text-gray-700 hover:text-tech-blue transition-colors font-medium"
+              className="flex items-center text-gray-700 hover:text-tech-blue transition-colors font-medium p-2 rounded-md"
+              aria-label="Mở mega menu"
               data-mega-menu
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              <div className="w-6 h-6 flex flex-col items-center justify-center space-y-1">
+                <span className={`block h-0.5 w-6 bg-current transition-transform duration-200 ${isMegaMenuOpen ? 'translate-y-1.5 rotate-45' : ''}`}></span>
+                <span className={`block h-0.5 w-6 bg-current transition-opacity duration-200 ${isMegaMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+                <span className={`block h-0.5 w-6 bg-current transition-transform duration-200 ${isMegaMenuOpen ? '-translate-y-1.5 -rotate-45' : ''}`}></span>
+              </div>
             </button>
           </nav>
 
@@ -196,16 +258,43 @@ export default function Header() {
           <div className="flex items-center space-x-4">
             {isLoggedIn ? (
               <>
-                <span className="text-gray-700 font-medium">
-                  Xin chào, {user?.name}
-                </span>
-  
-                <button
-                  onClick={handleSignOut}
-                  className="text-gray-700 hover:text-tech-blue transition-colors font-medium"
-                >
-                  Đăng xuất
-                </button>
+                <div className="relative" data-profile-menu>
+                  <button
+                    onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                    className="w-10 h-10 rounded-full bg-tech-blue text-white flex items-center justify-center font-semibold hover:bg-tech-dark-blue transition-colors"
+                    aria-haspopup="menu"
+                    aria-label="Mở menu hồ sơ"
+                  >
+                    {getUserInitial()}
+                  </button>
+
+                  {isProfileMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                      <div className="px-4 py-3 border-b border-gray-100">
+                        <div className="text-sm font-semibold text-gray-900">{user?.name}</div>
+                        <div className="text-xs text-gray-600 truncate">{user?.email}</div>
+                        <div className="text-xs text-gray-500 mt-1">Vai trò: {user?.role}</div>
+                      </div>
+                      <div className="py-1">
+                        {isAdmin() && (
+                          <Link
+                            href="/admin"
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => setIsProfileMenuOpen(false)}
+                          >
+                            Đi tới Admin
+                          </Link>
+                        )}
+                        <button
+                          onClick={handleSignOut}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          Đăng xuất
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </>
             ) : (
               <>
@@ -239,7 +328,9 @@ export default function Header() {
                 {megaMenuCategories.map((category, index) => (
                   <div key={index} className="space-y-4">
                     <div className="flex items-center space-x-2">
-                      <h3 className="font-bold text-lg text-gray-900">{category.title}</h3>
+                      <Link href={category.baseHref} className={getMegaMenuTitleClasses(category.baseHref)}>
+                        {category.title}
+                      </Link>
                       <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                       </svg>
@@ -249,7 +340,7 @@ export default function Header() {
                         <Link
                           key={subIndex}
                           href={sub.href}
-                          className="block text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-2 py-1 rounded transition-colors"
+                          className={getMegaMenuLinkClasses(sub.href)}
                           onClick={() => setIsMegaMenuOpen(false)}
                         >
                           {sub.name}
@@ -296,13 +387,15 @@ export default function Header() {
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
               {megaMenuCategories.map((category, index) => (
                 <div key={index} className="space-y-1">
-                  <div className="font-bold text-gray-900 px-3 py-2">{category.title}</div>
+                  <Link href={category.baseHref} className={getMobileMenuTitleClasses(category.baseHref)}>
+                    {category.title}
+                  </Link>
                   <div className="ml-4 space-y-1">
                     {category.subcategories.map((sub, subIndex) => (
                       <Link
                         key={subIndex}
                         href={sub.href}
-                        className="block px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                        className={getMobileNavLinkClasses(sub.href)}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {sub.name}

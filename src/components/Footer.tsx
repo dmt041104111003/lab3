@@ -1,7 +1,23 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 
 export default function Footer() {
+  const pathname = usePathname()
+
+  const isActive = (path: string) => {
+    if (path === '/') return pathname === '/'
+    return pathname.startsWith(path)
+  }
+
+  const getFooterLinkClasses = (path: string) => {
+    const base = 'transition-colors text-sm font-medium'
+    const active = 'text-blue-400'
+    const inactive = 'text-white hover:text-blue-400'
+    return `${base} ${isActive(path) ? active : inactive}`
+  }
   return (
     <footer className="bg-gray-900 text-white">
       {/* Top Navigation Bar */}
@@ -23,20 +39,26 @@ export default function Footer() {
           
           {/* Navigation Links */}
           <div className="flex flex-wrap gap-4 md:gap-6">
-            <Link href="/tin-tuc" className="text-white hover:text-blue-400 transition-colors text-sm font-medium">
+            <Link href="/tin-tuc" className={getFooterLinkClasses('/tin-tuc')}>
               TIN TỨC
             </Link>
-            <Link href="/ai-chuyen-doi-so" className="text-white hover:text-blue-400 transition-colors text-sm font-medium">
+            <Link href="/ai-chuyen-doi-so" className={getFooterLinkClasses('/ai-chuyen-doi-so')}>
               AI - CHUYỂN ĐỔI SỐ
             </Link>
-            <Link href="/doi-moi-sang-tao" className="text-white hover:text-blue-400 transition-colors text-sm font-medium">
+            <Link href="/doi-moi-sang-tao" className={getFooterLinkClasses('/doi-moi-sang-tao')}>
               ĐỔI MỚI SÁNG TẠO
             </Link>
-            <Link href="/san-pham-review" className="text-white hover:text-blue-400 transition-colors text-sm font-medium">
+            <Link href="/san-pham-review" className={getFooterLinkClasses('/san-pham-review')}>
               SẢN PHẨM & REVIEW
             </Link>
-            <Link href="/xu-huong-tuong-lai" className="text-white hover:text-blue-400 transition-colors text-sm font-medium">
+            <Link href="/xu-huong-tuong-lai" className={getFooterLinkClasses('/xu-huong-tuong-lai')}>
               XU HƯỚNG TƯƠNG LAI
+            </Link>
+            <Link href="/nhan-vat-goc-nhin" className={getFooterLinkClasses('/nhan-vat-goc-nhin')}>
+              NHÂN VẬT & GÓC NHÌN
+            </Link>
+            <Link href="/multimedia" className={getFooterLinkClasses('/multimedia')}>
+              MULTIMEDIA
             </Link>
           </div>
         </div>

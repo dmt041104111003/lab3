@@ -53,6 +53,26 @@ export const CATEGORIES: Category[] = [
     ]
   },
   {
+    id: 'nhan-vat-goc-nhin',
+    name: 'Nhân vật & Góc nhìn',
+    slug: 'nhan-vat-goc-nhin',
+    subcategories: [
+      { id: 'chan-dung-nha-sang-tao', name: 'Chân dung nhà sáng tạo', slug: 'chan-dung-nha-sang-tao', parentId: 'nhan-vat-goc-nhin' },
+      { id: 'phong-van-chuyen-gia', name: 'Phỏng vấn chuyên gia', slug: 'phong-van-chuyen-gia', parentId: 'nhan-vat-goc-nhin' },
+      { id: 'binh-luan-cong-nghe', name: 'Bình luận công nghệ', slug: 'binh-luan-cong-nghe', parentId: 'nhan-vat-goc-nhin' }
+    ]
+  },
+  {
+    id: 'multimedia',
+    name: 'Multimedia',
+    slug: 'multimedia',
+    subcategories: [
+      { id: 'video', name: 'Video', slug: 'video', parentId: 'multimedia' },
+      { id: 'anh', name: 'Ảnh', slug: 'anh', parentId: 'multimedia' },
+      { id: 'infographic', name: 'Infographic', slug: 'infographic', parentId: 'multimedia' }
+    ]
+  },
+  {
     id: 'xu-huong-tuong-lai',
     name: 'Xu hướng tương lai',
     slug: 'xu-huong-tuong-lai',

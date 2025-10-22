@@ -131,9 +131,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             className="p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
             aria-label="Toggle mobile menu"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            <span className="sr-only">Menu</span>
+            <div className="w-6 h-6 flex flex-col items-center justify-center space-y-1">
+              <span className={`block h-0.5 w-6 bg-current transition-transform duration-200 ${isMobileMenuOpen ? 'translate-y-1.5 rotate-45' : ''}`}></span>
+              <span className={`block h-0.5 w-6 bg-current transition-opacity duration-200 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+              <span className={`block h-0.5 w-6 bg-current transition-transform duration-200 ${isMobileMenuOpen ? '-translate-y-1.5 -rotate-45' : ''}`}></span>
+            </div>
           </button>
           
           <div className="flex items-center space-x-4">
@@ -227,12 +230,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               <div className="absolute top-0 right-0 -mr-12 pt-2">
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                  className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white text-white"
                   aria-label="Close mobile menu"
                 >
-                  <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                  <div className="w-6 h-6 flex flex-col items-center justify-center space-y-1">
+                    <span className={`block h-0.5 w-6 bg-current transition-transform duration-200 ${true ? 'translate-y-1.5 rotate-45' : ''}`}></span>
+                    <span className={`block h-0.5 w-6 bg-current transition-opacity duration-200 ${true ? 'opacity-0' : 'opacity-100'}`}></span>
+                    <span className={`block h-0.5 w-6 bg-current transition-transform duration-200 ${true ? '-translate-y-1.5 -rotate-45' : ''}`}></span>
+                  </div>
                 </button>
               </div>
               <div className="flex-1 flex flex-col h-full">
