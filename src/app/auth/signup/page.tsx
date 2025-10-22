@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
+import { getSession } from "@/lib/session"
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -14,6 +15,17 @@ export default function SignUp() {
   const [error, setError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+  useEffect(() => {
+    const user = getSession()
+    if (user) {
+      if (user.role === 'ADMIN') {
+        window.location.href = '/admin'
+      } else {
+        window.location.href = '/'
+      }
+    }
+  }, [])
 
   const validateForm = () => {
     if (!formData.name.trim()) {

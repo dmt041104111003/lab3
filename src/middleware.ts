@@ -8,25 +8,41 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  if (pathname === '/') {
+  if (pathname.startsWith('/auth/')) {
     const userSession = request.cookies.get('user_session')?.value
     if (userSession) {
       try {
         const user = JSON.parse(userSession)
         if (user.role === 'ADMIN') {
           return NextResponse.redirect(new URL('/admin', request.url))
+        } else {
+          return NextResponse.redirect(new URL('/', request.url))
         }
       } catch (error) {
       }
     }
   }
 
-  return NextResponse.next()
+  // if (pathname === '/') {
+  //   const userSession = request.cookies.get('user_session')?.value
+  //   if (userSession) {
+  //     try {
+  //       const user = JSON.parse(userSession)
+  //       if (user.role === 'ADMIN') {
+  //         return NextResponse.redirect(new URL('/admin', request.url))
+  //       }
+  //     } catch (error) {
+  //     }
+  //   }
+  // }
+
+  // return NextResponse.next()
 }
 
 export const config = {
   matcher: [
     '/admin/:path*',
+    '/auth/:path*',
     '/',
   ],
 }
