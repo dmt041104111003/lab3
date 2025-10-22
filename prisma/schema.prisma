@@ -37,6 +37,7 @@ model Post {
   author       User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   
   tags         PostTag[]
+  images       PostImage[]
 
   @@map("posts")
 }
@@ -65,6 +66,8 @@ model Image {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  posts     PostImage[]
+
   @@map("images")
 }
 
@@ -77,6 +80,17 @@ model PostTag {
   
   @@id([postId, tagId])
   @@map("post_tags")
+}
+
+model PostImage {
+  postId  String
+  imageId String
+  
+  post  Post  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  image Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  
+  @@id([postId, imageId])
+  @@map("post_images")
 }
 
 enum Role {

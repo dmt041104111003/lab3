@@ -33,6 +33,11 @@ export async function GET(
               }
             }
           }
+        },
+        images: {
+          include: {
+            image: true
+          }
         }
       }
     })

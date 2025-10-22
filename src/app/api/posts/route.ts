@@ -16,6 +16,11 @@ export async function GET(request: NextRequest) {
           include: {
             tag: true
           }
+        },
+        images: {
+          include: {
+            image: true
+          }
         }
       },
       orderBy: {
@@ -142,6 +147,15 @@ export async function POST(request: NextRequest) {
               connect: { id: tagId }
             }
           }))
+        } : undefined,
+
+        // Connect image if provided
+        images: imageId ? {
+          create: {
+            image: {
+              connect: { id: imageId }
+            }
+          }
         } : undefined
       },
       include: {
@@ -154,6 +168,11 @@ export async function POST(request: NextRequest) {
         tags: {
           include: {
             tag: true
+          }
+        },
+        images: {
+          include: {
+            image: true
           }
         }
       }
@@ -263,8 +282,11 @@ export async function PUT(request: NextRequest) {
       imageId = image.id
     }
 
-    // First, delete existing tags
+    // First, delete existing tags and images
     await prisma.postTag.deleteMany({
+      where: { postId: id }
+    })
+    await prisma.postImage.deleteMany({
       where: { postId: id }
     })
 
@@ -287,6 +309,15 @@ export async function PUT(request: NextRequest) {
               connect: { id: tagId }
             }
           }))
+        } : undefined,
+
+        // Connect new image if provided
+        images: imageId ? {
+          create: {
+            image: {
+              connect: { id: imageId }
+            }
+          }
         } : undefined
       },
       include: {
@@ -299,6 +330,11 @@ export async function PUT(request: NextRequest) {
         tags: {
           include: {
             tag: true
+          }
+        },
+        images: {
+          include: {
+            image: true
           }
         }
       }

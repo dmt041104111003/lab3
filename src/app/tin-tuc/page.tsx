@@ -21,6 +21,13 @@ interface Post {
     name: string
     email: string
   }
+  images?: Array<{
+    image: {
+      id: string
+      path: string
+      alt?: string
+    }
+  }>
 }
 
 export default function TinTucPage() {
@@ -51,9 +58,12 @@ export default function TinTucPage() {
         .slice(0, 5) // Lấy 5 bài mới nhất
 
       setPosts(allPosts)
+      console.log('Fetched posts:', allPosts)
+      console.log('First post images:', allPosts[0]?.images)
     } catch (error) {
       console.error('Error fetching posts:', error)
-      setError('Có lỗi xảy ra khi tải bài viết')
+      // Không set error để vẫn hiển thị danh sách tiểu mục
+      setPosts([])
     } finally {
       setLoading(false)
     }
@@ -62,19 +72,26 @@ export default function TinTucPage() {
   // Lấy danh sách tiểu mục của "Tin tức"
   const tinTucCategory = CATEGORIES.find(cat => cat.id === 'tin-tuc')
   const subcategories = tinTucCategory?.subcategories || []
+  
 
   const tinTucSection = {
     title: "TIN TỨC",
     mainArticle: posts.length > 0 ? {
       title: posts[0].title,
-      href: `/tin-tuc/${posts[0].subcategory}/${posts[0].slug}`
+      href: `/tin-tuc/${posts[0].subcategory}/${posts[0].slug}`,
+      imageUrl: posts[0].images?.[0]?.image?.path,
+      imageAlt: posts[0].images?.[0]?.image?.alt || posts[0].title,
+      excerpt: posts[0].excerpt
     } : {
       title: "Chưa có bài viết nào",
       href: "#"
     },
     subArticles: posts.slice(1, 4).map(post => ({
       title: post.title,
-      href: `/tin-tuc/${post.subcategory}/${post.slug}`
+      href: `/tin-tuc/${post.subcategory}/${post.slug}`,
+      imageUrl: post.images?.[0]?.image?.path,
+      imageAlt: post.images?.[0]?.image?.alt || post.title,
+      excerpt: post.excerpt
     }))
   }
 
@@ -115,29 +132,36 @@ export default function TinTucPage() {
           {/* Danh sách tiểu mục */}
           <div className="mt-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Chuyên mục tin tức</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {subcategories.map((subcategory) => (
-                <a
-                  key={subcategory.id}
-                  href={`/tin-tuc/${subcategory.slug}`}
-                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 border border-gray-200 hover:border-tech-blue"
-                >
-                  <div className="text-center">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      {subcategory.name}
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      Khám phá tin tức về {subcategory.name.toLowerCase()}
-                    </p>
-                    <div className="mt-4">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-tech-blue text-white">
-                        Xem tin tức
-                      </span>
+            {subcategories.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {subcategories.map((subcategory) => (
+                  <a
+                    key={subcategory.id}
+                    href={`/tin-tuc/${subcategory.slug}`}
+                    className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 border border-gray-200 hover:border-blue-500"
+                  >
+                    <div className="text-center">
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                        {subcategory.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm">
+                        Khám phá tin tức về {subcategory.name.toLowerCase()}
+                      </p>
+                      <div className="mt-4">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-500 text-white">
+                          Xem tin tức
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </a>
-              ))}
-            </div>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-gray-500">Không có tiểu mục nào</p>
+                <p className="text-sm text-gray-400 mt-2">Debug: subcategories.length = {subcategories.length}</p>
+              </div>
+            )}
           </div>
         </div>
       </main>

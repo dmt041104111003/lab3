@@ -6,10 +6,16 @@ interface ContentSectionProps {
   mainArticle: {
     title: string
     href: string
+    imageUrl?: string
+    imageAlt?: string
+    excerpt?: string
   }
   subArticles: Array<{
     title: string
     href: string
+    imageUrl?: string
+    imageAlt?: string
+    excerpt?: string
   }>
   className?: string
 }
@@ -25,6 +31,9 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
           title={mainArticle.title}
           href={mainArticle.href}
           isMain={true}
+          imageUrl={mainArticle.imageUrl}
+          imageAlt={mainArticle.imageAlt}
+          excerpt={mainArticle.excerpt}
         />
       </div>
 
@@ -35,6 +44,9 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
             key={index}
             title={article.title}
             href={article.href}
+            imageUrl={article.imageUrl}
+            imageAlt={article.imageAlt}
+            excerpt={article.excerpt}
           />
         ))}
       </div>

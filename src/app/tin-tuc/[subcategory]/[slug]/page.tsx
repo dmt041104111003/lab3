@@ -21,6 +21,13 @@ interface Post {
     email: string
   }
   tags?: Array<{ id: string; name: string; color: string }>
+  images?: Array<{
+    image: {
+      id: string
+      path: string
+      alt?: string
+    }
+  }>
 }
 
 export default function PostDetailPage() {
@@ -126,6 +133,17 @@ export default function PostDetailPage() {
                 </div>
               )}
             </header>
+            
+            {/* Featured Image */}
+            {post.images && post.images.length > 0 && (
+              <div className="mb-8">
+                <img 
+                  src={post.images[0].image.path} 
+                  alt={post.images[0].image.alt || post.title}
+                  className="w-full h-64 object-cover rounded-lg"
+                />
+              </div>
+            )}
             
             <div 
               className="prose prose-lg max-w-none"

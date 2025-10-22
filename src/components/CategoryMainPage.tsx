@@ -21,6 +21,13 @@ interface Post {
     name: string
     email: string
   }
+  images?: Array<{
+    image: {
+      id: string
+      path: string
+      alt?: string
+    }
+  }>
 }
 
 interface CategoryMainPageProps {
@@ -73,14 +80,20 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
     title: title.toUpperCase(),
     mainArticle: posts.length > 0 ? {
       title: posts[0].title,
-      href: `/${basePath}/${posts[0].subcategory}/${posts[0].slug}`
+      href: `/${basePath}/${posts[0].subcategory}/${posts[0].slug}`,
+      imageUrl: posts[0].images?.[0]?.image?.path,
+      imageAlt: posts[0].images?.[0]?.image?.alt || posts[0].title,
+      excerpt: posts[0].excerpt
     } : {
       title: "Chưa có bài viết nào",
       href: "#"
     },
     subArticles: posts.slice(1, 4).map(post => ({
       title: post.title,
-      href: `/${basePath}/${post.subcategory}/${post.slug}`
+      href: `/${basePath}/${post.subcategory}/${post.slug}`,
+      imageUrl: post.images?.[0]?.image?.path,
+      imageAlt: post.images?.[0]?.image?.alt || post.title,
+      excerpt: post.excerpt
     }))
   }
 

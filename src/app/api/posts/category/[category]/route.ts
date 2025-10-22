@@ -22,6 +22,11 @@ export async function GET(
           include: {
             tag: true
           }
+        },
+        images: {
+          include: {
+            image: true
+          }
         }
       },
       orderBy: {

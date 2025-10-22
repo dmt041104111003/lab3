@@ -119,7 +119,7 @@ export default function EditPost() {
           excerpt: postData.excerpt,
           published: postData.published,
           selectedTags: postData.tags?.map((tag: any) => tag.tag?.id || tag.id) || [],
-          selectedImage: postData.featuredImage?.id || '',
+          selectedImage: postData.images?.[0]?.image?.id || '',
           category: postData.category || '',
           subcategory: postData.subcategory || '',
           imageType: 'existing' as 'existing' | 'upload' | 'url',

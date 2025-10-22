@@ -27,6 +27,13 @@ interface Post {
     color: string
   }[]
   imageUrl?: string
+  images?: Array<{
+    image: {
+      id: string
+      path: string
+      alt?: string
+    }
+  }>
 }
 
 export default function PostDetail() {
@@ -129,7 +136,15 @@ export default function PostDetail() {
           </div>
 
           {/* Post Image */}
-          {post.imageUrl && (
+          {post.images && post.images.length > 0 ? (
+            <div className="aspect-w-16 aspect-h-9">
+              <img
+                src={post.images[0].image.path}
+                alt={post.images[0].image.alt || post.title}
+                className="w-full h-64 object-cover"
+              />
+            </div>
+          ) : post.imageUrl ? (
             <div className="aspect-w-16 aspect-h-9">
               <img
                 src={post.imageUrl}
@@ -137,7 +152,7 @@ export default function PostDetail() {
                 className="w-full h-64 object-cover"
               />
             </div>
-          )}
+          ) : null}
 
           {/* Post Content */}
           <div className="px-6 py-8">
@@ -154,11 +169,7 @@ export default function PostDetail() {
                 {post.tags.map((tag) => (
                   <span
                     key={tag.id}
-                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
-                    style={{ 
-                      backgroundColor: `${tag.color}20`,
-                      color: tag.color 
-                    }}
+                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
                   >
                     {tag.name}
                   </span>
