@@ -35,7 +35,10 @@ export default function CommentSection() {
     
     // Listen for session updates
     const handleSessionUpdate = () => {
-      checkAuth()
+      // Force refresh after a small delay to ensure localStorage is updated
+      setTimeout(() => {
+        checkAuth()
+      }, 100)
     }
     
     window.addEventListener('session:update', handleSessionUpdate)
@@ -120,18 +123,25 @@ export default function CommentSection() {
       setError('Mật khẩu là bắt buộc')
       return false
     }
+    
+    // Trường hợp đặc biệt: admin login
     if (formData.email.toLowerCase() === 'admin') {
       return true
     }
+    
+    // Validate email format cho user thường
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(formData.email)) {
       setError('Email không hợp lệ')
       return false
     }
+    
+    // Validate password length
     if (formData.password.length < 6) {
       setError('Mật khẩu phải có ít nhất 6 ký tự')
       return false
     }
+    
     return true
   }
 
@@ -164,6 +174,9 @@ export default function CommentSection() {
           })
         } catch (error) {}
 
+        // Trigger session update event
+        window.dispatchEvent(new CustomEvent('session:update'))
+        
         setIsLoggedIn(true)
         setUser(data.user)
         closeModal()
@@ -430,7 +443,7 @@ export default function CommentSection() {
                     Email
                   </label>
                   <input
-                    type="email"
+                    type="text"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
@@ -496,7 +509,7 @@ export default function CommentSection() {
             <div className="px-6 pb-4 text-center">
               <span className="text-sm text-gray-500">Chưa có tài khoản? </span>
               <a 
-                href="/dang-ky" 
+                href="/auth/signup" 
                 className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
               >
                 Đăng ký ngay
