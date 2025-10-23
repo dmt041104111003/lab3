@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { getSession } from '@/lib/session'
+import { useParams } from 'next/navigation'
 
 export default function CommentSection() {
+  const params = useParams()
   const [comment, setComment] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [formData, setFormData] = useState({
@@ -12,11 +14,18 @@ export default function CommentSection() {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const [replyingTo, setReplyingTo] = useState<number | null>(null)
+  const [replyingTo, setReplyingTo] = useState<string | null>(null)
   const [replyText, setReplyText] = useState('')
-  const [likedComments, setLikedComments] = useState<Set<number>>(new Set())
+  const [likedComments, setLikedComments] = useState<Set<string>>(new Set())
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [user, setUser] = useState<any>(null)
+  const [comments, setComments] = useState<any[]>([])
+  const [loadingComments, setLoadingComments] = useState(false)
+  const [submittingComment, setSubmittingComment] = useState(false)
+  const [submittingReply, setSubmittingReply] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalComments, setTotalComments] = useState(0)
+  const [loadingMore, setLoadingMore] = useState(false)
   
   // Check authentication status
   useEffect(() => {
@@ -48,57 +57,47 @@ export default function CommentSection() {
     }
   }, [])
   
-  // Mock comments data
-  const comments = [
-    {
-      id: 1,
-      author: 'Bảo Long',
-      avatar: 'B',
-      text: 'Tuyệt vời quá, nên làm ngay và luôn',
-      likes: 3,
-      time: '1h trước'
-    },
-    {
-      id: 2,
-      author: 'ftwane81',
-      avatar: 'F',
-      text: 'Ngoài ra nên khuyến khích tuyên truyền cho học sinh và người già tăng thời gian vận động dưới ánh sáng nhe ngoài trời để cơ thể khỏe mạnh hơn là ngồi trong phòng máy lạnh kín khí thiếu ko khí sạch.\n\nNgoài trông chờ vào hệ thống y tế có giới hạn thì mỗi người phải có ý thức tự chăm sóc bản thân mình trước. Đừng để bệnh rồi mới tìm thầy thuốc mà việc ăn uống sinh hoạt hằng ngày thì lai ko chú ý.',
-      likes: 5,
-      time: '1h trước'
-    },
-    {
-      id: 3,
-      author: 'TrungNguyen',
-      avatar: 'https://i.pravatar.cc/40?img=12',
-      text: 'Quá tuyệt vời, hi vọng áp dụng được luôn vào năm 2026',
-      likes: 5,
-      time: '1h trước'
-    },
-    {
-      id: 4,
-      author: 'quyhoi',
-      avatar: 'Q',
-      text: 'Tp HCM thành phố nghĩa tình',
-      likes: 0,
-      time: '1h trước'
-    },
-    {
-      id: 5,
-      author: 'huyenpt.datviet',
-      avatar: 'https://i.pravatar.cc/40?img=33',
-      text: 'Tốt quá. Số tiền không nhỏ với nhiều gia đình trong bối cảnh kinh tế khó khăn. Cảm ơn lãnh đạo TP HCM.',
-      likes: 3,
-      time: '1h trước'
-    },
-    {
-      id: 6,
-      author: 'nguyendinhdung5406',
-      avatar: 'N',
-      text: 'Đúng rồi rất ok',
-      likes: 0,
-      time: '1h trước'
+  // Load comments
+  const loadComments = async (page = 1, limit = 3, append = false) => {
+    if (!params?.slug) return
+    
+    if (append) {
+      setLoadingMore(true)
+    } else {
+      setLoadingComments(true)
     }
-  ]
+    
+    try {
+      const response = await fetch(`/api/comments?postSlug=${params.slug}&page=${page}&limit=${limit}`)
+      const data = await response.json()
+      
+      if (response.ok) {
+        if (append) {
+          setComments(prev => [...prev, ...(data.comments || [])])
+        } else {
+          setComments(data.comments || [])
+        }
+        setTotalComments(data.pagination?.total || 0)
+        setCurrentPage(page)
+      }
+    } catch (error) {
+      console.error('Error loading comments:', error)
+    } finally {
+      setLoadingComments(false)
+      setLoadingMore(false)
+    }
+  }
+
+  // Load comments on mount
+  useEffect(() => {
+    loadComments()
+  }, [params?.slug])
+
+  // Load more comments
+  const loadMoreComments = () => {
+    const nextPage = currentPage + 1
+    loadComments(nextPage, 5, true)
+  }
 
   const handleInputClick = () => {
     if (isLoggedIn) {
@@ -212,34 +211,103 @@ export default function CommentSection() {
     }
   }
 
-  const handleLike = (commentId: number) => {
-    setLikedComments(prev => {
-      const newSet = new Set(prev)
-      if (newSet.has(commentId)) {
-        newSet.delete(commentId)
-      } else {
-        newSet.add(commentId)
-      }
-      return newSet
-    })
-  }
+  const handleLike = async (commentId: string) => {
+    try {
+      const response = await fetch(`/api/comments/${commentId}/like`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      })
 
-  const handleReplySubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (replyText.trim()) {
-      // TODO: Implement reply submission
-      console.log('Reply to comment', replyingTo, ':', replyText)
-      setReplyText('')
-      setReplyingTo(null)
+      if (response.ok) {
+        setLikedComments(prev => {
+          const newSet = new Set(prev)
+          if (newSet.has(commentId)) {
+            newSet.delete(commentId)
+          } else {
+            newSet.add(commentId)
+          }
+          return newSet
+        })
+        loadComments() // Reload to get updated like count
+      }
+    } catch (error) {
+      console.error('Error liking comment:', error)
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleReplySubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (comment.trim()) {
-      // TODO: Implement comment submission
-      console.log('Comment:', comment)
-      setComment('')
+    if (!replyText.trim() || !replyingTo) return
+    
+    setSubmittingReply(true)
+    setError('')
+    
+    try {
+      const response = await fetch('/api/replies', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          commentId: replyingTo,
+          content: replyText.trim()
+        })
+      })
+
+      if (response.ok) {
+        setReplyText('')
+        setReplyingTo(null)
+        setCurrentPage(1)
+        loadComments(1, 3, false) // Reload comments from page 1
+      } else {
+        const error = await response.json()
+        setError(error.error || 'Có lỗi xảy ra khi gửi phản hồi')
+      }
+    } catch (error) {
+      console.error('Error submitting reply:', error)
+      setError('Có lỗi xảy ra khi gửi phản hồi')
+    } finally {
+      setSubmittingReply(false)
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!comment.trim() || !params?.slug) return
+    
+    setSubmittingComment(true)
+    setError('')
+    
+    try {
+      const response = await fetch('/api/comments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          postSlug: params.slug,
+          content: comment.trim()
+        })
+      })
+
+      if (response.ok) {
+        setComment('')
+        setCurrentPage(1)
+        loadComments(1, 3, false) // Reload comments from page 1
+      } else {
+        const error = await response.json()
+        setError(error.error || 'Có lỗi xảy ra khi gửi bình luận')
+      }
+    } catch (error) {
+      console.error('Error submitting comment:', error)
+      setError('Có lỗi xảy ra khi gửi bình luận')
+    } finally {
+      setSubmittingComment(false)
     }
   }
 
@@ -251,35 +319,40 @@ export default function CommentSection() {
         </div>
         
         <div className="p-6">
-          <div 
-            className="relative border-l-4 border-tech-blue bg-gray-50 rounded cursor-pointer"
-            onClick={handleInputClick}
-          >
-            <div className="flex items-center p-4">
-              <input
-                type="text"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="Chia sẻ ý kiến của bạn"
-                className="flex-1 border-none bg-transparent text-gray-700 placeholder-gray-500 outline-none text-sm cursor-pointer"
-                readOnly={!isLoggedIn}
-              />
-              <div className="ml-3 p-2 text-gray-400">
-                <svg 
-                  className="w-6 h-6" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="1.5"
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
+              {error}
+            </div>
+          )}
+          <form onSubmit={handleSubmit}>
+            <div className="relative border-l-4 border-tech-blue bg-gray-50 rounded">
+              <div className="flex items-center p-4">
+                <input
+                  type="text"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="Chia sẻ ý kiến của bạn"
+                  className="flex-1 border-none bg-transparent text-gray-700 placeholder-gray-500 outline-none text-sm"
+                  readOnly={!isLoggedIn}
+                  onClick={!isLoggedIn ? handleInputClick : undefined}
+                />
+                <button
+                  type="submit"
+                  disabled={!comment.trim() || !isLoggedIn || submittingComment}
+                  className="ml-3 px-4 py-2 bg-tech-blue/10 text-tech-blue font-semibold rounded hover:bg-tech-blue/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
-                  <circle cx="12" cy="12" r="10"/>
-                  <circle cx="8.5" cy="9.5" r="1.5"/>
-                  <circle cx="15.5" cy="9.5" r="1.5"/>
-                  <path d="M8 14.5 Q12 17 16 14.5" strokeLinecap="round"/>
-                </svg>
+                  {submittingComment ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-tech-blue"></div>
+                      Đang gửi...
+                    </>
+                  ) : (
+                    'Gửi'
+                  )}
+                </button>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
 
@@ -294,31 +367,33 @@ export default function CommentSection() {
 
         {/* Comments */}
         <div className="space-y-5">
-          {comments.map((comment) => (
+          {loadingComments ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-tech-blue mx-auto"></div>
+              <p className="text-gray-500 mt-2">Đang tải bình luận...</p>
+            </div>
+          ) : comments.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-gray-500">Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</p>
+            </div>
+          ) : (
+            comments.map((comment) => (
             <div key={comment.id} className="flex gap-3 pb-5 border-b border-gray-100">
               {/* Avatar */}
-              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-sm font-semibold text-gray-600 flex-shrink-0">
-                {comment.avatar.startsWith('http') ? (
-                  <img 
-                    src={comment.avatar} 
-                    alt={comment.author}
-                    className="w-full h-full rounded-full object-cover"
-                  />
-                ) : (
-                  comment.avatar
-                )}
+              <div className="w-10 h-10 rounded-full bg-tech-blue/10 flex items-center justify-center text-sm font-semibold text-tech-blue flex-shrink-0">
+                {comment.author.name.charAt(0).toUpperCase()}
               </div>
 
               {/* Comment Content */}
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-sm font-semibold text-gray-900">
-                    {comment.author}
+                    {comment.author.name}
                   </span>
                 </div>
                 
                 <div className="text-sm text-gray-800 leading-relaxed mb-3 whitespace-pre-line">
-                  {comment.text}
+                  {comment.content}
                 </div>
                 
                 <div className="flex items-center gap-4">
@@ -326,7 +401,7 @@ export default function CommentSection() {
                     onClick={() => handleLike(comment.id)}
                     className={`flex items-center gap-1 text-xs transition-colors ${
                       likedComments.has(comment.id) 
-                        ? 'text-blue-600 hover:text-blue-800' 
+                        ? 'text-tech-blue hover:text-tech-blue/80' 
                         : 'text-gray-600 hover:text-gray-800'
                     }`}
                   >
@@ -349,53 +424,130 @@ export default function CommentSection() {
                   
                   
                   <span className="text-xs text-gray-500 ml-auto">
-                    {comment.time}
+                    {new Date(comment.createdAt).toLocaleDateString('vi-VN', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
                   </span>
                 </div>
 
-                {/* Reply Input */}
-                {replyingTo === comment.id && (
-                  <div className="mt-3">
-                    <div 
-                      className="relative border-l-4 border-tech-blue bg-gray-50 rounded cursor-pointer"
-                      onClick={handleInputClick}
-                    >
-                      <div className="flex items-center p-4">
-                        <input
-                          type="text"
-                          value={replyText}
-                          onChange={(e) => setReplyText(e.target.value)}
-                          placeholder="Chia sẻ ý kiến của bạn"
-                          className="flex-1 border-none bg-transparent text-gray-700 placeholder-gray-500 outline-none text-sm cursor-pointer"
-                          readOnly={!isLoggedIn}
-                        />
-                        <div className="ml-3 p-2 text-gray-400">
-                          <svg 
-                            className="w-6 h-6" 
-                            viewBox="0 0 24 24" 
-                            fill="none" 
-                            stroke="currentColor" 
-                            strokeWidth="1.5"
-                          >
-                            <circle cx="12" cy="12" r="10"/>
-                            <circle cx="8.5" cy="9.5" r="1.5"/>
-                            <circle cx="15.5" cy="9.5" r="1.5"/>
-                            <path d="M8 14.5 Q12 17 16 14.5" strokeLinecap="round"/>
-                          </svg>
+                {/* Replies */}
+                {comment.replies && comment.replies.length > 0 && (
+                  <div className="ml-13 mt-3 space-y-3">
+                    {comment.replies.map((reply: any) => (
+                      <div key={reply.id} className="flex gap-3">
+                        <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600 flex-shrink-0">
+                          {reply.author.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-xs font-semibold text-gray-900">
+                              {reply.author.name}
+                            </span>
+                            {reply.mentionedUser && (
+                              <>
+                                <span className="text-xs text-gray-500">trả lời</span>
+                                <span className="text-xs text-tech-blue font-medium">
+                                  @{reply.mentionedUser.name}
+                                </span>
+                              </>
+                            )}
+                          </div>
+                          <div className="text-xs text-gray-800 leading-relaxed mb-2 whitespace-pre-line">
+                            {reply.content}
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <button 
+                              onClick={() => handleLike(reply.id)}
+                              className={`flex items-center gap-1 text-xs transition-colors ${
+                                likedComments.has(reply.id) 
+                                  ? 'text-tech-blue hover:text-tech-blue/80' 
+                                  : 'text-gray-600 hover:text-gray-800'
+                              }`}
+                            >
+                              <svg className="w-3 h-3" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8.864 2.908a.75.75 0 0 0-1.728 0L5.5 7.5H2.75a.75.75 0 0 0-.712.988l1.817 5.451A.75.75 0 0 0 4.567 14.5h6.866a.75.75 0 0 0 .712-.561l1.817-5.451A.75.75 0 0 0 13.25 7.5H10.5L8.864 2.908z"/>
+                              </svg>
+                              <span>Thích</span>
+                              {reply.likes > 0 && (
+                                <span className="ml-1 font-semibold">{reply.likes}</span>
+                              )}
+                            </button>
+                            <span className="text-xs text-gray-500">
+                              {new Date(reply.createdAt).toLocaleDateString('vi-VN', {
+                                day: 'numeric',
+                                month: 'short',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Reply Input */}
+                {replyingTo === comment.id && (
+                  <div className="mt-3 ml-13">
+                    <form onSubmit={handleReplySubmit}>
+                      <div className="relative border-l-4 border-tech-blue bg-gray-50 rounded">
+                        <div className="flex items-center p-4">
+                          <input
+                            type="text"
+                            value={replyText}
+                            onChange={(e) => setReplyText(e.target.value)}
+                            placeholder={`Trả lời ${comment.author.name}...`}
+                            className="flex-1 border-none bg-transparent text-gray-700 placeholder-gray-500 outline-none text-sm"
+                            readOnly={!isLoggedIn}
+                            onClick={!isLoggedIn ? handleInputClick : undefined}
+                          />
+                          <button
+                            type="submit"
+                            disabled={!replyText.trim() || !isLoggedIn || submittingReply}
+                            className="ml-3 px-3 py-1.5 bg-tech-blue/10 text-tech-blue text-xs font-semibold rounded hover:bg-tech-blue/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                          >
+                            {submittingReply ? (
+                              <>
+                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-tech-blue"></div>
+                                Đang gửi...
+                              </>
+                            ) : (
+                              'Gửi'
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </form>
                   </div>
                 )}
               </div>
             </div>
-          ))}
+          ))
+          )}
         </div>
 
         {/* Load More Button */}
-        <button className="w-full py-3 bg-tech-blue/10 text-tech-blue font-semibold rounded hover:bg-tech-blue/20 transition-colors mt-5">
-          Xem thêm bình luận
-        </button>
+        {comments.length < totalComments && (
+          <button 
+            onClick={loadMoreComments}
+            disabled={loadingMore}
+            className="w-full py-3 bg-tech-blue/10 text-tech-blue font-semibold rounded hover:bg-tech-blue/20 transition-colors mt-5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            {loadingMore ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-tech-blue"></div>
+                Đang tải...
+              </>
+            ) : (
+              `Xem thêm bình luận (${totalComments - comments.length} còn lại)`
+            )}
+          </button>
+        )}
       </div>
 
       {/* Login Modal */}
