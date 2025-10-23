@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import ArticleCard from '@/components/ArticleCard'
@@ -44,11 +44,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
   const [subcategoryCounts, setSubcategoryCounts] = useState<Record<string, number>>({})
   const [subcategoryPosts, setSubcategoryPosts] = useState<Record<string, Post[]>>({})
 
-  useEffect(() => {
-    fetchPosts()
-  }, [categoryId])
-
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     try {
       const category = CATEGORIES.find(cat => cat.id === categoryId)
       const subcategories = category?.subcategories || []
@@ -90,7 +86,11 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
     } finally {
       setLoading(false)
     }
-  }
+  }, [categoryId])
+
+  useEffect(() => {
+    fetchPosts()
+  }, [categoryId, fetchPosts])
 
   const category = CATEGORIES.find(cat => cat.id === categoryId)
   const subcategories = category?.subcategories || []

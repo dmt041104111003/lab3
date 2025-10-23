@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { getSession } from '@/lib/session'
 import { useParams } from 'next/navigation'
 
@@ -71,7 +71,7 @@ export default function CommentSection() {
   }, [])
   
   // Load comments
-  const loadComments = async (page = 1, limit = 3, append = false) => {
+  const loadComments = useCallback(async (page = 1, limit = 3, append = false) => {
     if (!params?.slug) return
     
     if (append) {
@@ -99,12 +99,12 @@ export default function CommentSection() {
       setLoadingComments(false)
       setLoadingMore(false)
     }
-  }
+  }, [params?.slug])
 
   // Load comments on mount
   useEffect(() => {
     loadComments()
-  }, [params?.slug])
+  }, [params?.slug, loadComments])
 
   // Load more comments
   const loadMoreComments = () => {

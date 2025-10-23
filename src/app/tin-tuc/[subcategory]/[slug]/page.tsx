@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -43,22 +43,7 @@ export default function PostDetailPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  useEffect(() => {
-    if (slug) {
-      fetchPost()
-    }
-  }, [slug])
-
-  useEffect(() => {
-    if (post) {
-      const newTitle = `${post.title} - TechNova`
-      document.title = newTitle
-    } else if (!loading) {
-      document.title = 'Đang tải bài viết... - TechNova'
-    }
-  }, [post, loading])
-
-  const fetchPost = async () => {
+  const fetchPost = useCallback(async () => {
     try {
       const response = await fetch(`/api/posts/slug/${slug}`)
       const data = await response.json()
@@ -77,7 +62,22 @@ export default function PostDetailPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [slug, subcategory])
+
+  useEffect(() => {
+    if (slug) {
+      fetchPost()
+    }
+  }, [slug, fetchPost])
+
+  useEffect(() => {
+    if (post) {
+      const newTitle = `${post.title} - TechNova`
+      document.title = newTitle
+    } else if (!loading) {
+      document.title = 'Đang tải bài viết... - TechNova'
+    }
+  }, [post, loading])
 
   if (loading) {
     return (

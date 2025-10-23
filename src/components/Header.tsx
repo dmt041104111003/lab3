@@ -632,7 +632,7 @@ export default function Header() {
                   {searchResults.length > 0 ? (
                     <div className="p-4">
                       <div className="text-sm text-gray-500 mb-4 px-2">
-                        Tìm thấy {searchResults.length} kết quả cho "{searchQuery}"
+                        Tìm thấy {searchResults.length} kết quả cho &quot;{searchQuery}&quot;
                       </div>
                       <div className="space-y-3">
                         {searchResults.map((result) => (

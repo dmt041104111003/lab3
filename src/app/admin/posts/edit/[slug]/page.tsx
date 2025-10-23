@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import AdminLayout from '@/components/AdminLayout'
 import AdminPageHeader from '@/components/admin/AdminPageHeader'
@@ -83,7 +83,7 @@ export default function EditPost() {
       fetchPost()
       fetchData()
     }
-  }, [postSlug])
+  }, [postSlug, fetchPost, fetchData])
 
   const fetchData = useCallback(async () => {
     try {
