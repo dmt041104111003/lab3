@@ -12,11 +12,7 @@ export async function DELETE(
     }
     
     const session = JSON.parse(sessionCookie.value)
-    const replyId = parseInt(params.id)
-
-    if (isNaN(replyId)) {
-      return NextResponse.json({ error: 'Invalid reply ID' }, { status: 400 })
-    }
+    const replyId = params.id
 
     const reply = await prisma.reply.findUnique({
       where: { id: replyId },
