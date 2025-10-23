@@ -123,12 +123,12 @@ export default function RelatedPosts({ currentPostSlug, className = '' }: Relate
             className="flex gap-4 hover:bg-gray-50 p-3 rounded-lg transition-colors group"
           >
             {/* Thumbnail */}
-            <div className="w-20 h-16 flex-shrink-0 overflow-hidden rounded-lg">
+            <div className="w-28 h-20 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
               <ImageWithFallback
                 src={post.image && post.image.path 
                   ? (post.image.path.startsWith('http') 
                       ? post.image.path 
-                      : `https://res.cloudinary.com/demo/image/fetch/w_80,h_64,c_fill/${post.image.path}`)
+                      : `https://res.cloudinary.com/demo/image/fetch/w_112,h_80,c_fill,g_auto/${post.image.path}`)
                   : ''
                 }
                 alt={post.image?.alt || post.title}
