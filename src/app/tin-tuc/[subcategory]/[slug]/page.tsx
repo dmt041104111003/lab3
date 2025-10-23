@@ -148,7 +148,7 @@ export default function PostDetailPage() {
                 <img 
                   src={post.images[0].image.path} 
                   alt={post.images[0].image.alt || post.title}
-                  className="w-full h-64 object-cover rounded-lg"
+                  className="w-full max-w-full h-auto border-radius rounded-lg mx-auto block shadow-md"
                 />
               </div>
             )}

@@ -139,19 +139,19 @@ export default function PostDetail() {
 
           {/* Post Image */}
           {post.images && post.images.length > 0 ? (
-            <div className="aspect-w-16 aspect-h-9">
+            <div className="px-6 py-4">
               <img
                 src={post.images[0].image.path}
                 alt={post.images[0].image.alt || post.title}
-                className="w-full h-64 object-cover"
+                className="w-full max-w-full h-auto border-radius rounded-lg mx-auto block shadow-md"
               />
             </div>
           ) : post.imageUrl ? (
-            <div className="aspect-w-16 aspect-h-9">
+            <div className="px-6 py-4">
               <img
                 src={post.imageUrl}
                 alt={post.title}
-                className="w-full h-64 object-cover"
+                className="w-full max-w-full h-auto border-radius rounded-lg mx-auto block shadow-md"
               />
             </div>
           ) : null}
