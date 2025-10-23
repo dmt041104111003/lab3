@@ -9,6 +9,7 @@ import LoadingState from '@/components/LoadingState'
 import TiptapPreview from '@/components/TiptapPreview'
 import CommentSection from '@/components/CommentSection'
 import ShareButtons from '@/components/ShareButtons'
+import RelatedPosts from '@/components/RelatedPosts'
 
 interface Post {
   id: string
@@ -194,6 +195,11 @@ export default function PostDetailPage() {
         {/* Comment Section */}
         <div className="mt-8">
           <CommentSection />
+        </div>
+
+        {/* Related Posts */}
+        <div className="mt-8">
+          <RelatedPosts currentPostSlug={post.slug} />
         </div>
       </main>
 

@@ -28,6 +28,17 @@ export default function CommentSection() {
   const [loadingMore, setLoadingMore] = useState(false)
   const [deletingComment, setDeletingComment] = useState<string | null>(null)
   const [deletingReply, setDeletingReply] = useState<string | null>(null)
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean
+    type: 'comment' | 'reply' | null
+    id: string | null
+    authorName: string | null
+  }>({
+    isOpen: false,
+    type: null,
+    id: null,
+    authorName: null
+  })
   
   // Check authentication status
   useEffect(() => {
@@ -240,11 +251,25 @@ export default function CommentSection() {
     }
   }
 
-  const handleDeleteComment = async (commentId: string) => {
-    if (!confirm('Bạn có chắc chắn muốn xóa bình luận này?')) {
-      return
-    }
+  const openDeleteModal = (type: 'comment' | 'reply', id: string, authorName: string) => {
+    setDeleteModal({
+      isOpen: true,
+      type,
+      id,
+      authorName
+    })
+  }
 
+  const closeDeleteModal = () => {
+    setDeleteModal({
+      isOpen: false,
+      type: null,
+      id: null,
+      authorName: null
+    })
+  }
+
+  const handleDeleteComment = async (commentId: string) => {
     setDeletingComment(commentId)
     setError('')
     
@@ -257,6 +282,7 @@ export default function CommentSection() {
       if (response.ok) {
         setCurrentPage(1)
         loadComments(1, 3, false) // Reload comments from page 1
+        closeDeleteModal()
       } else {
         const errorData = await response.json()
         setError(errorData.error || 'Có lỗi xảy ra khi xóa bình luận')
@@ -270,10 +296,6 @@ export default function CommentSection() {
   }
 
   const handleDeleteReply = async (replyId: string) => {
-    if (!confirm('Bạn có chắc chắn muốn xóa phản hồi này?')) {
-      return
-    }
-
     setDeletingReply(replyId)
     setError('')
     
@@ -286,6 +308,7 @@ export default function CommentSection() {
       if (response.ok) {
         setCurrentPage(1)
         loadComments(1, 3, false) // Reload comments from page 1
+        closeDeleteModal()
       } else {
         const errorData = await response.json()
         setError(errorData.error || 'Có lỗi xảy ra khi xóa phản hồi')
@@ -498,24 +521,15 @@ export default function CommentSection() {
                   {/* Delete button for comment author or admin */}
                   {isLoggedIn && (user?.id === comment.author.id || user?.role === 'admin') && (
                     <button 
-                      onClick={() => handleDeleteComment(comment.id)}
+                      onClick={() => openDeleteModal('comment', comment.id, comment.author.name)}
                       disabled={deletingComment === comment.id}
                       className="text-xs text-red-600 hover:text-red-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                     >
-                      {deletingComment === comment.id ? (
-                        <>
-                          <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600"></div>
-                          Đang xóa...
-                        </>
-                      ) : (
-                        <>
-                          <svg className="w-3 h-3" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                            <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                          </svg>
-                          Xóa
-                        </>
-                      )}
+                      <svg className="w-3 h-3" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                        <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                      </svg>
+                      Xóa
                     </button>
                   )}
                   
@@ -576,24 +590,15 @@ export default function CommentSection() {
                             {/* Delete button for reply author or admin */}
                             {isLoggedIn && (user?.id === reply.author.id || user?.role === 'admin') && (
                               <button 
-                                onClick={() => handleDeleteReply(reply.id)}
+                                onClick={() => openDeleteModal('reply', reply.id, reply.author.name)}
                                 disabled={deletingReply === reply.id}
                                 className="text-xs text-red-600 hover:text-red-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                               >
-                                {deletingReply === reply.id ? (
-                                  <>
-                                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600"></div>
-                                    Đang xóa...
-                                  </>
-                                ) : (
-                                  <>
-                                    <svg className="w-3 h-3" viewBox="0 0 16 16" fill="currentColor">
-                                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                    <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                    </svg>
-                                    Xóa
-                                  </>
-                                )}
+                                <svg className="w-3 h-3" viewBox="0 0 16 16" fill="currentColor">
+                                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                  <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                </svg>
+                                Xóa
                               </button>
                             )}
                             
@@ -788,6 +793,57 @@ export default function CommentSection() {
               >
                 Đăng ký ngay
               </a>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteModal.isOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div className="mt-3">
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+              </div>
+              <div className="text-center">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  Xác nhận xóa
+                </h3>
+                <p className="text-sm text-gray-500 mb-4">
+                  Bạn có chắc chắn muốn xóa {deleteModal.type === 'comment' ? 'bình luận' : 'phản hồi'} của <strong>{deleteModal.authorName}</strong>?
+                </p>
+                <p className="text-xs text-red-600 mb-6">
+                  Hành động này không thể hoàn tác.
+                </p>
+                <div className="flex justify-center space-x-3">
+                  <button
+                    onClick={closeDeleteModal}
+                    disabled={deleteModal.type === 'comment' ? deletingComment === deleteModal.id : deletingReply === deleteModal.id}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 disabled:opacity-50"
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (deleteModal.type === 'comment' && deleteModal.id) {
+                        handleDeleteComment(deleteModal.id)
+                      } else if (deleteModal.type === 'reply' && deleteModal.id) {
+                        handleDeleteReply(deleteModal.id)
+                      }
+                    }}
+                    disabled={deleteModal.type === 'comment' ? deletingComment === deleteModal.id : deletingReply === deleteModal.id}
+                    className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 disabled:opacity-50"
+                  >
+                    {(() => {
+                      const isDeleting = deleteModal.type === 'comment' ? deletingComment === deleteModal.id : deletingReply === deleteModal.id
+                      return isDeleting ? 'Đang xóa...' : 'Xóa'
+                    })()}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
