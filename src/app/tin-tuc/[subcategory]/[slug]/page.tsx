@@ -1,11 +1,13 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import LoadingState from '@/components/LoadingState'
 import TiptapPreview from '@/components/TiptapPreview'
+import CommentSection from '@/components/CommentSection'
 
 interface Post {
   id: string
@@ -106,6 +108,19 @@ export default function PostDetailPage() {
       <Header />
       
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Breadcrumb Navigation */}
+        <nav className="mb-6">
+          <Link 
+            href="/" 
+            className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Trang chủ
+          </Link>
+        </nav>
+
         <article className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="p-8">
             <header className="mb-8">
@@ -166,6 +181,11 @@ export default function PostDetailPage() {
             </div>
           </div>
         </article>
+
+        {/* Comment Section */}
+        <div className="mt-8">
+          <CommentSection />
+        </div>
       </main>
 
       <Footer />
