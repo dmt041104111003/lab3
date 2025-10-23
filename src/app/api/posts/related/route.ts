@@ -59,11 +59,6 @@ export async function GET(request: NextRequest) {
       image: post.images[0]?.image || null
     }))
 
-    console.log('Transformed posts:', transformedPosts.map(p => ({ 
-      title: p.title, 
-      hasImage: !!p.image,
-      imageFilename: p.image?.filename 
-    })))
 
     return NextResponse.json({ posts: transformedPosts })
   } catch (error) {

@@ -125,10 +125,10 @@ export default function RelatedPosts({ currentPostSlug, className = '' }: Relate
             {/* Thumbnail */}
             <div className="w-20 h-16 flex-shrink-0 overflow-hidden rounded-lg">
               <ImageWithFallback
-                src={post.image && post.image.filename 
-                  ? (post.image.filename.startsWith('http') 
-                      ? post.image.filename 
-                      : `https://res.cloudinary.com/demo/image/fetch/w_80,h_64,c_fill/${post.image.filename}`)
+                src={post.image && post.image.path 
+                  ? (post.image.path.startsWith('http') 
+                      ? post.image.path 
+                      : `https://res.cloudinary.com/demo/image/fetch/w_80,h_64,c_fill/${post.image.path}`)
                   : ''
                 }
                 alt={post.image?.alt || post.title}
