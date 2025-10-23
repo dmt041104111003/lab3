@@ -8,6 +8,7 @@ import Footer from '@/components/Footer'
 import LoadingState from '@/components/LoadingState'
 import TiptapPreview from '@/components/TiptapPreview'
 import CommentSection from '@/components/CommentSection'
+import ShareButtons from '@/components/ShareButtons'
 
 interface Post {
   id: string
@@ -213,6 +214,14 @@ export default function PostDetail() {
             </div>
           </div>
         </article>
+
+        {/* Share Buttons */}
+        <div className="mt-6 flex justify-end">
+          <ShareButtons 
+            url={typeof window !== 'undefined' ? window.location.href : ''} 
+            title={post.title}
+          />
+        </div>
 
         {/* Comment Section */}
         <div className="mt-8">
