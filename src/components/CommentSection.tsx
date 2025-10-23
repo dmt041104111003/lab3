@@ -26,6 +26,8 @@ export default function CommentSection() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalComments, setTotalComments] = useState(0)
   const [loadingMore, setLoadingMore] = useState(false)
+  const [deletingComment, setDeletingComment] = useState<string | null>(null)
+  const [deletingReply, setDeletingReply] = useState<string | null>(null)
   
   // Check authentication status
   useEffect(() => {
@@ -204,7 +206,7 @@ export default function CommentSection() {
 
   const handleReply = (commentId: number) => {
     if (isLoggedIn) {
-      setReplyingTo(commentId)
+      setReplyingTo(commentId.toString())
       setReplyText('')
     } else {
       setIsModalOpen(true)
@@ -235,6 +237,64 @@ export default function CommentSection() {
       }
     } catch (error) {
       console.error('Error liking comment:', error)
+    }
+  }
+
+  const handleDeleteComment = async (commentId: string) => {
+    if (!confirm('Bạn có chắc chắn muốn xóa bình luận này?')) {
+      return
+    }
+
+    setDeletingComment(commentId)
+    setError('')
+    
+    try {
+      const response = await fetch(`/api/comments/${commentId}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      })
+
+      if (response.ok) {
+        setCurrentPage(1)
+        loadComments(1, 3, false) // Reload comments from page 1
+      } else {
+        const errorData = await response.json()
+        setError(errorData.error || 'Có lỗi xảy ra khi xóa bình luận')
+      }
+    } catch (error) {
+      console.error('Error deleting comment:', error)
+      setError('Có lỗi xảy ra khi xóa bình luận')
+    } finally {
+      setDeletingComment(null)
+    }
+  }
+
+  const handleDeleteReply = async (replyId: string) => {
+    if (!confirm('Bạn có chắc chắn muốn xóa phản hồi này?')) {
+      return
+    }
+
+    setDeletingReply(replyId)
+    setError('')
+    
+    try {
+      const response = await fetch(`/api/replies/${replyId}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      })
+
+      if (response.ok) {
+        setCurrentPage(1)
+        loadComments(1, 3, false) // Reload comments from page 1
+      } else {
+        const errorData = await response.json()
+        setError(errorData.error || 'Có lỗi xảy ra khi xóa phản hồi')
+      }
+    } catch (error) {
+      console.error('Error deleting reply:', error)
+      setError('Có lỗi xảy ra khi xóa phản hồi')
+    } finally {
+      setDeletingReply(null)
     }
   }
 
@@ -435,6 +495,29 @@ export default function CommentSection() {
                     Trả lời
                   </button>
                   
+                  {/* Delete button for comment author or admin */}
+                  {isLoggedIn && (user?.id === comment.author.id || user?.role === 'admin') && (
+                    <button 
+                      onClick={() => handleDeleteComment(comment.id)}
+                      disabled={deletingComment === comment.id}
+                      className="text-xs text-red-600 hover:text-red-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                    >
+                      {deletingComment === comment.id ? (
+                        <>
+                          <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600"></div>
+                          Đang xóa...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-3 h-3" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                            <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                          </svg>
+                          Xóa
+                        </>
+                      )}
+                    </button>
+                  )}
                   
                   <span className="text-xs text-gray-500 ml-auto">
                     {new Date(comment.createdAt).toLocaleDateString('vi-VN', {
@@ -489,6 +572,31 @@ export default function CommentSection() {
                                 <span className="ml-1 font-semibold">{reply.likes}</span>
                               )}
                             </button>
+                            
+                            {/* Delete button for reply author or admin */}
+                            {isLoggedIn && (user?.id === reply.author.id || user?.role === 'admin') && (
+                              <button 
+                                onClick={() => handleDeleteReply(reply.id)}
+                                disabled={deletingReply === reply.id}
+                                className="text-xs text-red-600 hover:text-red-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                              >
+                                {deletingReply === reply.id ? (
+                                  <>
+                                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600"></div>
+                                    Đang xóa...
+                                  </>
+                                ) : (
+                                  <>
+                                    <svg className="w-3 h-3" viewBox="0 0 16 16" fill="currentColor">
+                                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                    <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                    </svg>
+                                    Xóa
+                                  </>
+                                )}
+                              </button>
+                            )}
+                            
                             <span className="text-xs text-gray-500">
                               {new Date(reply.createdAt).toLocaleDateString('vi-VN', {
                                 day: 'numeric',
