@@ -12,7 +12,7 @@ import Color from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import { createLowlight } from 'lowlight'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import AdminModal from './admin/AdminModal'
 import AdminInput from './admin/AdminInput'
 import AdminButton from './admin/AdminButton'
@@ -33,10 +33,27 @@ export default function TiptapEditor({ content, onChange, placeholder = "Nhập 
   const [linkUrl, setLinkUrl] = useState('')
   const [imageCaption, setImageCaption] = useState('')
   const [uploading, setUploading] = useState(false)
+  const [isAddingContent, setIsAddingContent] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
   }, [])
+
+  // Debounced onChange to prevent excessive updates
+  const debouncedOnChange = useCallback(
+    (() => {
+      let timeoutId: NodeJS.Timeout
+      return (content: string) => {
+        if (isAddingContent) return // Skip if adding content
+        
+        clearTimeout(timeoutId)
+        timeoutId = setTimeout(() => {
+          onChange(content)
+        }, 300) // 300ms delay
+      }
+    })(),
+    [onChange, isAddingContent]
+  )
 
   const editor = useEditor({
     extensions: [
@@ -67,7 +84,7 @@ export default function TiptapEditor({ content, onChange, placeholder = "Nhập 
     ],
     content,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML())
+      debouncedOnChange(editor.getHTML())
     },
     editorProps: {
       attributes: {
@@ -131,6 +148,8 @@ export default function TiptapEditor({ content, onChange, placeholder = "Nhập 
 
   const handleAddImage = () => {
     if (imageUrl.trim()) {
+      setIsAddingContent(true)
+      
       const imageHtml = imageCaption.trim() 
         ? `<figure class="image-container">
              <img src="${imageUrl.trim()}" alt="${imageCaption.trim()}" class="max-w-full h-auto rounded-lg mx-auto block my-4" />
@@ -139,6 +158,12 @@ export default function TiptapEditor({ content, onChange, placeholder = "Nhập 
         : `<img src="${imageUrl.trim()}" alt="" class="max-w-full h-auto rounded-lg mx-auto block my-4" />`
       
       editor.chain().focus().insertContent(imageHtml).run()
+      
+      // Re-enable onChange after content is added
+      setTimeout(() => {
+        setIsAddingContent(false)
+        onChange(editor.getHTML())
+      }, 100)
     }
     
     setShowImageModal(false)
@@ -153,8 +178,16 @@ export default function TiptapEditor({ content, onChange, placeholder = "Nhập 
 
   const handleUpdateCaption = () => {
     if (imageCaption.trim()) {
+      setIsAddingContent(true)
+      
       const captionHtml = `<div class="image-caption text-center text-sm text-gray-600 italic mt-2 mb-4">${imageCaption.trim()}</div>`
       editor.chain().focus().insertContent(captionHtml).run()
+      
+      // Re-enable onChange after content is added
+      setTimeout(() => {
+        setIsAddingContent(false)
+        onChange(editor.getHTML())
+      }, 100)
     }
     
     setShowCaptionModal(false)
