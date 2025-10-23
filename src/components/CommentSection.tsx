@@ -265,7 +265,11 @@ export default function CommentSection() {
         loadComments(1, 3, false) // Reload comments from page 1
       } else {
         const error = await response.json()
-        setError(error.error || 'Có lỗi xảy ra khi gửi phản hồi')
+        if (response.status === 403) {
+          setError(error.error || 'Tài khoản của bạn đã bị khóa')
+        } else {
+          setError(error.error || 'Có lỗi xảy ra khi gửi phản hồi')
+        }
       }
     } catch (error) {
       console.error('Error submitting reply:', error)
@@ -301,7 +305,11 @@ export default function CommentSection() {
         loadComments(1, 3, false) // Reload comments from page 1
       } else {
         const error = await response.json()
-        setError(error.error || 'Có lỗi xảy ra khi gửi bình luận')
+        if (response.status === 403) {
+          setError(error.error || 'Tài khoản của bạn đã bị khóa')
+        } else {
+          setError(error.error || 'Có lỗi xảy ra khi gửi bình luận')
+        }
       }
     } catch (error) {
       console.error('Error submitting comment:', error)
@@ -320,7 +328,11 @@ export default function CommentSection() {
         
         <div className="p-6">
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
+            <div className={`mb-4 p-3 border rounded text-sm ${
+              error.includes('khóa') || error.includes('banned') 
+                ? 'bg-orange-50 border-orange-200 text-orange-600' 
+                : 'bg-red-50 border-red-200 text-red-600'
+            }`}>
               {error}
             </div>
           )}

@@ -12,6 +12,25 @@ export async function POST(request: NextRequest) {
     
     const session = JSON.parse(sessionCookie.value)
 
+    // Check if user is banned
+    const user = await prisma.user.findUnique({
+      where: { id: session.id },
+      select: { isBanned: true, bannedUntil: true }
+    })
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    if (user.isBanned) {
+      const now = new Date()
+      if (user.bannedUntil && user.bannedUntil > now) {
+        return NextResponse.json({ 
+          error: 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.' 
+        }, { status: 403 })
+      }
+    }
+
     const { commentId, content, mentionedUserId } = await request.json()
 
     if (!commentId || !content?.trim()) {
