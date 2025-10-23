@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { getSession } from '@/lib/session'
 
 export default function CommentSection() {
   const [comment, setComment] = useState('')
@@ -9,6 +10,35 @@ export default function CommentSection() {
   const [replyingTo, setReplyingTo] = useState<number | null>(null)
   const [replyText, setReplyText] = useState('')
   const [likedComments, setLikedComments] = useState<Set<number>>(new Set())
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  
+  // Check authentication status
+  useEffect(() => {
+    const checkAuth = () => {
+      const session = getSession()
+      if (session) {
+        setIsLoggedIn(true)
+        setUser(session)
+      } else {
+        setIsLoggedIn(false)
+        setUser(null)
+      }
+    }
+    
+    checkAuth()
+    
+    // Listen for session updates
+    const handleSessionUpdate = () => {
+      checkAuth()
+    }
+    
+    window.addEventListener('session:update', handleSessionUpdate)
+    
+    return () => {
+      window.removeEventListener('session:update', handleSessionUpdate)
+    }
+  }, [])
   
   // Mock comments data
   const comments = [
@@ -63,7 +93,13 @@ export default function CommentSection() {
   ]
 
   const handleInputClick = () => {
-    setIsModalOpen(true)
+    if (isLoggedIn) {
+      // User is logged in, allow typing
+      return
+    } else {
+      // User not logged in, show login modal
+      setIsModalOpen(true)
+    }
   }
 
   const closeModal = () => {
@@ -72,23 +108,22 @@ export default function CommentSection() {
 
   const handleModalSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (email.trim()) {
-      // TODO: Implement login logic
-      console.log('Login with email:', email)
-      alert('Đang xử lý đăng nhập...')
-      closeModal()
-    }
+    // Redirect to signin page
+    window.location.href = '/auth/signin'
   }
 
   const handleGoogleLogin = () => {
-    // TODO: Implement Google login
-    console.log('Login with Google')
-    alert('Đăng nhập với Google')
+    // Redirect to signin page
+    window.location.href = '/auth/signin'
   }
 
   const handleReply = (commentId: number) => {
-    setReplyingTo(commentId)
-    setReplyText('')
+    if (isLoggedIn) {
+      setReplyingTo(commentId)
+      setReplyText('')
+    } else {
+      setIsModalOpen(true)
+    }
   }
 
   const handleLike = (commentId: number) => {
@@ -141,7 +176,7 @@ export default function CommentSection() {
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Chia sẻ ý kiến của bạn"
                 className="flex-1 border-none bg-transparent text-gray-700 placeholder-gray-500 outline-none text-sm cursor-pointer"
-                readOnly
+                readOnly={!isLoggedIn}
               />
               <div className="ml-3 p-2 text-gray-400">
                 <svg 
@@ -246,7 +281,7 @@ export default function CommentSection() {
                           onChange={(e) => setReplyText(e.target.value)}
                           placeholder="Chia sẻ ý kiến của bạn"
                           className="flex-1 border-none bg-transparent text-gray-700 placeholder-gray-500 outline-none text-sm cursor-pointer"
-                          readOnly
+                          readOnly={!isLoggedIn}
                         />
                         <div className="ml-3 p-2 text-gray-400">
                           <svg 
