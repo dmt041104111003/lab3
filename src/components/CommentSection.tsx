@@ -6,6 +6,61 @@ export default function CommentSection() {
   const [comment, setComment] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [email, setEmail] = useState('')
+  const [replyingTo, setReplyingTo] = useState<number | null>(null)
+  const [replyText, setReplyText] = useState('')
+  const [likedComments, setLikedComments] = useState<Set<number>>(new Set())
+  
+  // Mock comments data
+  const comments = [
+    {
+      id: 1,
+      author: 'Bảo Long',
+      avatar: 'B',
+      text: 'Tuyệt vời quá, nên làm ngay và luôn',
+      likes: 3,
+      time: '1h trước'
+    },
+    {
+      id: 2,
+      author: 'ftwane81',
+      avatar: 'F',
+      text: 'Ngoài ra nên khuyến khích tuyên truyền cho học sinh và người già tăng thời gian vận động dưới ánh sáng nhe ngoài trời để cơ thể khỏe mạnh hơn là ngồi trong phòng máy lạnh kín khí thiếu ko khí sạch.\n\nNgoài trông chờ vào hệ thống y tế có giới hạn thì mỗi người phải có ý thức tự chăm sóc bản thân mình trước. Đừng để bệnh rồi mới tìm thầy thuốc mà việc ăn uống sinh hoạt hằng ngày thì lai ko chú ý.',
+      likes: 5,
+      time: '1h trước'
+    },
+    {
+      id: 3,
+      author: 'TrungNguyen',
+      avatar: 'https://i.pravatar.cc/40?img=12',
+      text: 'Quá tuyệt vời, hi vọng áp dụng được luôn vào năm 2026',
+      likes: 5,
+      time: '1h trước'
+    },
+    {
+      id: 4,
+      author: 'quyhoi',
+      avatar: 'Q',
+      text: 'Tp HCM thành phố nghĩa tình',
+      likes: 0,
+      time: '1h trước'
+    },
+    {
+      id: 5,
+      author: 'huyenpt.datviet',
+      avatar: 'https://i.pravatar.cc/40?img=33',
+      text: 'Tốt quá. Số tiền không nhỏ với nhiều gia đình trong bối cảnh kinh tế khó khăn. Cảm ơn lãnh đạo TP HCM.',
+      likes: 3,
+      time: '1h trước'
+    },
+    {
+      id: 6,
+      author: 'nguyendinhdung5406',
+      avatar: 'N',
+      text: 'Đúng rồi rất ok',
+      likes: 0,
+      time: '1h trước'
+    }
+  ]
 
   const handleInputClick = () => {
     setIsModalOpen(true)
@@ -31,6 +86,33 @@ export default function CommentSection() {
     alert('Đăng nhập với Google')
   }
 
+  const handleReply = (commentId: number) => {
+    setReplyingTo(commentId)
+    setReplyText('')
+  }
+
+  const handleLike = (commentId: number) => {
+    setLikedComments(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(commentId)) {
+        newSet.delete(commentId)
+      } else {
+        newSet.add(commentId)
+      }
+      return newSet
+    })
+  }
+
+  const handleReplySubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (replyText.trim()) {
+      // TODO: Implement reply submission
+      console.log('Reply to comment', replyingTo, ':', replyText)
+      setReplyText('')
+      setReplyingTo(null)
+    }
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (comment.trim()) {
@@ -49,7 +131,7 @@ export default function CommentSection() {
         
         <div className="p-6">
           <div 
-            className="relative border-l-4 border-red-500 bg-gray-50 rounded cursor-pointer"
+            className="relative border-l-4 border-tech-blue bg-gray-50 rounded cursor-pointer"
             onClick={handleInputClick}
           >
             <div className="flex items-center p-4">
@@ -78,6 +160,121 @@ export default function CommentSection() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Comments List */}
+      <div className="mt-6">
+        {/* Tabs */}
+        <div className="flex gap-6 border-b border-gray-200 mb-6">
+          <div className="pb-3 text-sm text-tech-blue border-b-2 border-tech-blue font-semibold">
+            Mới nhất
+          </div>
+        </div>
+
+        {/* Comments */}
+        <div className="space-y-5">
+          {comments.map((comment) => (
+            <div key={comment.id} className="flex gap-3 pb-5 border-b border-gray-100">
+              {/* Avatar */}
+              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-sm font-semibold text-gray-600 flex-shrink-0">
+                {comment.avatar.startsWith('http') ? (
+                  <img 
+                    src={comment.avatar} 
+                    alt={comment.author}
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                ) : (
+                  comment.avatar
+                )}
+              </div>
+
+              {/* Comment Content */}
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-sm font-semibold text-gray-900">
+                    {comment.author}
+                  </span>
+                </div>
+                
+                <div className="text-sm text-gray-800 leading-relaxed mb-3 whitespace-pre-line">
+                  {comment.text}
+                </div>
+                
+                <div className="flex items-center gap-4">
+                  <button 
+                    onClick={() => handleLike(comment.id)}
+                    className={`flex items-center gap-1 text-xs transition-colors ${
+                      likedComments.has(comment.id) 
+                        ? 'text-blue-600 hover:text-blue-800' 
+                        : 'text-gray-600 hover:text-gray-800'
+                    }`}
+                  >
+                    <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+                      <path d="M8.864 2.908a.75.75 0 0 0-1.728 0L5.5 7.5H2.75a.75.75 0 0 0-.712.988l1.817 5.451A.75.75 0 0 0 4.567 14.5h6.866a.75.75 0 0 0 .712-.561l1.817-5.451A.75.75 0 0 0 13.25 7.5H10.5L8.864 2.908z"/>
+                    </svg>
+                    <span>Thích</span>
+                    {comment.likes > 0 && (
+                      <span className="ml-1 font-semibold">{comment.likes}</span>
+                    )}
+                  </button>
+                  
+                  
+                  <button 
+                    onClick={() => handleReply(comment.id)}
+                    className="text-xs text-gray-600 hover:text-gray-800"
+                  >
+                    Trả lời
+                  </button>
+                  
+                  
+                  <span className="text-xs text-gray-500 ml-auto">
+                    {comment.time}
+                  </span>
+                </div>
+
+                {/* Reply Input */}
+                {replyingTo === comment.id && (
+                  <div className="mt-3">
+                    <div 
+                      className="relative border-l-4 border-tech-blue bg-gray-50 rounded cursor-pointer"
+                      onClick={handleInputClick}
+                    >
+                      <div className="flex items-center p-4">
+                        <input
+                          type="text"
+                          value={replyText}
+                          onChange={(e) => setReplyText(e.target.value)}
+                          placeholder="Chia sẻ ý kiến của bạn"
+                          className="flex-1 border-none bg-transparent text-gray-700 placeholder-gray-500 outline-none text-sm cursor-pointer"
+                          readOnly
+                        />
+                        <div className="ml-3 p-2 text-gray-400">
+                          <svg 
+                            className="w-6 h-6" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            strokeWidth="1.5"
+                          >
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="8.5" cy="9.5" r="1.5"/>
+                            <circle cx="15.5" cy="9.5" r="1.5"/>
+                            <path d="M8 14.5 Q12 17 16 14.5" strokeLinecap="round"/>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Load More Button */}
+        <button className="w-full py-3 bg-tech-blue/10 text-tech-blue font-semibold rounded hover:bg-tech-blue/20 transition-colors mt-5">
+          Xem thêm bình luận
+        </button>
       </div>
 
       {/* Login Modal */}
