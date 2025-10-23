@@ -27,9 +27,12 @@ interface TiptapEditorProps {
 export default function TiptapEditor({ content, onChange, placeholder = "Nhập nội dung bài viết...", className = "" }: TiptapEditorProps) {
   const [isMounted, setIsMounted] = useState(false)
   const [showImageModal, setShowImageModal] = useState(false)
+  const [showCaptionModal, setShowCaptionModal] = useState(false)
   const [showLinkModal, setShowLinkModal] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
   const [linkUrl, setLinkUrl] = useState('')
+  const [imageCaption, setImageCaption] = useState('')
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
@@ -90,7 +93,35 @@ export default function TiptapEditor({ content, onChange, placeholder = "Nhập 
 
   const addImage = () => {
     setImageUrl('')
+    setImageCaption('')
     setShowImageModal(true)
+  }
+
+  const handleFileUpload = async (file: File) => {
+    if (!file) return
+
+    setUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await fetch('/api/images', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setImageUrl(data.image.path)
+      } else {
+        alert('Lỗi khi upload ảnh')
+      }
+    } catch (error) {
+      console.error('Upload error:', error)
+      alert('Lỗi khi upload ảnh')
+    } finally {
+      setUploading(false)
+    }
   }
 
   const addLink = () => {
@@ -100,10 +131,34 @@ export default function TiptapEditor({ content, onChange, placeholder = "Nhập 
 
   const handleAddImage = () => {
     if (imageUrl.trim()) {
-      editor.chain().focus().setImage({ src: imageUrl.trim() }).run()
-      setShowImageModal(false)
-      setImageUrl('')
+      const imageHtml = imageCaption.trim() 
+        ? `<figure class="image-container">
+             <img src="${imageUrl.trim()}" alt="${imageCaption.trim()}" class="max-w-full h-auto rounded-lg mx-auto block my-4" />
+             <figcaption class="image-caption text-center text-sm text-gray-600 italic mt-2">${imageCaption.trim()}</figcaption>
+           </figure>`
+        : `<img src="${imageUrl.trim()}" alt="" class="max-w-full h-auto rounded-lg mx-auto block my-4" />`
+      
+      editor.chain().focus().insertContent(imageHtml).run()
     }
+    
+    setShowImageModal(false)
+    setImageUrl('')
+    setImageCaption('')
+  }
+
+  const addImageCaption = () => {
+    setImageCaption('')
+    setShowCaptionModal(true)
+  }
+
+  const handleUpdateCaption = () => {
+    if (imageCaption.trim()) {
+      const captionHtml = `<div class="image-caption text-center text-sm text-gray-600 italic mt-2 mb-4">${imageCaption.trim()}</div>`
+      editor.chain().focus().insertContent(captionHtml).run()
+    }
+    
+    setShowCaptionModal(false)
+    setImageCaption('')
   }
 
   const handleAddLink = () => {
@@ -198,6 +253,12 @@ export default function TiptapEditor({ content, onChange, placeholder = "Nhập 
           Image
         </button>
         <button
+          onClick={addImageCaption}
+          className="px-3 py-2 rounded-md text-sm font-medium bg-white text-gray-700 hover:bg-tech-blue/10 hover:text-tech-blue border border-gray-200 transition-colors"
+        >
+          Add Caption
+        </button>
+        <button
           onClick={addLink}
           className="px-3 py-2 rounded-md text-sm font-medium bg-white text-gray-700 hover:bg-tech-blue/10 hover:text-tech-blue border border-gray-200 transition-colors"
         >
@@ -257,13 +318,38 @@ export default function TiptapEditor({ content, onChange, placeholder = "Nhập 
       <AdminModal
         isOpen={showImageModal}
         title="Thêm ảnh"
-        onClose={() => setShowImageModal(false)}
+        onClose={() => {
+          setShowImageModal(false)
+          setImageUrl('')
+          setImageCaption('')
+        }}
         size="md"
       >
         <div className="space-y-4">
+          {/* File Upload */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              URL ảnh
+              Upload ảnh
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) handleFileUpload(file)
+              }}
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-tech-blue file:text-white hover:file:bg-tech-blue/90"
+              disabled={uploading}
+            />
+            {uploading && (
+              <div className="text-sm text-gray-500 mt-1">Đang upload...</div>
+            )}
+          </div>
+
+          {/* URL Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Hoặc nhập URL ảnh
             </label>
             <AdminInput
               name="imageUrl"
@@ -271,7 +357,20 @@ export default function TiptapEditor({ content, onChange, placeholder = "Nhập 
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
               placeholder="Nhập URL ảnh..."
-              required
+            />
+          </div>
+
+          {/* Caption Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Chú thích ảnh (tùy chọn)
+            </label>
+            <AdminInput
+              name="imageCaption"
+              type="text"
+              value={imageCaption}
+              onChange={(e) => setImageCaption(e.target.value)}
+              placeholder="Nhập chú thích cho ảnh..."
             />
           </div>
           
@@ -279,16 +378,69 @@ export default function TiptapEditor({ content, onChange, placeholder = "Nhập 
             <AdminButton
               type="button"
               variant="secondary"
-              onClick={() => setShowImageModal(false)}
+              onClick={() => {
+                setShowImageModal(false)
+                setImageUrl('')
+                setImageCaption('')
+              }}
             >
               Hủy
             </AdminButton>
             <AdminButton
               type="button"
               onClick={handleAddImage}
-              disabled={!imageUrl.trim()}
+              disabled={!imageUrl.trim() || uploading}
             >
-              Thêm ảnh
+              {uploading ? 'Đang upload...' : 'Thêm ảnh'}
+            </AdminButton>
+          </div>
+        </div>
+      </AdminModal>
+
+      {/* Caption Modal */}
+      <AdminModal
+        isOpen={showCaptionModal}
+        title="Thêm chú thích dưới ảnh"
+        onClose={() => {
+          setShowCaptionModal(false)
+          setImageCaption('')
+        }}
+        size="md"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Chú thích ảnh
+            </label>
+            <AdminInput
+              name="imageCaption"
+              type="text"
+              value={imageCaption}
+              onChange={(e) => setImageCaption(e.target.value)}
+              placeholder="Nhập chú thích cho ảnh..."
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Chú thích sẽ được thêm vào vị trí con trỏ hiện tại
+            </p>
+          </div>
+          
+          <div className="flex justify-end space-x-2">
+            <AdminButton
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                setShowCaptionModal(false)
+                setImageCaption('')
+              }}
+            >
+              Hủy
+            </AdminButton>
+            <AdminButton
+              type="button"
+              onClick={handleUpdateCaption}
+              disabled={!imageCaption.trim()}
+            >
+              Thêm chú thích
             </AdminButton>
           </div>
         </div>
