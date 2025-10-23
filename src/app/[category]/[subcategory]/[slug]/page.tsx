@@ -134,8 +134,6 @@ export default function PostDetailPage() {
                 <p className="text-xl text-gray-600 mb-4">{post.excerpt}</p>
               )}
               <div className="flex items-center text-sm text-gray-500 mb-4">
-                <span>Tác giả: {post.author.name}</span>
-                <span className="mx-2">•</span>
                 <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
                 {post.subcategory && (
                   <>
@@ -175,6 +173,15 @@ export default function PostDetailPage() {
               content={post.content}
               className=""
             />
+          </div>
+
+          {/* Author */}
+          <div className="px-6 py-4 border-t border-gray-200">
+            <div className="text-right">
+              <span className="font-bold text-gray-900">
+                Tác giả: {post.author.name}
+              </span>
+            </div>
           </div>
         </article>
       </main>

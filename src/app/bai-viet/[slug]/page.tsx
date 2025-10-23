@@ -180,12 +180,18 @@ export default function PostDetail() {
             </div>
           )}
 
+          {/* Author */}
+          <div className="px-6 py-4 border-t border-gray-200">
+            <div className="text-right">
+              <span className="font-bold text-gray-900">
+                Tác giả: {post.author.name}
+              </span>
+            </div>
+          </div>
+
           {/* Post Footer */}
           <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-            <div className="flex items-center justify-between text-sm text-gray-500">
-              <div>
-                <span>Đăng bởi {post.author.name}</span>
-              </div>
+            <div className="flex items-center justify-end text-sm text-gray-500">
               <div>
                 <span>Cập nhật lần cuối: {formatDate(post.updatedAt)}</span>
               </div>
