@@ -22,6 +22,7 @@ interface RelatedPost {
   image: {
     id: string
     filename: string
+    path: string
     alt: string
   } | null
 }
