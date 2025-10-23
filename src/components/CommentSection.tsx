@@ -333,8 +333,9 @@ export default function CommentSection() {
                   onChange={(e) => setComment(e.target.value)}
                   placeholder="Chia sẻ ý kiến của bạn"
                   className="flex-1 border-none bg-transparent text-gray-700 placeholder-gray-500 outline-none text-sm"
-                  readOnly={!isLoggedIn}
+                  readOnly={!isLoggedIn || submittingComment}
                   onClick={!isLoggedIn ? handleInputClick : undefined}
+                  disabled={submittingComment}
                 />
                 <button
                   type="submit"
@@ -503,8 +504,9 @@ export default function CommentSection() {
                             onChange={(e) => setReplyText(e.target.value)}
                             placeholder={`Trả lời ${comment.author.name}...`}
                             className="flex-1 border-none bg-transparent text-gray-700 placeholder-gray-500 outline-none text-sm"
-                            readOnly={!isLoggedIn}
+                            readOnly={!isLoggedIn || submittingReply}
                             onClick={!isLoggedIn ? handleInputClick : undefined}
+                            disabled={submittingReply}
                           />
                           <button
                             type="submit"
