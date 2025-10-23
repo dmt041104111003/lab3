@@ -16,6 +16,10 @@ export default function Header() {
   const [isEditingName, setIsEditingName] = useState(false)
   const [nameInput, setNameInput] = useState('')
   const [mounted, setMounted] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isSearching, setIsSearching] = useState(false)
 
   // TechNova mega menu categories
   const megaMenuCategories = [
@@ -111,6 +115,34 @@ export default function Header() {
     }
   }, [])
 
+  // Debounce search effect
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchQuery.trim()) {
+        handleSearch(searchQuery)
+      } else {
+        setSearchResults([])
+        setIsSearchOpen(false)
+      }
+    }, 300)
+
+    return () => clearTimeout(timeoutId)
+  }, [searchQuery])
+
+  // Handle ESC key to close search popup
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isSearchOpen) {
+        setIsSearchOpen(false)
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isSearchOpen])
+
   // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -121,13 +153,17 @@ export default function Header() {
       if (isProfileMenuOpen && !target.closest('[data-profile-menu]')) {
         setIsProfileMenuOpen(false)
       }
+      // Only close mobile search when clicking outside (desktop uses popup overlay)
+      if (isSearchOpen && !target.closest('[data-mobile-search]') && window.innerWidth < 768) {
+        setIsSearchOpen(false)
+      }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isMegaMenuOpen, isProfileMenuOpen])
+  }, [isMegaMenuOpen, isProfileMenuOpen, isSearchOpen])
 
   // Prevent hydration mismatch
   if (!mounted) {
@@ -236,6 +272,65 @@ export default function Header() {
     return name ? name.charAt(0).toUpperCase() : 'U'
   }
 
+  // Search functionality
+  const handleSearch = async (query: string) => {
+    if (!query.trim()) {
+      setSearchResults([])
+      setIsSearchOpen(false)
+      return
+    }
+
+    setIsSearching(true)
+    try {
+      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}&limit=8`)
+      const data = await response.json()
+      setSearchResults(data.results || [])
+      setIsSearchOpen(true)
+    } catch (error) {
+      console.error('Search error:', error)
+      setSearchResults([])
+    } finally {
+      setIsSearching(false)
+    }
+  }
+
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setSearchQuery(value)
+  }
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      handleSearch(searchQuery)
+    }
+  }
+
+  const closeSearch = () => {
+    setIsSearchOpen(false)
+    setSearchQuery('')
+    setSearchResults([])
+  }
+
+  // Highlight search terms in text
+  const highlightSearchTerm = (text: string, searchTerm: string) => {
+    if (!searchTerm.trim()) return text
+    
+    const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+    const parts = text.split(regex)
+    
+    return parts.map((part, index) => {
+      if (regex.test(part)) {
+        return (
+          <mark key={index} className="bg-yellow-200 text-yellow-900 px-1 rounded">
+            {part}
+          </mark>
+        )
+      }
+      return part
+    })
+  }
+
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -257,15 +352,15 @@ export default function Header() {
           <div className="flex items-center space-x-4">
             <Link href="/" className="flex flex-col items-center">
               <Image
-                src="/logo.png"
+                src="/footer.png"
                 alt="TechNova Logo"
                 width={120}
                 height={60}
                 className="mb-1"
               />
-              <div className="tech-slogan text-black">
+              {/* <div className="tech-slogan text-black">
                 CÔNG NGHỆ & ĐỜI SỐNG
-              </div>
+              </div> */}
             </Link>
           </div>
 
@@ -307,6 +402,19 @@ export default function Header() {
               </div>
             </button>
           </nav>
+
+          {/* Search Button */}
+          <div className="hidden md:flex items-center">
+            <button
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+              className="p-2 rounded-lg text-gray-700 hover:text-tech-blue hover:bg-gray-100 transition-colors"
+              aria-label="Tìm kiếm"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+          </div>
 
           {/* Auth Buttons */}
           <div className="flex items-center space-x-4">
@@ -387,6 +495,26 @@ export default function Header() {
 
               </>
             )}
+            
+            {/* Mobile Search Button */}
+            <button 
+              className="md:hidden p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
+              onClick={() => {
+                setIsSearchOpen(!isSearchOpen)
+                if (!isSearchOpen) {
+                  // Focus vào input khi mở search
+                  setTimeout(() => {
+                    const input = document.querySelector('input[placeholder="Tìm kiếm..."]') as HTMLInputElement
+                    if (input) input.focus()
+                  }, 100)
+                }
+              }}
+              aria-label="Tìm kiếm"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
             {/* <button className="text-gray-700 hover:text-tech-blue transition-colors">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -457,6 +585,201 @@ export default function Header() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Desktop Search Popup */}
+        {isSearchOpen && (
+          <div className="hidden md:block fixed inset-0 bg-black bg-opacity-50 z-50" onClick={() => setIsSearchOpen(false)}>
+            <div className="flex items-start justify-center pt-20 px-4" onClick={(e) => e.stopPropagation()}>
+              <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform transition-all duration-300 ease-out">
+                {/* Search Header */}
+                <div className="flex items-center p-6 border-b border-gray-200">
+                  <div className="flex-1 relative">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={handleSearchInputChange}
+                      placeholder="Tìm kiếm bài viết, tác giả..."
+                      className="w-full px-4 py-3 pl-12 pr-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-tech-blue focus:border-transparent"
+                      autoFocus
+                    />
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                    </div>
+                    {isSearching && (
+                      <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-tech-blue"></div>
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => setIsSearchOpen(false)}
+                    className="ml-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                    aria-label="Đóng tìm kiếm"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Search Results */}
+                <div className="max-h-96 overflow-y-auto">
+                  {searchResults.length > 0 ? (
+                    <div className="p-4">
+                      <div className="text-sm text-gray-500 mb-4 px-2">
+                        Tìm thấy {searchResults.length} kết quả cho "{searchQuery}"
+                      </div>
+                      <div className="space-y-3">
+                        {searchResults.map((result) => (
+                          <Link
+                            key={result.id}
+                            href={`/bai-viet/${result.slug}`}
+                            className="block p-4 hover:bg-gray-50 rounded-xl transition-colors border border-gray-100 hover:border-tech-blue/20"
+                            onClick={closeSearch}
+                          >
+                            <div className="flex space-x-4">
+                              {result.image && (
+                                <div className="flex-shrink-0">
+                                  <img
+                                    src={result.image}
+                                    alt={result.imageAlt || result.title}
+                                    className="w-16 h-16 object-cover rounded-lg"
+                                  />
+                                </div>
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <h4 className="text-base font-semibold text-gray-900 line-clamp-2 mb-2">
+                                  {highlightSearchTerm(result.title, searchQuery)}
+                                </h4>
+                                {result.excerpt && (
+                                  <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+                                    {highlightSearchTerm(result.excerpt, searchQuery)}
+                                  </p>
+                                )}
+                                <div className="flex items-center text-xs text-gray-500">
+                                  <span className="font-medium">{result.author}</span>
+                                  <span className="mx-2">•</span>
+                                  <span>{new Date(result.createdAt).toLocaleDateString('vi-VN')}</span>
+                                  {result.tags.length > 0 && (
+                                    <>
+                                      <span className="mx-2">•</span>
+                                      <span className="text-tech-blue">{result.tags[0].name}</span>
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ) : searchQuery.trim() && !isSearching ? (
+                    <div className="p-8 text-center">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                        <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">Không tìm thấy kết quả</h3>
+                      <p className="text-gray-500">Thử tìm kiếm với từ khóa khác</p>
+                    </div>
+                  ) : !searchQuery.trim() ? (
+                    <div className="p-8 text-center">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-tech-blue/10 rounded-full flex items-center justify-center">
+                        <svg className="w-8 h-8 text-tech-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">Tìm kiếm bài viết</h3>
+                      <p className="text-gray-500">Nhập từ khóa để tìm kiếm bài viết, tác giả...</p>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Search */}
+        {isSearchOpen && (
+          <div className="md:hidden" data-mobile-search>
+            <div className="px-4 py-3 bg-white border-t border-gray-200">
+              <form onSubmit={handleSearchSubmit} className="relative">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={handleSearchInputChange}
+                    placeholder="Tìm kiếm..."
+                    className="w-full px-4 py-2 pl-10 pr-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tech-blue focus:border-transparent"
+                  />
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                  {isSearching && (
+                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-tech-blue"></div>
+                    </div>
+                  )}
+                </div>
+              </form>
+
+              {/* Mobile Search Results */}
+              {searchResults.length > 0 && (
+                <div className="mt-3 max-h-64 overflow-y-auto">
+                  <div className="text-xs text-gray-500 mb-2">
+                    Tìm thấy {searchResults.length} kết quả
+                  </div>
+                  {searchResults.map((result) => (
+                    <Link
+                      key={result.id}
+                      href={`/bai-viet/${result.slug}`}
+                      className="block p-3 hover:bg-gray-50 rounded-md transition-colors border-b border-gray-100 last:border-b-0"
+                      onClick={closeSearch}
+                    >
+                      <div className="flex space-x-3">
+                        {result.image && (
+                          <div className="flex-shrink-0">
+                            <img
+                              src={result.image}
+                              alt={result.imageAlt || result.title}
+                              className="w-12 h-12 object-cover rounded"
+                            />
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-sm font-medium text-gray-900 line-clamp-2">
+                            {highlightSearchTerm(result.title, searchQuery)}
+                          </h4>
+                          {result.excerpt && (
+                            <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                              {highlightSearchTerm(result.excerpt, searchQuery)}
+                            </p>
+                          )}
+                          <div className="flex items-center mt-1 text-xs text-gray-500">
+                            <span>{result.author}</span>
+                            <span className="mx-1">•</span>
+                            <span>{new Date(result.createdAt).toLocaleDateString('vi-VN')}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {searchQuery.trim() && searchResults.length === 0 && !isSearching && (
+                <div className="mt-3 text-center text-gray-500 text-sm">
+                  Không tìm thấy kết quả nào
+                </div>
+              )}
             </div>
           </div>
         )}

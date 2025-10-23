@@ -32,9 +32,9 @@ export default function Footer() {
               height={80}
               className="mb-2"
             />
-            <div className="text-sm text-gray-300 text-center">
+            {/* <div className="text-sm text-gray-300 text-center">
               CÔNG NGHỆ & ĐỜI SỐNG
-            </div>
+            </div> */}
           </div>
           
           {/* Navigation Links */}

@@ -117,7 +117,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         <div className="flex h-12">
           <div className="w-64 flex items-center justify-center">
             <Image
-              src="/logo.png"
+              src="/footer.png"
               alt="TechNova Logo"
               width={150}
               height={150}
@@ -260,7 +260,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               <div className="flex-1 flex flex-col h-full">
                 <div className="flex-shrink-0 flex items-center justify-center px-4 py-6">
                   <Image
-                    src="/logo.png"
+                    src="/footer.png"
                     alt="TechNova Logo"
                     width={120}
                     height={120}
