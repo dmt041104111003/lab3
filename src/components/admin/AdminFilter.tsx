@@ -52,7 +52,6 @@ export default function AdminFilter({
 
   return (
     <div className={`bg-white p-4 rounded-lg shadow-sm border border-gray-200 ${className}`}>
-      {/* Main Search Bar */}
       <div className="flex flex-col sm:flex-row gap-4 items-center">
         <div className="flex-1 w-full">
           <AdminInput
@@ -86,11 +85,9 @@ export default function AdminFilter({
         </div>
       </div>
 
-      {/* Expanded Filters */}
       {isExpanded && (
         <div className="mt-4 pt-4 border-t border-gray-200">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Sort Options */}
             {showSort && sortOptions.length > 0 && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -108,7 +105,6 @@ export default function AdminFilter({
               </div>
             )}
 
-            {/* Filter Options */}
             {showFilter && filterOptions.length > 0 && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">

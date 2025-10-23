@@ -290,7 +290,6 @@ export default function ImagesPage() {
           onCancel={() => setDeletingImage(null)}
         />
 
-        {/* Images Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {paginatedImages.map((image) => (
             <div key={image.id} className="bg-white rounded-lg shadow overflow-hidden">

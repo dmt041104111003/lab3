@@ -6,7 +6,6 @@ export async function POST(request: NextRequest) {
     
     const response = NextResponse.json({ success: true })
     
-    // Set cookie in response
     response.cookies.set('user_session', JSON.stringify(user), {
       path: '/',
       maxAge: 86400,

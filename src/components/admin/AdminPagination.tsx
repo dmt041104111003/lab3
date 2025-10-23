@@ -68,7 +68,6 @@ export default function AdminPagination({
       </div>
       
       <div className="flex items-center space-x-1">
-        {/* Previous Button */}
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -77,7 +76,6 @@ export default function AdminPagination({
           Trước
         </button>
 
-        {/* Page Numbers */}
         {getPageNumbers().map((page, index) => (
           <React.Fragment key={index}>
             {page === '...' ? (
@@ -97,7 +95,6 @@ export default function AdminPagination({
           </React.Fragment>
         ))}
 
-        {/* Next Button */}
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}

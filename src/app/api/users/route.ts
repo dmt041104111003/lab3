@@ -39,7 +39,6 @@ export async function PUT(request: NextRequest) {
   try {
     const { id, name, email, role, isBanned, bannedUntil } = await request.json()
 
-    // Check if email already exists for other users
     if (email) {
       const existingUser = await prisma.user.findFirst({
         where: {
@@ -89,7 +88,6 @@ export async function PUT(request: NextRequest) {
       user: updatedUser
     })
   } catch (error) {
-    console.error('Update user error:', error)
     return NextResponse.json(
       { message: 'Có lỗi xảy ra khi cập nhật người dùng' },
       { status: 500 }
@@ -109,7 +107,6 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    // Get user info before deletion for logging
     const user = await prisma.user.findUnique({
       where: { id },
       select: {
@@ -132,29 +129,23 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    // Use transaction to ensure all related data is deleted
     await prisma.$transaction(async (tx) => {
-      // Delete all user's posts (cascade will handle PostTag, PostImage)
       await tx.post.deleteMany({
         where: { authorId: id }
       })
 
-      // Delete all user's comments (cascade will handle replies)
       await tx.comment.deleteMany({
         where: { authorId: id }
       })
 
-      // Delete all user's replies
       await tx.reply.deleteMany({
         where: { authorId: id }
       })
 
-      // Delete all replies that mention this user
       await tx.reply.deleteMany({
         where: { mentionedUserId: id }
       })
 
-      // Finally delete the user
       await tx.user.delete({
         where: { id }
       })
@@ -171,7 +162,6 @@ export async function DELETE(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('Delete user error:', error)
     return NextResponse.json(
       { message: 'Có lỗi xảy ra khi xóa người dùng' },
       { status: 500 }

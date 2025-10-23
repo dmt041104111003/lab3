@@ -50,7 +50,6 @@ export default function ArticleCard({ title, href, isMain = false, className = "
     return (
       <Link href={href} className={`block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 ${className}`}>
         <div className="flex">
-          {/* Image Section */}
           <div className="flex-shrink-0 w-32 h-24">
             {imageUrl ? (
               <img 
@@ -70,7 +69,6 @@ export default function ArticleCard({ title, href, isMain = false, className = "
             )}
           </div>
           
-          {/* Content Section */}
           <div className="flex-1 p-4">
             <h4 className="text-gray-800 text-sm font-bold mb-2 line-clamp-2">{title}</h4>
             {excerpt && (
@@ -94,7 +92,6 @@ export default function ArticleCard({ title, href, isMain = false, className = "
     return (
       <Link href={href} className={`block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 ${className}`}>
         <div className="flex p-4">
-          {/* Image Section */}
           <div className="flex-shrink-0 w-20 h-20">
             {imageUrl ? (
               <img 
@@ -114,7 +111,6 @@ export default function ArticleCard({ title, href, isMain = false, className = "
             )}
           </div>
           
-          {/* Content Section */}
           <div className="flex-1 ml-4">
             {category && (
               <div className="text-xs text-blue-600 font-medium mb-1">{category}</div>

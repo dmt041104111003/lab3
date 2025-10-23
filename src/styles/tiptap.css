@@ -1,10 +1,8 @@
-/* Tiptap Editor Styles */
 .ProseMirror {
   outline: none;
   text-align: justify;
 }
 
-/* Preview styles */
 .tiptap-preview {
   line-height: 1.7;
   font-size: 16px;
@@ -12,7 +10,6 @@
   text-align: justify;
 }
 
-/* Apply same styles to preview content */
 .tiptap-preview p {
   margin-bottom: 1rem;
   margin-top: 0;
@@ -199,7 +196,6 @@
   color: #1d4ed8;
 }
 
-/* ProseMirror caption styling */
 .ProseMirror figcaption {
   text-align: center !important;
   font-size: 0.75rem;
@@ -211,7 +207,6 @@
   width: 100% !important;
 }
 
-/* ProseMirror div caption styling */
 .ProseMirror div.image-caption {
   text-align: center !important;
   font-size: 0.75rem;
@@ -229,7 +224,6 @@
   max-width: 100% !important;
 }
 
-/* ProseMirror class-based caption styling */
 .ProseMirror .image-caption {
   text-align: center !important;
   font-size: 0.75rem;
@@ -241,7 +235,6 @@
   width: 100% !important;
 }
 
-/* Force all caption elements in ProseMirror to center */
 .ProseMirror [class*="caption"],
 .ProseMirror [class*="image-caption"] {
   text-align: center !important;
@@ -251,7 +244,6 @@
   margin-right: auto !important;
 }
 
-/* Ultra force center for all caption elements */
 .ProseMirror div[class*="caption"],
 .ProseMirror span[class*="caption"],
 .ProseMirror p[class*="caption"],
@@ -268,7 +260,6 @@
   transform: none !important;
 }
 
-/* Text alignment */
 .ProseMirror [data-text-align="center"] {
   text-align: center;
 }
@@ -281,7 +272,6 @@
   text-align: left;
 }
 
-/* Image alignment */
 .ProseMirror img[data-text-align="center"] {
   margin-left: auto;
   margin-right: auto;
@@ -297,7 +287,6 @@
   margin-right: auto;
 }
 
-/* Image container with caption */
 .ProseMirror .image-container,
 .tiptap-preview .image-container {
   margin: 1.5rem 0;
@@ -316,7 +305,6 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-/* Ensure image containers work properly in preview */
 .tiptap-preview .image-container {
   margin: 1.5rem 0 !important;
   text-align: center !important;
@@ -345,7 +333,6 @@
   width: 100% !important;
 }
 
-/* Standalone caption styling */
 .ProseMirror div.image-caption,
 .tiptap-preview div.image-caption {
   text-align: center !important;
@@ -364,7 +351,6 @@
   max-width: 100% !important;
 }
 
-/* Ensure captions are properly styled in preview */
 .tiptap-preview .image-caption {
   text-align: center !important;
   font-size: 0.75rem !important;
@@ -382,7 +368,6 @@
   max-width: 100% !important;
 }
 
-/* Additional preview styling for better display */
 .tiptap-preview {
   line-height: 1.7;
   font-size: 16px;

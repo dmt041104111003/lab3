@@ -45,7 +45,6 @@ export default function Pagination({
 
   return (
     <div className={`flex items-center justify-center space-x-2 ${className}`}>
-      {/* Previous Button */}
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
@@ -58,7 +57,6 @@ export default function Pagination({
         Trước
       </button>
 
-      {/* Page Numbers */}
       {visiblePages.map((page, index) => (
         <div key={index}>
           {page === '...' ? (
@@ -78,7 +76,6 @@ export default function Pagination({
         </div>
       ))}
 
-      {/* Next Button */}
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}

@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-// GET related posts (3 latest posts from entire website)
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const excludeSlug = searchParams.get('excludeSlug')
   const limit = parseInt(searchParams.get('limit') || '3')
 
   try {
-    // Always get latest posts from entire website, optionally exclude current post
     const whereCondition = excludeSlug 
       ? { published: true, slug: { not: excludeSlug } }
       : { published: true }
@@ -47,7 +45,6 @@ export async function GET(request: NextRequest) {
       take: limit
     })
 
-    // Transform the data to match the expected format
     const transformedPosts = posts.map(post => ({
       id: post.id,
       title: post.title,
@@ -62,7 +59,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ posts: transformedPosts })
   } catch (error) {
-    console.error('Related posts API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

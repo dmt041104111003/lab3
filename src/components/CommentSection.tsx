@@ -40,7 +40,6 @@ export default function CommentSection() {
     authorName: null
   })
   
-  // Check authentication status
   useEffect(() => {
     const checkAuth = () => {
       const session = getSession()
@@ -55,9 +54,7 @@ export default function CommentSection() {
     
     checkAuth()
     
-    // Listen for session updates
     const handleSessionUpdate = () => {
-      // Force refresh after a small delay to ensure localStorage is updated
       setTimeout(() => {
         checkAuth()
       }, 100)
@@ -70,7 +67,6 @@ export default function CommentSection() {
     }
   }, [])
   
-  // Load comments
   const loadComments = useCallback(async (page = 1, limit = 3, append = false) => {
     if (!params?.slug) return
     
@@ -94,19 +90,16 @@ export default function CommentSection() {
         setCurrentPage(page)
       }
     } catch (error) {
-      console.error('Error loading comments:', error)
     } finally {
       setLoadingComments(false)
       setLoadingMore(false)
     }
   }, [params?.slug])
 
-  // Load comments on mount
   useEffect(() => {
     loadComments()
   }, [params?.slug, loadComments])
 
-  // Load more comments
   const loadMoreComments = () => {
     const nextPage = currentPage + 1
     loadComments(nextPage, 5, true)
@@ -114,10 +107,8 @@ export default function CommentSection() {
 
   const handleInputClick = () => {
     if (isLoggedIn) {
-      // User is logged in, allow typing
       return
     } else {
-      // User not logged in, show login modal
       setIsModalOpen(true)
     }
   }
@@ -136,19 +127,15 @@ export default function CommentSection() {
       return false
     }
     
-    // Trường hợp đặc biệt: admin login
     if (formData.email.toLowerCase() === 'admin') {
       return true
     }
-    
-    // Validate email format cho user thường
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(formData.email)) {
       setError('Email không hợp lệ')
       return false
     }
     
-    // Validate password length
     if (formData.password.length < 6) {
       setError('Mật khẩu phải có ít nhất 6 ký tự')
       return false
@@ -186,7 +173,6 @@ export default function CommentSection() {
           })
         } catch (error) {}
 
-        // Trigger session update event
         window.dispatchEvent(new CustomEvent('session:update'))
         
         setIsLoggedIn(true)
@@ -211,7 +197,6 @@ export default function CommentSection() {
   }
 
   const handleGoogleLogin = () => {
-    // Redirect to signin page
     window.location.href = '/auth/signin'
   }
 
@@ -244,10 +229,9 @@ export default function CommentSection() {
           }
           return newSet
         })
-        loadComments() // Reload to get updated like count
+        loadComments()
       }
     } catch (error) {
-      console.error('Error liking comment:', error)
     }
   }
 
@@ -281,14 +265,13 @@ export default function CommentSection() {
 
       if (response.ok) {
         setCurrentPage(1)
-        loadComments(1, 3, false) // Reload comments from page 1
+        loadComments(1, 3, false)
         closeDeleteModal()
       } else {
         const errorData = await response.json()
         setError(errorData.error || 'Có lỗi xảy ra khi xóa bình luận')
       }
     } catch (error) {
-      console.error('Error deleting comment:', error)
       setError('Có lỗi xảy ra khi xóa bình luận')
     } finally {
       setDeletingComment(null)
@@ -307,14 +290,13 @@ export default function CommentSection() {
 
       if (response.ok) {
         setCurrentPage(1)
-        loadComments(1, 3, false) // Reload comments from page 1
+        loadComments(1, 3, false)
         closeDeleteModal()
       } else {
         const errorData = await response.json()
         setError(errorData.error || 'Có lỗi xảy ra khi xóa phản hồi')
       }
     } catch (error) {
-      console.error('Error deleting reply:', error)
       setError('Có lỗi xảy ra khi xóa phản hồi')
     } finally {
       setDeletingReply(null)
@@ -345,7 +327,7 @@ export default function CommentSection() {
         setReplyText('')
         setReplyingTo(null)
         setCurrentPage(1)
-        loadComments(1, 3, false) // Reload comments from page 1
+        loadComments(1, 3, false)
       } else {
         const error = await response.json()
         if (response.status === 403) {
@@ -355,7 +337,6 @@ export default function CommentSection() {
         }
       }
     } catch (error) {
-      console.error('Error submitting reply:', error)
       setError('Có lỗi xảy ra khi gửi phản hồi')
     } finally {
       setSubmittingReply(false)
@@ -385,7 +366,7 @@ export default function CommentSection() {
       if (response.ok) {
         setComment('')
         setCurrentPage(1)
-        loadComments(1, 3, false) // Reload comments from page 1
+        loadComments(1, 3, false)
       } else {
         const error = await response.json()
         if (response.status === 403) {
@@ -395,7 +376,6 @@ export default function CommentSection() {
         }
       }
     } catch (error) {
-      console.error('Error submitting comment:', error)
       setError('Có lỗi xảy ra khi gửi bình luận')
     } finally {
       setSubmittingComment(false)
@@ -452,16 +432,12 @@ export default function CommentSection() {
         </div>
       </div>
 
-      {/* Comments List */}
       <div className="mt-6">
-        {/* Tabs */}
         <div className="flex gap-6 border-b border-gray-200 mb-6">
           <div className="pb-3 text-sm text-tech-blue border-b-2 border-tech-blue font-semibold">
             Mới nhất
           </div>
         </div>
-
-        {/* Comments */}
         <div className="space-y-5">
           {loadingComments ? (
             <div className="text-center py-8">
@@ -475,12 +451,10 @@ export default function CommentSection() {
           ) : (
             comments.map((comment) => (
             <div key={comment.id} className="flex gap-3 pb-5 border-b border-gray-100">
-              {/* Avatar */}
               <div className="w-10 h-10 rounded-full bg-tech-blue/10 flex items-center justify-center text-sm font-semibold text-tech-blue flex-shrink-0">
                 {comment.author.name.charAt(0).toUpperCase()}
               </div>
 
-              {/* Comment Content */}
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-sm font-semibold text-gray-900">
@@ -518,7 +492,6 @@ export default function CommentSection() {
                     Trả lời
                   </button>
                   
-                  {/* Delete button for comment author or admin */}
                   {isLoggedIn && (user?.id === comment.author.id || user?.role === 'admin') && (
                     <button 
                       onClick={() => openDeleteModal('comment', comment.id, comment.author.name)}
@@ -544,7 +517,6 @@ export default function CommentSection() {
                   </span>
                 </div>
 
-                {/* Replies */}
                 {comment.replies && comment.replies.length > 0 && (
                   <div className="ml-13 mt-3 space-y-3">
                     {comment.replies.map((reply: any) => (
@@ -587,7 +559,6 @@ export default function CommentSection() {
                               )}
                             </button>
                             
-                            {/* Delete button for reply author or admin */}
                             {isLoggedIn && (user?.id === reply.author.id || user?.role === 'admin') && (
                               <button 
                                 onClick={() => openDeleteModal('reply', reply.id, reply.author.name)}
@@ -617,7 +588,6 @@ export default function CommentSection() {
                   </div>
                 )}
 
-                {/* Reply Input */}
                 {replyingTo === comment.id && (
                   <div className="mt-3 ml-13">
                     <form onSubmit={handleReplySubmit}>
@@ -658,7 +628,6 @@ export default function CommentSection() {
           )}
         </div>
 
-        {/* Load More Button */}
         {comments.length < totalComments && (
           <button 
             onClick={loadMoreComments}
@@ -677,14 +646,12 @@ export default function CommentSection() {
         )}
       </div>
 
-      {/* Login Modal */}
       {isModalOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
           onClick={(e) => e.target === e.currentTarget && closeModal()}
         >
           <div className="bg-white rounded-lg w-full max-w-md mx-4 animate-slide-down">
-            {/* Modal Header */}
             <div className="px-6 py-4 border-b border-gray-200 relative">
               <button
                 onClick={closeModal}
@@ -708,7 +675,6 @@ export default function CommentSection() {
               </h3>
             </div>
             
-            {/* Modal Body */}
             <div className="px-6 py-6">
               {error && (
                 <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
@@ -779,12 +745,10 @@ export default function CommentSection() {
               </button>
             </div>
             
-            {/* Modal Footer */}
             <div className="px-6 py-4 text-xs text-gray-600 text-center leading-relaxed">
               Tiếp tục là đồng ý với <a href="#" className="text-blue-600 hover:underline">điều khoản sử dụng</a> và <a href="#" className="text-blue-600 hover:underline">chính sách bảo mật</a> của TechNova.
             </div>
             
-            {/* Register Link */}
             <div className="px-6 pb-4 text-center">
               <span className="text-sm text-gray-500">Chưa có tài khoản? </span>
               <a 
@@ -798,7 +762,6 @@ export default function CommentSection() {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
       {deleteModal.isOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
           <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">

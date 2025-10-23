@@ -21,7 +21,6 @@ export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
 
-  // TechNova mega menu categories
   const megaMenuCategories = [
     {
       title: 'TIN TỨC',
@@ -115,7 +114,6 @@ export default function Header() {
     }
   }, [])
 
-  // Debounce search effect
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (searchQuery.trim()) {
@@ -129,7 +127,6 @@ export default function Header() {
     return () => clearTimeout(timeoutId)
   }, [searchQuery])
 
-  // Handle ESC key to close search popup
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isSearchOpen) {
@@ -143,7 +140,6 @@ export default function Header() {
     }
   }, [isSearchOpen])
 
-  // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement
@@ -153,7 +149,6 @@ export default function Header() {
       if (isProfileMenuOpen && !target.closest('[data-profile-menu]')) {
         setIsProfileMenuOpen(false)
       }
-      // Only close mobile search when clicking outside (desktop uses popup overlay)
       if (isSearchOpen && !target.closest('[data-mobile-search]') && window.innerWidth < 768) {
         setIsSearchOpen(false)
       }
@@ -165,7 +160,6 @@ export default function Header() {
     }
   }, [isMegaMenuOpen, isProfileMenuOpen, isSearchOpen])
 
-  // Prevent hydration mismatch
   if (!mounted) {
     return (
       <header className="bg-white shadow-sm border-b border-gray-200">
@@ -272,7 +266,6 @@ export default function Header() {
     return name ? name.charAt(0).toUpperCase() : 'U'
   }
 
-  // Search functionality
   const handleSearch = async (query: string) => {
     if (!query.trim()) {
       setSearchResults([])
@@ -287,7 +280,6 @@ export default function Header() {
       setSearchResults(data.results || [])
       setIsSearchOpen(true)
     } catch (error) {
-      console.error('Search error:', error)
       setSearchResults([])
     } finally {
       setIsSearching(false)
@@ -312,7 +304,6 @@ export default function Header() {
     setSearchResults([])
   }
 
-  // Highlight search terms in text
   const highlightSearchTerm = (text: string, searchTerm: string) => {
     if (!searchTerm.trim()) return text
     
@@ -335,7 +326,6 @@ export default function Header() {
     <header className="bg-white shadow-sm border-b border-gray-200 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          {/* Mobile menu button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
@@ -348,7 +338,6 @@ export default function Header() {
               <span className={`block h-0.5 w-6 bg-current transition-transform duration-200 ${isMobileMenuOpen ? '-translate-y-1.5 -rotate-45' : ''}`}></span>
             </div>
           </button>
-          {/* Logo và Slogan */}
           <div className="flex items-center space-x-4">
             <Link href="/" className="flex flex-col items-center">
               <Image
@@ -364,7 +353,6 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Navigation - Desktop */}
           <nav className="hidden md:flex space-x-8">
             <Link href="/tin-tuc" className={getNavLinkClasses('/tin-tuc')}>
               Tin tức
@@ -388,7 +376,6 @@ export default function Header() {
               Multimedia
             </Link> */}
             
-            {/* Hamburger Menu Button */}
             <button
               onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)}
               className="flex items-center text-gray-700 hover:text-tech-blue transition-colors font-medium p-2 rounded-md"
@@ -403,7 +390,6 @@ export default function Header() {
             </button>
           </nav>
 
-          {/* Search Button */}
           <div className="hidden md:flex items-center">
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
@@ -416,7 +402,6 @@ export default function Header() {
             </button>
           </div>
 
-          {/* Auth Buttons */}
           <div className="flex items-center space-x-4">
             {isLoggedIn ? (
               <>
@@ -496,13 +481,11 @@ export default function Header() {
               </>
             )}
             
-            {/* Mobile Search Button */}
             <button 
               className="md:hidden p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
               onClick={() => {
                 setIsSearchOpen(!isSearchOpen)
                 if (!isSearchOpen) {
-                  // Focus vào input khi mở search
                   setTimeout(() => {
                     const input = document.querySelector('input[placeholder="Tìm kiếm..."]') as HTMLInputElement
                     if (input) input.focus()
@@ -528,7 +511,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mega Menu */}
         {isMegaMenuOpen && (
           <div className="absolute top-full left-0 w-full bg-gray-100 border-t border-gray-200 shadow-lg z-50" data-mega-menu>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -559,7 +541,6 @@ export default function Header() {
                 ))}
               </div>
               
-              {/* App Download Section */}
               <div className="mt-8 pt-6 border-t border-gray-300">
                 <div className="flex justify-start">
                   <div className="flex space-x-4">
@@ -589,12 +570,10 @@ export default function Header() {
           </div>
         )}
 
-        {/* Desktop Search Popup */}
         {isSearchOpen && (
           <div className="hidden md:block fixed inset-0 bg-black bg-opacity-50 z-50" onClick={() => setIsSearchOpen(false)}>
             <div className="flex items-start justify-center pt-20 px-4" onClick={(e) => e.stopPropagation()}>
               <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform transition-all duration-300 ease-out">
-                {/* Search Header */}
                 <div className="flex items-center p-6 border-b border-gray-200">
                   <div className="flex-1 relative">
                     <input
@@ -627,7 +606,6 @@ export default function Header() {
                   </button>
                 </div>
 
-                {/* Search Results */}
                 <div className="max-h-96 overflow-y-auto">
                   {searchResults.length > 0 ? (
                     <div className="p-4">
@@ -705,7 +683,6 @@ export default function Header() {
           </div>
         )}
 
-        {/* Mobile Search */}
         {isSearchOpen && (
           <div className="md:hidden" data-mobile-search>
             <div className="px-4 py-3 bg-white border-t border-gray-200">
@@ -731,7 +708,6 @@ export default function Header() {
                 </div>
               </form>
 
-              {/* Mobile Search Results */}
               {searchResults.length > 0 && (
                 <div className="mt-3 max-h-64 overflow-y-auto">
                   <div className="text-xs text-gray-500 mb-2">
@@ -784,7 +760,6 @@ export default function Header() {
           </div>
         )}
 
-        {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">

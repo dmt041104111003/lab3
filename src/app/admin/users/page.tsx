@@ -35,7 +35,6 @@ export default function AdminUsers() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
   
-  // Filter states
   const [searchTerm, setSearchTerm] = useState('')
   const [sortBy, setSortBy] = useState('')
   const [filterBy, setFilterBy] = useState('')
@@ -118,7 +117,6 @@ export default function AdminUsers() {
     setUserToDelete(null)
   }
 
-  // Filter and search logic
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -128,7 +126,6 @@ export default function AdminUsers() {
     return matchesSearch && matchesFilter
   })
 
-  // Sort logic
   const sortedUsers = [...filteredUsers].sort((a, b) => {
     switch (sortBy) {
       case 'name':
@@ -144,7 +141,6 @@ export default function AdminUsers() {
     }
   })
 
-  // Pagination logic
   const totalPages = Math.ceil(sortedUsers.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage

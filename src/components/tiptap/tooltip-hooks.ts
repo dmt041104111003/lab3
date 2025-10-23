@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Editor } from '@tiptap/react';
-// import { useToastContext } from '~/components/toast-provider';
 
 export function useTooltipSelection(editor: Editor) {
   const [selectedText, setSelectedText] = useState('');
@@ -33,7 +32,6 @@ export function useTooltipSelection(editor: Editor) {
 }
 
 export function useTooltipEvents(editor: Editor, setTooltipText: (text: string) => void, setIsOpen: (open: boolean) => void) {
-  // const { showSuccess } = useToastContext();
 
   useEffect(() => {
     if (!editor) return;
@@ -50,7 +48,6 @@ export function useTooltipEvents(editor: Editor, setTooltipText: (text: string) 
         if (tooltipText) {
           setTooltipText(tooltipText);
           setIsOpen(true);
-          // showSuccess('Tooltip edit form opened');
         }
       }
     };
@@ -77,7 +74,6 @@ export function useTooltipEvents(editor: Editor, setTooltipText: (text: string) 
 }
 
 export function useTooltipActions(editor: Editor) {
-  // const { showSuccess } = useToastContext();
 
   const addTooltip = (tooltipText: string, from: number, to: number) => {
     if (!editor || !tooltipText.trim()) return;
@@ -87,7 +83,6 @@ export function useTooltipActions(editor: Editor) {
       .setTooltip({ tooltip: tooltipText.trim() })
       .run();
 
-    showSuccess('Tooltip added successfully');
   };
 
   const removeTooltip = (from: number, to: number) => {
@@ -98,14 +93,12 @@ export function useTooltipActions(editor: Editor) {
       .unsetTooltip()
       .run();
     
-    showSuccess('Tooltip removed successfully');
   };
 
   const unlockText = (from: number, to: number) => {
     if (!editor) return;
     
     editor.chain().focus().setTextSelection({ from, to }).unsetMark('lockMark').run();
-    showSuccess('Text unlocked');
   };
 
   const lockText = (from: number, to: number) => {

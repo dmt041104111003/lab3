@@ -110,7 +110,6 @@ export default function PostDetailPage() {
       <Header />
       
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumb Navigation */}
         <nav className="mb-6">
           <Link 
             href="/" 
@@ -157,7 +156,6 @@ export default function PostDetailPage() {
               )}
             </header>
             
-            {/* Featured Image */}
             {post.images && post.images.length > 0 && (
               <div className="mb-8">
                 <img 
@@ -174,7 +172,6 @@ export default function PostDetailPage() {
             />
           </div>
 
-          {/* Author */}
           <div className="px-6 py-4 border-t border-gray-200">
             <div className="text-right">
               <span className="font-bold text-gray-900">
@@ -184,7 +181,6 @@ export default function PostDetailPage() {
           </div>
         </article>
 
-        {/* Share Buttons */}
         <div className="mt-6 flex justify-end">
           <ShareButtons 
             url={typeof window !== 'undefined' ? window.location.href : ''} 
@@ -192,12 +188,10 @@ export default function PostDetailPage() {
           />
         </div>
 
-        {/* Comment Section */}
         <div className="mt-8">
           <CommentSection />
         </div>
 
-        {/* Related Posts */}
         <div className="mt-8">
           <RelatedPosts currentPostSlug={post.slug} />
         </div>

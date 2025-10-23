@@ -24,7 +24,6 @@ import { TooltipHandler } from './tiptap/tooltip-handler';
 import { createLowlight, common } from 'lowlight';
 import HorizontalRule from '@tiptap/extension-horizontal-rule';
 import AdminModal from '@/components/admin/AdminModal';
-// import { useToastContext } from '@/components/admin/AdminToast';
 import {
   Bold,
   Italic,
@@ -75,13 +74,11 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-  // const { showSuccess, showError } = useToastContext();
 
   useEffect(() => {
     if (!editor) return;
 
     const updateToolbar = () => {
-      // setForceUpdate(prev => prev + 1); // This line was removed
     };
 
     editor.on('selectionUpdate', updateToolbar);
@@ -109,7 +106,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     editor.chain().focus().extendMarkRange('link').setLink({ href: linkUrl }).run();
     setLinkUrl('');
     setShowLinkModal(false);
-    // showSuccess('Link added successfully');
   };
 
   const addImage = () => {
@@ -124,7 +120,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     editor.chain().focus().setImage({ src: imageUrl }).run();
     setImageUrl('');
     setShowImageModal(false);
-    // showSuccess('Image added successfully');
   };
 
   const addTable = () => {

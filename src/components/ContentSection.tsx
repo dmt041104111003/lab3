@@ -59,7 +59,6 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
         </div>
       ) : variant === 'list' ? (
         <div className="space-y-4">
-          {/* Main Article */}
           <ArticleCard
             title={mainArticle.title}
             href={mainArticle.href}
@@ -71,7 +70,6 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
             layout='list'
           />
           
-          {/* Sub Articles */}
           {subArticles.map((article, index) => (
             <ArticleCard
               key={index}
@@ -88,7 +86,6 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
         </div>
       ) : (
         <>
-          {/* Main Article - Large Image with Content Overlay */}
           <Link href={mainArticle.href} className="block relative h-96 md:h-96 overflow-hidden border-b-4 border-red-600 mb-6 rounded-lg hover:opacity-95 transition-opacity">
             {mainArticle.imageUrl ? (
               <img 
@@ -107,7 +104,6 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
               </div>
             )}
             
-            {/* Content Overlay - Hidden on mobile, shown on desktop */}
             <div className="hidden md:block absolute right-0 top-0 bottom-0 w-2/5 bg-white p-8 flex flex-col justify-center">
               <h1 className="text-2xl font-bold text-gray-900 mb-4 leading-tight">
                 {mainArticle.title}
@@ -120,7 +116,6 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
               </p>
             </div>
             
-            {/* Mobile Content - Below image */}
             <div className="md:hidden absolute bottom-0 left-0 right-0 bg-white bg-opacity-95 p-4">
               <h1 className="text-lg font-bold text-gray-900 mb-2 leading-tight">
                 {mainArticle.title}
@@ -134,7 +129,6 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
             </div>
           </Link>
 
-          {/* Sub Articles Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {subArticles.map((article, index) => (
               <Link key={index} href={article.href} className="block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">

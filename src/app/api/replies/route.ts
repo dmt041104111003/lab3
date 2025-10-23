@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-// POST new reply
 export async function POST(request: NextRequest) {
   try {
-    // Get session from cookies
     const sessionCookie = request.cookies.get('user_session')
     if (!sessionCookie) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -12,7 +10,6 @@ export async function POST(request: NextRequest) {
     
     const session = JSON.parse(sessionCookie.value)
 
-    // Check if user is banned
     const user = await prisma.user.findUnique({
       where: { id: session.id },
       select: { isBanned: true, bannedUntil: true }
@@ -37,7 +34,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Comment ID and content are required' }, { status: 400 })
     }
 
-    // Verify comment exists
     const comment = await prisma.comment.findUnique({
       where: { id: commentId },
       select: { id: true }
@@ -47,7 +43,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Comment not found' }, { status: 404 })
     }
 
-    // Verify mentioned user exists if provided
     if (mentionedUserId) {
       const mentionedUser = await prisma.user.findUnique({
         where: { id: mentionedUserId },
@@ -59,7 +54,6 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Create reply
     const reply = await prisma.reply.create({
       data: {
         content: content.trim(),
@@ -86,7 +80,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ reply }, { status: 201 })
   } catch (error) {
-    console.error('Create reply error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

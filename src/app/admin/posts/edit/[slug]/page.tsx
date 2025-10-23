@@ -330,7 +330,6 @@ export default function EditPost() {
       <AdminCard title="Thông tin bài viết">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Post Info */}
             <div className="space-y-4">
               <AdminFormField label="Tác giả">
                 <input
@@ -363,7 +362,6 @@ export default function EditPost() {
               </AdminFormField>
             </div>
 
-            {/* Post Settings */}
             <div className="space-y-4">
               <AdminCheckbox
                 name="published"
@@ -475,13 +473,11 @@ export default function EditPost() {
           </AdminFormField>
 
 
-          {/* Featured Image Selection */}
           <div className="mt-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Hình ảnh nổi bật
             </label>
             
-            {/* Image Type Selection */}
             <div className="mb-4">
               <div className="flex space-x-4">
                 <label className="flex items-center">
@@ -520,7 +516,6 @@ export default function EditPost() {
               </div>
             </div>
 
-            {/* Existing Images */}
             {formData.imageType === 'existing' && (
               <>
                 {loadingData ? (
@@ -565,7 +560,6 @@ export default function EditPost() {
               </>
             )}
 
-            {/* Upload New Image */}
             {formData.imageType === 'upload' && (
               <div>
                 <input
@@ -595,7 +589,6 @@ export default function EditPost() {
               </div>
             )}
 
-            {/* Image URL */}
             {formData.imageType === 'url' && (
               <div>
                 <input

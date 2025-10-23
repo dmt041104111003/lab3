@@ -31,7 +31,6 @@ interface RelatedPostsProps {
   className?: string
 }
 
-// Simple image component with fallback
 const ImageWithFallback = ({ src, alt, className }: { src: string; alt: string; className: string }) => {
   const [imageError, setImageError] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -80,7 +79,6 @@ export default function RelatedPosts({ currentPostSlug, className = '' }: Relate
           setPosts(data.posts || [])
         }
       } catch (error) {
-        console.error('Error fetching related posts:', error)
       } finally {
         setLoading(false)
       }
@@ -122,7 +120,6 @@ export default function RelatedPosts({ currentPostSlug, className = '' }: Relate
             href={`/bai-viet/${post.slug}`}
             className="flex gap-4 hover:bg-gray-50 p-3 rounded-lg transition-colors group"
           >
-            {/* Thumbnail */}
             <div className="w-28 h-20 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
               <ImageWithFallback
                 src={post.image && post.image.path 
@@ -136,7 +133,6 @@ export default function RelatedPosts({ currentPostSlug, className = '' }: Relate
               />
             </div>
 
-            {/* Content */}
             <div className="flex-1 min-w-0">
               <h4 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-tech-blue transition-colors mb-1">
                 {post.title}

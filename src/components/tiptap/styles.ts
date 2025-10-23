@@ -14,7 +14,6 @@ export const tiptapStyles = `
     pointer-events: none;
   }
   
-  /* Table Styles - Responsive Dark/Light Theme */
   .ProseMirror table {
     border-collapse: collapse !important;
     margin: 0 !important;
@@ -25,14 +24,12 @@ export const tiptapStyles = `
     overflow: hidden !important;
   }
   
-  /* Dark Mode Table */
   .dark .ProseMirror table {
     background-color: #1e3a8a !important;
     border: 2px solid #1e40af !important;
     color: #ffffff !important;
   }
   
-  /* Light Mode Table */
   .ProseMirror table {
     background-color: #ffffff !important;
     border: 2px solid #e5e7eb !important;
@@ -49,7 +46,6 @@ export const tiptapStyles = `
     vertical-align: top !important;
   }
   
-  /* Dark Mode Table Cells */
   .dark .ProseMirror table td,
   .dark .ProseMirror table th {
     border: 1px solid #3b82f6 !important;
@@ -57,7 +53,6 @@ export const tiptapStyles = `
     background-color: #1e3a8a !important;
   }
   
-  /* Light Mode Table Cells */
   .ProseMirror table td {
     background-color: #ffffff !important;
     color: #1f2937 !important;
@@ -70,7 +65,6 @@ export const tiptapStyles = `
     color: #1f2937 !important;
   }
   
-  /* Dark Mode Table Headers */
   .dark .ProseMirror table th {
     background-color: #1e40af !important;
     color: #ffffff !important;
@@ -102,17 +96,14 @@ export const tiptapStyles = `
     margin: 0;
   }
   
-  /* Dark Mode Table Text */
   .dark .ProseMirror table p {
     color: #ffffff !important;
   }
   
-  /* Light Mode Table Text */
   .ProseMirror table p {
     color: #1f2937 !important;
   }
   
-  /* Table Selection */
   .ProseMirror table .selectedCell {
     background-color: rgba(59, 130, 246, 0.1) !important;
   }
@@ -132,7 +123,6 @@ export const tiptapStyles = `
     opacity: 0.5;
   }
   
-  /* Force table colors - Responsive */
   .ProseMirror table * {
     color: inherit !important;
   }
@@ -539,7 +529,6 @@ export const tiptapPreviewStyles = `
     pointer-events: none;
   }
   
-  /* Table Styles - Responsive Dark/Light Theme */
   .ProseMirror table {
     border-collapse: collapse !important;
     margin: 0 !important;
@@ -550,14 +539,12 @@ export const tiptapPreviewStyles = `
     overflow: hidden !important;
   }
   
-  /* Dark Mode Table */
   .dark .ProseMirror table {
     background-color: #1e3a8a !important;
     border: 2px solid #1e40af !important;
     color: #ffffff !important;
   }
   
-  /* Light Mode Table */
   .ProseMirror table {
     background-color: #ffffff !important;
     border: 2px solid #e5e7eb !important;
@@ -574,7 +561,6 @@ export const tiptapPreviewStyles = `
     vertical-align: top !important;
   }
   
-  /* Dark Mode Table Cells */
   .dark .ProseMirror table td,
   .dark .ProseMirror table th {
     border: 1px solid #3b82f6 !important;
@@ -582,7 +568,6 @@ export const tiptapPreviewStyles = `
     background-color: #1e3a8a !important;
   }
   
-  /* Light Mode Table Cells */
   .ProseMirror table td {
     background-color: #ffffff !important;
     color: #1f2937 !important;
@@ -595,7 +580,6 @@ export const tiptapPreviewStyles = `
     color: #1f2937 !important;
   }
   
-  /* Dark Mode Table Headers */
   .dark .ProseMirror table th {
     background-color: #1e40af !important;
     color: #ffffff !important;
@@ -627,17 +611,14 @@ export const tiptapPreviewStyles = `
     margin: 0;
   }
   
-  /* Dark Mode Table Text */
   .dark .ProseMirror table p {
     color: #ffffff !important;
   }
   
-  /* Light Mode Table Text */
   .ProseMirror table p {
     color: #1f2937 !important;
   }
   
-  /* Table Selection */
   .ProseMirror table .selectedCell {
     background-color: rgba(59, 130, 246, 0.1) !important;
   }
@@ -657,7 +638,6 @@ export const tiptapPreviewStyles = `
     opacity: 0.5;
   }
   
-  /* Force table colors - Responsive */
   .ProseMirror table * {
     color: inherit !important;
   }
@@ -826,13 +806,11 @@ export const tiptapPreviewStyles = `
     text-align: left !important;
   }
   
-  /* Dark Mode Table */
   .dark .ProseMirror th, .dark .ProseMirror td {
     border: 1px solid #3b82f6 !important;
     color: #ffffff !important;
   }
   
-  /* Light Mode Table */
   .ProseMirror td {
     background-color: #ffffff !important;
     color: #1f2937 !important;
@@ -845,13 +823,11 @@ export const tiptapPreviewStyles = `
     color: #1f2937 !important;
   }
   
-  /* Dark Mode Table Headers */
   .dark .ProseMirror th {
     background-color: #1e40af !important;
     color: #ffffff !important;
   }
   
-  /* Dark Mode Table Cells */
   .dark .ProseMirror td {
     background-color: #1e3a8a !important;
     color: #ffffff !important;

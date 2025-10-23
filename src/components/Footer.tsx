@@ -20,10 +20,8 @@ export default function Footer() {
   }
   return (
     <footer className="bg-gray-900 text-white">
-      {/* Top Navigation Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
-          {/* Logo */}
           <div className="flex flex-col items-center mb-4 md:mb-0">
             <Image 
               src="/footer.png" 
@@ -37,7 +35,6 @@ export default function Footer() {
             </div> */}
           </div>
           
-          {/* Navigation Links */}
           <div className="flex flex-wrap gap-4 md:gap-6">
             <Link href="/tin-tuc" className={getFooterLinkClasses('/tin-tuc')}>
               TIN TỨC
@@ -64,13 +61,10 @@ export default function Footer() {
         </div>
       </div>
       
-      {/* Blue Separator Line */}
       <div className="w-full h-0.5 bg-blue-400"></div>
       
-      {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column - Contact Info */}
           <div className="space-y-4">
             <div className="text-sm">
               <div className="mb-4">
@@ -95,7 +89,6 @@ export default function Footer() {
             </div>
           </div>
           
-          {/* Right Column - About & Licensing */}
           <div className="space-y-6">
             <div>
               <h3 className="font-bold text-sm mb-3">VỀ TECHNOVA</h3>

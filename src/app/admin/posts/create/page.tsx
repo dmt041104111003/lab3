@@ -372,13 +372,11 @@ export default function CreatePost() {
           </AdminFormField>
 
 
-          {/* Featured Image Selection */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Hình ảnh nổi bật
             </label>
             
-            {/* Image Type Selection */}
             <div className="mb-4">
               <div className="flex space-x-4">
                 <label className="flex items-center">
@@ -417,7 +415,6 @@ export default function CreatePost() {
               </div>
             </div>
 
-            {/* Existing Images */}
             {formData.imageType === 'existing' && (
               <>
                 {loadingData ? (
@@ -462,7 +459,6 @@ export default function CreatePost() {
               </>
             )}
 
-            {/* Upload New Image */}
             {formData.imageType === 'upload' && (
               <div>
                 <input
@@ -492,7 +488,6 @@ export default function CreatePost() {
               </div>
             )}
 
-            {/* Image URL */}
             {formData.imageType === 'url' && (
               <div>
                 <input

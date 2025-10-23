@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-// GET comments for a post
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const postSlug = searchParams.get('postSlug')
@@ -13,7 +12,6 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Find post by slug
     const post = await prisma.post.findUnique({
       where: { slug: postSlug },
       select: { id: true }
@@ -23,7 +21,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 })
     }
 
-    // Get comments with replies
     const comments = await prisma.comment.findMany({
       where: { postId: post.id },
       include: {
@@ -76,15 +73,12 @@ export async function GET(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('Comments API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
-// POST new comment
 export async function POST(request: NextRequest) {
   try {
-    // Get session from cookies
     const sessionCookie = request.cookies.get('user_session')
     if (!sessionCookie) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -92,7 +86,6 @@ export async function POST(request: NextRequest) {
     
     const session = JSON.parse(sessionCookie.value)
 
-    // Check if user is banned
     const user = await prisma.user.findUnique({
       where: { id: session.id },
       select: { isBanned: true, bannedUntil: true }
@@ -117,7 +110,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Post slug and content are required' }, { status: 400 })
     }
 
-    // Find post by slug
     const post = await prisma.post.findUnique({
       where: { slug: postSlug },
       select: { id: true }
@@ -127,7 +119,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 })
     }
 
-    // Create comment
     const comment = await prisma.comment.create({
       data: {
         content: content.trim(),
@@ -148,7 +139,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ comment }, { status: 201 })
   } catch (error) {
-    console.error('Create comment error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

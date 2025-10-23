@@ -14,7 +14,6 @@ export async function GET(request: NextRequest) {
 
     const searchTerm = query.trim()
 
-    // Build search conditions
     const whereConditions: any = {
       published: true,
       OR: [
@@ -39,12 +38,10 @@ export async function GET(request: NextRequest) {
       ]
     }
 
-    // Add category filter if specified
     if (category && category !== 'all') {
       whereConditions.category = category
     }
 
-    // Search posts
     const posts = await prisma.post.findMany({
       where: whereConditions,
       include: {
@@ -81,7 +78,6 @@ export async function GET(request: NextRequest) {
       take: limit
     })
 
-    // Format results
     const results = posts.map(post => ({
       id: post.id,
       title: post.title,
@@ -107,7 +103,6 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Search error:', error)
     return NextResponse.json(
       { error: 'Lỗi tìm kiếm' },
       { status: 500 }

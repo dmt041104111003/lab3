@@ -1,9 +1,4 @@
-/**
- * Generate a URL-friendly slug from Vietnamese text
- * Handles Vietnamese diacritics and special characters
- */
 export function generateSlug(text: string): string {
-  // Vietnamese character mapping
   const vietnameseMap: { [key: string]: string } = {
     'à': 'a', 'á': 'a', 'ạ': 'a', 'ả': 'a', 'ã': 'a', 'â': 'a', 'ầ': 'a', 'ấ': 'a', 'ậ': 'a', 'ẩ': 'a', 'ẫ': 'a', 'ă': 'a', 'ằ': 'a', 'ắ': 'a', 'ặ': 'a', 'ẳ': 'a', 'ẵ': 'a',
     'è': 'e', 'é': 'e', 'ẹ': 'e', 'ẻ': 'e', 'ẽ': 'e', 'ê': 'e', 'ề': 'e', 'ế': 'e', 'ệ': 'e', 'ể': 'e', 'ễ': 'e',
@@ -27,15 +22,12 @@ export function generateSlug(text: string): string {
     .split('')
     .map(char => vietnameseMap[char] || char)
     .join('')
-    .replace(/[^a-z0-9\s-]/g, '') // Remove any remaining special characters
-    .replace(/\s+/g, '-') // Replace spaces with hyphens
-    .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
-    .replace(/^-|-$/g, '') // Remove leading/trailing hyphens
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
 }
 
-/**
- * Generate a unique slug by appending a number if the slug already exists
- */
 export async function generateUniqueSlug(baseSlug: string, existingSlugs: string[]): Promise<string> {
   let slug = baseSlug
   let counter = 1

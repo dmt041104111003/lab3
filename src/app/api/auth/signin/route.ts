@@ -10,9 +10,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { provider, email, password, token } = body
 
-    // --- ĐĂNG NHẬP GOOGLE ---
     if (provider === 'google') {
-      // Xác thực token Google
       const ticket = await client.verifyIdToken({
         idToken: token,
         audience: process.env.GOOGLE_ID,
@@ -23,18 +21,16 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ message: 'Token Google không hợp lệ' }, { status: 401 })
       }
 
-      // Kiểm tra user trong DB
       let user = await prisma.user.findUnique({
         where: { email: payload.email },
       })
 
-      // Nếu chưa có thì tạo mới user Google
       if (!user) {
         user = await prisma.user.create({
           data: {
             email: payload.email,
             name: payload.name || 'Người dùng Google',
-            password: '', // Google không dùng password
+            password: '',
             role: 'USER',
           },
         })
@@ -51,7 +47,6 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // --- ĐĂNG NHẬP THƯỜNG ---
     const user = await prisma.user.findUnique({
       where: { email },
     })
@@ -81,7 +76,6 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error(error)
     return NextResponse.json(
       { message: 'Có lỗi xảy ra' },
       { status: 500 }

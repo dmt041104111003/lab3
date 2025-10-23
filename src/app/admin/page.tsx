@@ -106,7 +106,6 @@ export default function AdminDashboard() {
         description="Tổng quan hệ thống quản trị"
       />
 
-      {/* Stats Summary - 1 dòng */}
       <div className="bg-white shadow rounded-lg p-6 mb-8">
         <div className="flex justify-center items-center space-x-12">
           <div className="text-center">
@@ -124,7 +123,6 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Recent Posts Table */}
       <div className="bg-white shadow rounded-lg mb-8">
         <div className="px-6 py-4 border-b border-gray-200">
           <div className="flex justify-between items-center">
@@ -174,7 +172,6 @@ export default function AdminDashboard() {
         />
       </div>
 
-      {/* Recent Users Table */}
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200">
           <div className="flex justify-between items-center">

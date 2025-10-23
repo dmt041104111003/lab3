@@ -145,7 +145,6 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
           <div className="lg:col-span-3">
             {posts.length > 0 && (
               <div className="space-y-6">
-                {/* Bài viết chính - 1 cái to */}
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                   {posts[0].images?.[0]?.image?.path && (
                     <div className="aspect-w-16 aspect-h-9">
@@ -177,7 +176,6 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                   </div>
                 </div>
 
-                {/* 2 bài viết nhỏ bên dưới */}
                 {posts.length > 1 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {posts.slice(1, 3).map((post) => (

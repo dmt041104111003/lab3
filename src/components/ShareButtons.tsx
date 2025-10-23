@@ -25,13 +25,11 @@ export default function ShareButtons({ url, title, className = '' }: ShareButton
         setIsCopied(false)
       }, 2000)
     } catch (err) {
-      console.error('Failed to copy: ', err)
     }
   }
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      {/* Facebook Share */}
       <button
         onClick={handleFacebookShare}
         className="p-2 bg-tech-blue/10 text-tech-blue rounded-lg hover:bg-tech-blue/20 transition-colors"
@@ -42,7 +40,6 @@ export default function ShareButtons({ url, title, className = '' }: ShareButton
         </svg>
       </button>
 
-      {/* Copy Link */}
       <button
         onClick={handleCopyLink}
         className={`p-2 rounded-lg transition-colors ${

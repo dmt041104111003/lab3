@@ -54,7 +54,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     }
   }, [router])
 
-  // Prevent hydration mismatch
   if (!mounted) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -92,7 +91,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     )
   }
 
-  // Show access denied for non-admin users
   if (!isAdmin()) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -112,7 +110,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Admin Header - Desktop */}
       <header className="hidden lg:block bg-white shadow-sm border-b border-gray-200">
         <div className="flex h-12">
           <div className="w-64 flex items-center justify-center">
@@ -140,7 +137,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
       </header>
 
-      {/* Mobile Header */}
       <header className="lg:hidden bg-white shadow-sm border-b border-gray-200">
         <div className="flex items-center justify-between px-4 py-3">
           <button
@@ -171,7 +167,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       </header>
 
       <div className="flex">
-        {/* Admin Sidebar - Desktop */}
         <aside className="hidden lg:block w-64 bg-white shadow-sm min-h-screen">
           <nav className="mt-6">
             <div className="px-4 space-y-1">
@@ -239,7 +234,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </nav>
         </aside>
 
-        {/* Mobile Sidebar Overlay */}
         {isMobileMenuOpen && (
           <div className="lg:hidden fixed inset-0 z-50">
             <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setIsMobileMenuOpen(false)}></div>
@@ -340,7 +334,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </div>
         )}
 
-        {/* Main Content */}
         <main className="flex-1 p-6">
           {children}
         </main>

@@ -119,7 +119,6 @@ export default function PostDetail() {
       <Header />
       
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumb Navigation */}
         <nav className="mb-6">
           <Link 
             href="/" 
@@ -133,7 +132,6 @@ export default function PostDetail() {
         </nav>
 
         <article className="bg-white shadow rounded-lg overflow-hidden">
-          {/* Post Header */}
           <div className="px-6 py-8 border-b border-gray-200">
             <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
               <span className="capitalize">{post.category}</span>
@@ -154,7 +152,6 @@ export default function PostDetail() {
             )}
           </div>
 
-          {/* Post Image */}
           {post.images && post.images.length > 0 ? (
             <div className="px-6 py-4">
               <img
@@ -173,7 +170,6 @@ export default function PostDetail() {
             </div>
           ) : null}
 
-          {/* Post Content */}
           <div className="px-6 py-8">
             <TipTapPreview 
               content={post.content}
@@ -181,7 +177,6 @@ export default function PostDetail() {
             />
           </div>
 
-          {/* Post Tags */}
           {post.tags && post.tags.length > 0 && (
             <div className="px-6 py-4 border-t border-gray-200">
               <div className="flex flex-wrap gap-2">
@@ -197,7 +192,6 @@ export default function PostDetail() {
             </div>
           )}
 
-          {/* Author */}
           <div className="px-6 py-4 border-t border-gray-200">
             <div className="text-right">
               <span className="font-bold text-gray-900">
@@ -206,7 +200,6 @@ export default function PostDetail() {
             </div>
           </div>
 
-          {/* Post Footer */}
           <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
             <div className="flex items-center justify-end text-sm text-gray-500">
               <div>
@@ -216,7 +209,6 @@ export default function PostDetail() {
           </div>
         </article>
 
-        {/* Share Buttons */}
         <div className="mt-6 flex justify-end">
           <ShareButtons 
             url={typeof window !== 'undefined' ? window.location.href : ''} 
@@ -224,12 +216,10 @@ export default function PostDetail() {
           />
         </div>
 
-        {/* Comment Section */}
         <div className="mt-8">
           <CommentSection />
         </div>
 
-        {/* Related Posts */}
         <div className="mt-8">
           <RelatedPosts currentPostSlug={post.slug} />
         </div>

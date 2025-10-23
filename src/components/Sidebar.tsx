@@ -88,7 +88,6 @@ export default function Sidebar({ quickNews = [], techToday = [], mostRead = [],
 
   return (
     <aside className="w-full lg:w-80 space-y-6">
-      {/* Subcategories Section */}
       {subcategories.length > 0 && (
         <div className="mb-8">
           <h3 className="text-lg font-bold text-gray-800 mb-4 uppercase tracking-wide">

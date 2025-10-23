@@ -177,7 +177,6 @@ export default function EditUser() {
       <AdminCard title="Thông tin người dùng">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* User Info */}
             <div className="space-y-4">
               <AdminFormField label="Tên người dùng">
                 <input
@@ -210,7 +209,6 @@ export default function EditUser() {
               </AdminFormField>
             </div>
 
-            {/* Permissions */}
             <div className="space-y-4">
               <AdminFormField label="Vai trò" required>
                 <AdminSelect

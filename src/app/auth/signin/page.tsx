@@ -97,7 +97,6 @@ export default function SignIn() {
     })
   }
 
-  // ✅ Hàm xử lý Google Login
   const handleGoogleLogin = async (credentialResponse: any) => {
     try {
       const token = credentialResponse.credential
@@ -211,7 +210,6 @@ export default function SignIn() {
               </button>
             </div>
 
-            {/* Divider */}
             <div className="flex items-center my-4">
               <div className="flex-grow border-t border-gray-300"></div>
               <span className="mx-2 text-gray-500 text-sm">hoặc</span>
