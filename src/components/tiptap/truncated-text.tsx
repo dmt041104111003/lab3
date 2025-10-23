@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from 'react';
-import { TruncatedTextProps } from '~/constants/tooltip';
+
+interface TruncatedTextProps {
+  text: string;
+  maxLength?: number;
+  className?: string;
+}
 
 export function TruncatedText({ text, maxLength = 100, className = "" }: TruncatedTextProps) {
   const [isExpanded, setIsExpanded] = useState(false);

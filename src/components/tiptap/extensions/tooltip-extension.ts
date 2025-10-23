@@ -1,5 +1,4 @@
 import { Mark, mergeAttributes } from '@tiptap/core';
-import { TooltipOptions } from '~/constants/tooltip';
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -10,7 +9,7 @@ declare module '@tiptap/core' {
   }
 }
 
-export const Tooltip = Mark.create<TooltipOptions>({
+export const Tooltip = Mark.create({
   name: 'tooltip',
 
   addOptions() {

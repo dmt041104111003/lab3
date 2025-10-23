@@ -1,8 +1,17 @@
 "use client";
 
 import { TruncatedText } from './truncated-text';
-import { TooltipPopupProps } from '~/constants/tooltip';
 import AdminModal from '@/components/admin/AdminModal';
+
+interface TooltipPopupProps {
+  isOpen: boolean;
+  selectedText: string;
+  tooltipText: string;
+  onTooltipTextChange: (text: string) => void;
+  onAddTooltip: () => void;
+  onRemoveTooltip: () => void;
+  onClose: () => void;
+}
 
 export function TooltipPopup({
   isOpen,

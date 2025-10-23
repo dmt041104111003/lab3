@@ -4,7 +4,10 @@ import { useState, useEffect } from 'react';
 import { TooltipPopup } from './tooltip-popup';
 import { TooltipBadges } from './tooltip-badges';
 import { useTooltipSelection, useTooltipEvents, useTooltipActions, useLockedTexts } from './tooltip-hooks';
-import { TooltipButtonProps } from '~/constants/tooltip';
+
+interface TooltipButtonProps {
+  editor: any;
+}
 
 export function TooltipButton({ editor }: TooltipButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,7 +65,7 @@ export function TooltipButton({ editor }: TooltipButtonProps) {
     let hasTooltip = false;
     for (let pos = from; pos < to; pos++) {
       const marks = editor.state.doc.resolve(pos).marks();
-      if (marks.some(mark => mark.type.name === 'tooltip')) {
+      if (marks.some((mark: any) => mark.type.name === 'tooltip')) {
         hasTooltip = true;
         break;
       }
@@ -111,7 +114,7 @@ export function TooltipButton({ editor }: TooltipButtonProps) {
   if (hasSelectedText) {
     for (let pos = from; pos < to; pos++) {
       const marks = editor.state.doc.resolve(pos).marks();
-      if (marks.some(mark => mark.type.name === 'tooltip')) {
+      if (marks.some((mark: any) => mark.type.name === 'tooltip')) {
         hasTooltip = true;
         break;
       }

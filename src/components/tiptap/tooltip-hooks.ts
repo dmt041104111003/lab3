@@ -119,7 +119,7 @@ export function useLockedTexts(editor: Editor) {
       
       let hasOverlap = false;
       
-      for (const lockedText of prev) {
+      for (const lockedText of Array.from(prev)) {
         const docText = editor.state.doc.textContent;
         const lockedTextIndex = docText.indexOf(lockedText);
         
@@ -139,7 +139,7 @@ export function useLockedTexts(editor: Editor) {
       if (hasOverlap) {
         const nonOverlappingTexts = new Set<string>();
         
-        for (const lockedText of prev) {
+        for (const lockedText of Array.from(prev)) {
           const docText = editor.state.doc.textContent;
           const lockedTextIndex = docText.indexOf(lockedText);
           

@@ -1,6 +1,10 @@
 "use client";
 
-import { TooltipBadgesProps } from '~/constants/tooltip';
+interface TooltipBadgesProps {
+  lockedTextsSize: number;
+  tooltipCount: number;
+  selectedText: string;
+}
 
 export function TooltipBadges({ lockedTextsSize, tooltipCount, selectedText }: TooltipBadgesProps) {
   return (
