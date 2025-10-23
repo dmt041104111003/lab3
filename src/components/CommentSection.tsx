@@ -6,7 +6,12 @@ import { getSession } from '@/lib/session'
 export default function CommentSection() {
   const [comment, setComment] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [email, setEmail] = useState('')
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  })
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
   const [replyingTo, setReplyingTo] = useState<number | null>(null)
   const [replyText, setReplyText] = useState('')
   const [likedComments, setLikedComments] = useState<Set<number>>(new Set())
@@ -106,10 +111,78 @@ export default function CommentSection() {
     setIsModalOpen(false)
   }
 
-  const handleModalSubmit = (e: React.FormEvent) => {
+  const validateForm = () => {
+    if (!formData.email.trim()) {
+      setError('Email là bắt buộc')
+      return false
+    }
+    if (!formData.password.trim()) {
+      setError('Mật khẩu là bắt buộc')
+      return false
+    }
+    if (formData.email.toLowerCase() === 'admin') {
+      return true
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(formData.email)) {
+      setError('Email không hợp lệ')
+      return false
+    }
+    if (formData.password.length < 6) {
+      setError('Mật khẩu phải có ít nhất 6 ký tự')
+      return false
+    }
+    return true
+  }
+
+  const handleModalSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Redirect to signin page
-    window.location.href = '/auth/signin'
+    setIsLoading(true)
+    setError('')
+
+    if (!validateForm()) {
+      setIsLoading(false)
+      return
+    }
+
+    try {
+      const response = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        localStorage.setItem('user_session', JSON.stringify(data.user))
+        try {
+          await fetch('/api/set-cookie', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user: data.user }),
+          })
+        } catch (error) {}
+
+        setIsLoggedIn(true)
+        setUser(data.user)
+        closeModal()
+        setFormData({ email: '', password: '' })
+      } else {
+        setError(data.message || 'Đăng nhập thất bại')
+      }
+    } catch (error) {
+      setError('Có lỗi xảy ra, vui lòng thử lại')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
   }
 
   const handleGoogleLogin = () => {
@@ -345,26 +418,49 @@ export default function CommentSection() {
             
             {/* Modal Body */}
             <div className="px-6 py-6">
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
+                  {error}
+                </div>
+              )}
+              
               <form onSubmit={handleModalSubmit}>
-                <div className="mb-6">
+                <div className="mb-4">
                   <label className="block text-sm font-semibold text-gray-900 mb-2">
                     Email
                   </label>
                   <input
                     type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     placeholder="Nhập Email của bạn"
-                    className="w-full px-4 py-3 border border-gray-300 rounded text-sm focus:outline-none focus:border-gray-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded text-sm focus:outline-none focus:border-tech-blue"
+                    required
+                  />
+                </div>
+                
+                <div className="mb-6">
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    Mật khẩu
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Nhập mật khẩu"
+                    className="w-full px-4 py-3 border border-gray-300 rounded text-sm focus:outline-none focus:border-tech-blue"
                     required
                   />
                 </div>
                 
                 <button
                   type="submit"
-                  className="w-full py-3 bg-gray-600 text-white font-semibold rounded hover:bg-gray-700 transition-colors mb-5"
+                  disabled={isLoading}
+                  className="w-full py-3 bg-tech-blue text-white font-semibold rounded hover:bg-tech-blue/90 transition-colors mb-5 disabled:opacity-50"
                 >
-                  Tiếp tục
+                  {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
                 </button>
               </form>
               
