@@ -78,13 +78,6 @@ export default function EditPost() {
   const [images, setImages] = useState<Image[]>([])
   const [loadingData, setLoadingData] = useState(true)
 
-  useEffect(() => {
-    if (postSlug) {
-      fetchPost()
-      fetchData()
-    }
-  }, [postSlug, fetchPost, fetchData])
-
   const fetchData = useCallback(async () => {
     try {
       const [tagsRes, imagesRes] = await Promise.all([
@@ -136,6 +129,13 @@ export default function EditPost() {
       setIsLoading(false)
     }
   }, [postSlug])
+
+  useEffect(() => {
+    if (postSlug) {
+      fetchPost()
+      fetchData()
+    }
+  }, [postSlug, fetchPost, fetchData])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
