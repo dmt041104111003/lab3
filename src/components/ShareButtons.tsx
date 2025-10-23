@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 interface ShareButtonsProps {
   url: string
   title: string
@@ -7,6 +9,8 @@ interface ShareButtonsProps {
 }
 
 export default function ShareButtons({ url, title, className = '' }: ShareButtonsProps) {
+  const [isCopied, setIsCopied] = useState(false)
+
   const handleFacebookShare = () => {
     const encodedUrl = encodeURIComponent(url)
     const encodedTitle = encodeURIComponent(title)
@@ -16,15 +20,10 @@ export default function ShareButtons({ url, title, className = '' }: ShareButton
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(url)
-      // Show success message
-      const button = event?.target as HTMLButtonElement
-      const originalText = button.textContent
-      button.textContent = '✓'
-      button.className = button.className.replace('bg-gray-100', 'bg-green-100')
+      setIsCopied(true)
       setTimeout(() => {
-        button.textContent = originalText
-        button.className = button.className.replace('bg-green-100', 'bg-gray-100')
-      }, 1500)
+        setIsCopied(false)
+      }, 2000)
     } catch (err) {
       console.error('Failed to copy: ', err)
     }
@@ -35,7 +34,7 @@ export default function ShareButtons({ url, title, className = '' }: ShareButton
       {/* Facebook Share */}
       <button
         onClick={handleFacebookShare}
-        className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
+        className="p-2 bg-tech-blue/10 text-tech-blue rounded-lg hover:bg-tech-blue/20 transition-colors"
         title="Chia sẻ lên Facebook"
       >
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -46,13 +45,23 @@ export default function ShareButtons({ url, title, className = '' }: ShareButton
       {/* Copy Link */}
       <button
         onClick={handleCopyLink}
-        className="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors"
-        title="Copy link"
+        className={`p-2 rounded-lg transition-colors ${
+          isCopied 
+            ? 'bg-tech-blue text-white hover:bg-tech-dark-blue' 
+            : 'bg-tech-blue/10 text-tech-blue hover:bg-tech-blue/20'
+        }`}
+        title={isCopied ? "Đã sao chép!" : "Copy link"}
       >
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-        </svg>
+        {isCopied ? (
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+        ) : (
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+        )}
       </button>
     </div>
   )
