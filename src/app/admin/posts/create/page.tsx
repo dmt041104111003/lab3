@@ -8,7 +8,7 @@ import AdminCard from '@/components/admin/AdminCard'
 import AdminFormField from '@/components/admin/AdminFormField'
 import AdminInput from '@/components/admin/AdminInput'
 import AdminTextarea from '@/components/admin/AdminTextarea'
-import TiptapEditor from '@/components/TiptapEditor'
+import { TipTapEditor } from '@/components/tiptap-editor'
 import AdminSelect from '@/components/admin/AdminSelect'
 import AdminCheckbox from '@/components/admin/AdminCheckbox'
 import AdminButton from '@/components/admin/AdminButton'
@@ -308,11 +308,10 @@ export default function CreatePost() {
           />
 
           <AdminFormField label="Nội dung bài viết" required>
-            <TiptapEditor
+            <TipTapEditor
               content={formData.content}
               onChange={(content) => setFormData(prev => ({ ...prev, content }))}
               placeholder="Viết nội dung bài viết..."
-              className="min-h-[400px]"
             />
           </AdminFormField>
 

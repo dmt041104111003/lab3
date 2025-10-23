@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import LoadingState from '@/components/LoadingState'
-import TiptapPreview from '@/components/TiptapPreview'
+import { TipTapPreview } from '@/components/tiptap-preview'
 import CommentSection from '@/components/CommentSection'
 import ShareButtons from '@/components/ShareButtons'
 import RelatedPosts from '@/components/RelatedPosts'
@@ -70,7 +70,7 @@ export default function PostDetailPage() {
           setError('Bài viết không thuộc tiểu mục này')
         }
       } else {
-        setError('Không tìm thấy bài viết')
+        setError(data.error || 'Không tìm thấy bài viết')
       }
     } catch (error) {
       setError('Có lỗi xảy ra khi tải bài viết')
@@ -168,7 +168,7 @@ export default function PostDetailPage() {
               </div>
             )}
             
-            <TiptapPreview 
+            <TipTapPreview 
               content={post.content}
               className=""
             />

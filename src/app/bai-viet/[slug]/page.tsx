@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import LoadingState from '@/components/LoadingState'
-import TiptapPreview from '@/components/TiptapPreview'
+import { TipTapPreview } from '@/components/tiptap-preview'
 import CommentSection from '@/components/CommentSection'
 import ShareButtons from '@/components/ShareButtons'
 import RelatedPosts from '@/components/RelatedPosts'
@@ -53,12 +53,12 @@ export default function PostDetail() {
   const fetchPost = useCallback(async () => {
     try {
       const response = await fetch(`/api/posts/slug/${slug}`)
+      const data = await response.json()
+      
       if (response.ok) {
-        const data = await response.json()
         setPost(data)
-        
       } else {
-        setError('Không tìm thấy bài viết')
+        setError(data.error || 'Không tìm thấy bài viết')
       }
     } catch (error) {
       setError('Có lỗi xảy ra khi tải bài viết')
@@ -175,7 +175,7 @@ export default function PostDetail() {
 
           {/* Post Content */}
           <div className="px-6 py-8">
-            <TiptapPreview 
+            <TipTapPreview 
               content={post.content}
               className=""
             />
