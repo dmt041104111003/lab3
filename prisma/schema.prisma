@@ -23,6 +23,7 @@ model User {
   comments Comment[]
   replies Reply[]
   mentionedReplies Reply[] @relation("MentionedUser")
+  passwordResets PasswordReset[]
 }
 
 model Post {
@@ -131,6 +132,18 @@ model Reply {
   mentionedUser  User?   @relation("MentionedUser", fields: [mentionedUserId], references: [id])
 
   @@map("replies")
+}
+
+model PasswordReset {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_resets")
 }
 
 enum Role {

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendPasswordResetEmail } from '@/lib/email'
+import crypto from 'crypto'
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,6 +24,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ 
         message: 'Nếu email tồn tại, bạn sẽ nhận được link đặt lại mật khẩu' 
       }, { status: 200 })
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex')
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000) 
+
+    await prisma.passwordReset.deleteMany({
+      where: { userId: user.id }
+    })
+
+    await prisma.passwordReset.create({
+      data: {
+        token: resetToken,
+        expiresAt,
+        userId: user.id
+      }
+    })
+
+    const emailSent = await sendPasswordResetEmail(email, resetToken)
+    
+    if (!emailSent) {
+      return NextResponse.json({ 
+        error: 'Không thể gửi email. Vui lòng thử lại sau.' 
+      }, { status: 500 })
     }
 
     return NextResponse.json({ 
