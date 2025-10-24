@@ -11,6 +11,7 @@ import CommentSection from '@/components/CommentSection'
 import ShareButtons from '@/components/ShareButtons'
 import RelatedPosts from '@/components/RelatedPosts'
 import CategoryBreadcrumb from '@/components/CategoryBreadcrumb'
+import SocialMeta from '@/components/SocialMeta'
 import { CATEGORIES, getCategoryById } from '@/lib/categories'
 
 interface Post {
@@ -127,6 +128,18 @@ export default function PostDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SocialMeta
+        title={post.title}
+        description={post.excerpt}
+        image={post.images && post.images.length > 0 ? post.images[0].image.path : undefined}
+        url={typeof window !== 'undefined' ? window.location.href : ''}
+        type="article"
+        publishedTime={post.createdAt}
+        modifiedTime={post.createdAt}
+        author={post.author.name}
+        section="Tin tức"
+        tags={post.tags?.map(tag => tag.name) || []}
+      />
       <Header />
       
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -206,6 +219,7 @@ export default function PostDetailPage() {
           <ShareButtons 
             url={typeof window !== 'undefined' ? window.location.href : ''} 
             title={post.title}
+            description={post.excerpt}
           />
         </div>
 

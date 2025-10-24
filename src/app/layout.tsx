@@ -11,7 +11,7 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <head>
-         <link rel="icon" href="/logo.png" />
+         <link rel="icon" href="/footer.png" />
  
       </head>
       <body className={inter.className}>
