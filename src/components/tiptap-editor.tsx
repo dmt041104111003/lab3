@@ -1,7 +1,6 @@
 "use client";
 
 import { useEditor, EditorContent } from '@tiptap/react';
-import { useCallback, useRef } from 'react';
 import StarterKit from '@tiptap/starter-kit';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { Link } from '@tiptap/extension-link';

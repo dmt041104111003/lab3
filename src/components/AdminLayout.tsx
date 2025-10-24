@@ -126,6 +126,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               <span className="text-sm text-gray-600">
                 Xin chào, <span className="font-medium">{user?.name}</span>
               </span>
+              <Link
+                href="/auth/change-password"
+                className="text-gray-600 hover:text-gray-900 text-sm"
+              >
+                Đổi mật khẩu
+              </Link>
               <button
                 onClick={handleSignOut}
                 className="text-gray-600 hover:text-gray-900 text-sm"
@@ -156,6 +162,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <span className="text-xs sm:text-sm text-gray-600 truncate max-w-32 sm:max-w-none">
               Xin chào, <span className="font-medium">{user?.name}</span>
             </span>
+            <Link
+              href="/auth/change-password"
+              className="text-gray-600 hover:text-gray-900 text-xs sm:text-sm px-2 py-1 rounded hover:bg-gray-100"
+            >
+              Đổi mật khẩu
+            </Link>
             <button
               onClick={handleSignOut}
               className="text-gray-600 hover:text-gray-900 text-xs sm:text-sm px-2 py-1 rounded hover:bg-gray-100"

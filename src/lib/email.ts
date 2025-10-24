@@ -24,22 +24,16 @@ export const sendPasswordResetEmail = async (email: string, resetToken: string) 
       }
     ],
     html: `
-      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
         <!-- Header với logo -->
-        <div style="text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);">
-          <img src="cid:logo" alt="TechNova" style="height: 60px; width: auto; margin-bottom: 10px;">
-          <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600;">TechNova</h1>
-          <p style="color: #e0e7ff; margin: 5px 0 0 0; font-size: 14px;">Công nghệ & Đời sống</p>
+        <div style="text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);">
+          <img src="cid:logo" alt="TechNova" style="height: 60px; width: auto; margin-bottom: 15px;">
+       
         </div>
         
         <!-- Main content -->
         <div style="padding: 40px 30px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <div style="background-color: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 50%; width: 80px; height: 80px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
-              <svg style="width: 40px; height: 40px; color: #0ea5e9;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-              </svg>
-            </div>
             <h2 style="color: #1f2937; margin: 0 0 15px 0; font-size: 28px; font-weight: 700;">Đặt lại mật khẩu</h2>
             <p style="color: #6b7280; font-size: 16px; line-height: 1.6; margin: 0;">
               Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn.
@@ -49,7 +43,7 @@ export const sendPasswordResetEmail = async (email: string, resetToken: string) 
           <!-- Reset button -->
           <div style="text-align: center; margin: 40px 0;">
             <a href="${resetUrl}" 
-               style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.3); transition: all 0.3s ease;">
+               style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.3); transition: all 0.3s ease;">
               Đặt lại mật khẩu
             </a>
           </div>
@@ -95,7 +89,6 @@ export const sendPasswordResetEmail = async (email: string, resetToken: string) 
     await transporter.sendMail(mailOptions)
     return true
   } catch (error) {
-    console.error('Email sending error:', error)
     return false
   }
 }
