@@ -10,6 +10,7 @@ export default function Header() {
   const pathname = usePathname()
   const [user, setUser] = useState<User | null>(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isAdminUser, setIsAdminUser] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
@@ -92,6 +93,7 @@ export default function Header() {
     if (session) {
       setUser(session)
       setIsLoggedIn(true)
+      setIsAdminUser(session.role === 'ADMIN')
     }
 
     const handleStorage = (e: StorageEvent) => {
@@ -99,12 +101,14 @@ export default function Header() {
         const s = getSession()
         setUser(s)
         setIsLoggedIn(!!s)
+        setIsAdminUser(s?.role === 'ADMIN')
       }
     }
     const handleSessionUpdate = () => {
       const s = getSession()
       setUser(s)
       setIsLoggedIn(!!s)
+      setIsAdminUser(s?.role === 'ADMIN')
     }
     window.addEventListener('storage', handleStorage)
     window.addEventListener('session:update', handleSessionUpdate as EventListener)
@@ -449,11 +453,24 @@ export default function Header() {
                             Chỉnh sửa tên
                           </button>
                         )}
-                        {isAdmin() && (
+                        <Link
+                          href="/auth/change-password"
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setIsProfileMenuOpen(false)
+                          }}
+                        >
+                          Đổi mật khẩu
+                        </Link>
+                        {isAdminUser && (
                           <Link
                             href="/admin"
                             className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            onClick={() => setIsProfileMenuOpen(false)}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setIsProfileMenuOpen(false)
+                            }}
                           >
                             Đi tới Admin
                           </Link>

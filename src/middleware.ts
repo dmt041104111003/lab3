@@ -9,6 +9,10 @@ export function middleware(request: NextRequest) {
   }
 
   if (pathname.startsWith('/auth/')) {
+    if (pathname === '/auth/change-password') {
+      return NextResponse.next()
+    }
+    
     const userSession = request.cookies.get('user_session')?.value
     if (userSession) {
       try {
