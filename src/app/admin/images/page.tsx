@@ -34,6 +34,7 @@ export default function ImagesPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [altText, setAltText] = useState('')
   const [deletingImage, setDeletingImage] = useState<Image | null>(null)
+  const [selectedImage, setSelectedImage] = useState<Image | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
   const [toast, setToast] = useState('')
@@ -280,6 +281,50 @@ export default function ImagesPage() {
           </form>
         </AdminModal>
 
+        <AdminModal
+          isOpen={!!selectedImage}
+          title="Chi tiết hình ảnh"
+          onClose={() => setSelectedImage(null)}
+          size="md"
+        >
+          {selectedImage && (
+            <div className="space-y-4">
+              <div className="text-center">
+                <img
+                  src={selectedImage.path}
+                  alt={selectedImage.alt || selectedImage.originalName}
+                  className="max-w-full max-h-96 mx-auto rounded-lg shadow-lg"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.src = '/placeholder-image.png'
+                  }}
+                />
+              </div>
+              
+              <div className="space-y-3">
+                <div>
+                  <span className="font-medium text-gray-700">Tên file:</span>
+                  <p className="text-gray-900 break-all">{selectedImage.originalName}</p>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">URL:</span>
+                  <div className="flex items-center space-x-2">
+                    <p className="text-gray-900 text-sm truncate flex-1" title={selectedImage.path}>
+                      {selectedImage.path}
+                    </p>
+                    <button
+                      onClick={() => copyImageUrl(selectedImage.path)}
+                      className="text-xs bg-tech-blue text-white px-3 py-1 rounded hover:bg-tech-dark-blue flex-shrink-0"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </AdminModal>
+
         <AdminDeleteModal
           isOpen={!!deletingImage}
           title="Xác nhận xóa hình ảnh"
@@ -290,52 +335,93 @@ export default function ImagesPage() {
           onCancel={() => setDeletingImage(null)}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {paginatedImages.map((image) => (
-            <div key={image.id} className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="aspect-w-16 aspect-h-9">
-                <img
-                  src={image.path}
-                  alt={image.alt || image.originalName}
-                  className="w-full h-48 object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement
-                    target.src = '/placeholder-image.png'
-                  }}
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="text-sm font-medium text-gray-900 truncate">
-                  {image.originalName}
-                </h3>
-                <p className="text-xs text-gray-500 mt-1">
-                  {formatFileSize(image.size)} • {image.mimeType}
-                </p>
-                {image.alt && (
-                  <p className="text-xs text-gray-600 mt-1 truncate">
-                    Alt: {image.alt}
-                  </p>
-                )}
-                <p className="text-xs text-gray-400 mt-1">
-                  {new Date(image.createdAt).toLocaleDateString('vi-VN')}
-                </p>
-                <div className="mt-3 flex space-x-2">
-                  <button
-                    onClick={() => copyImageUrl(image.path)}
-                    className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200"
-                  >
-                    Copy URL
-                  </button>
-                  <button
-                    onClick={() => setDeletingImage(image)}
-                    className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200"
-                  >
-                    Xóa
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="bg-white shadow rounded-lg overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Hình ảnh
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Tên file
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Kích thước
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Alt text
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Ngày tạo
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Thao tác
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {paginatedImages.map((image) => (
+                  <tr key={image.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex-shrink-0 h-16 w-16">
+                        <img
+                          src={image.path}
+                          alt={image.alt || image.originalName}
+                          className="h-16 w-16 object-cover rounded-lg"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement
+                            target.src = '/placeholder-image.png'
+                          }}
+                        />
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900 truncate max-w-xs" title={image.originalName}>
+                        {image.originalName}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {image.mimeType}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {formatFileSize(image.size)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {image.alt ? (
+                        <span className="text-sm text-gray-900">{image.alt}</span>
+                      ) : (
+                        <span className="text-sm text-gray-400">Không có</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(image.createdAt).toLocaleDateString('vi-VN')}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                      <button
+                        onClick={() => setSelectedImage(image)}
+                        className="text-tech-blue hover:text-tech-dark-blue"
+                      >
+                        Xem chi tiết
+                      </button>
+                      <button
+                        onClick={() => copyImageUrl(image.path)}
+                        className="text-gray-600 hover:text-gray-900"
+                      >
+                        Copy URL
+                      </button>
+                      <button
+                        onClick={() => setDeletingImage(image)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        Xóa
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {filteredImages.length === 0 && (
