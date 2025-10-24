@@ -10,6 +10,8 @@ import { TipTapPreview } from '@/components/tiptap-preview'
 import CommentSection from '@/components/CommentSection'
 import ShareButtons from '@/components/ShareButtons'
 import RelatedPosts from '@/components/RelatedPosts'
+import CategoryBreadcrumb from '@/components/CategoryBreadcrumb'
+import { CATEGORIES, getCategoryById } from '@/lib/categories'
 
 interface Post {
   id: string
@@ -79,6 +81,24 @@ export default function PostDetailPage() {
     }
   }, [post, loading])
 
+  const getCategoryDisplayName = (categoryId: string) => {
+    const category = getCategoryById(categoryId)
+    return category?.name || categoryId
+  }
+
+  const getSubcategoryDisplayName = (subcategory: string) => {
+    const categoryData = CATEGORIES.find(cat => 
+      cat.subcategories.some(sub => sub.id === subcategory)
+    )
+    
+    if (categoryData) {
+      const subcategoryData = categoryData.subcategories.find(sub => sub.id === subcategory)
+      return subcategoryData?.name || subcategory
+    }
+    
+    return subcategory
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -110,17 +130,10 @@ export default function PostDetailPage() {
       <Header />
       
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <nav className="mb-6">
-          <Link 
-            href="/" 
-            className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 transition-colors"
-          >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Trang chủ
-          </Link>
-        </nav>
+        <CategoryBreadcrumb 
+          category="tin-tuc"
+          subcategory={subcategory as string}
+        />
 
         <article className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="p-8">
@@ -131,13 +144,19 @@ export default function PostDetailPage() {
               )}
               <div className="flex items-center text-sm text-gray-500 mb-4">
                 <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
+                {post.category && (
+                  <>
+                    <span className="mx-2">•</span>
+                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
+                      {getCategoryDisplayName(post.category)}
+                    </span>
+                  </>
+                )}
                 {post.subcategory && (
                   <>
                     <span className="mx-2">•</span>
                     <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">
-                      {post.subcategory === 'cong-nghe-viet-nam' ? 'Công nghệ Việt Nam' : 
-                       post.subcategory === 'cong-nghe-the-gioi' ? 'Công nghệ thế giới' : 
-                       post.subcategory}
+                      {getSubcategoryDisplayName(post.subcategory)}
                     </span>
                   </>
                 )}

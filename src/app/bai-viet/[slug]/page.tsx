@@ -10,6 +10,8 @@ import { TipTapPreview } from '@/components/tiptap-preview'
 import CommentSection from '@/components/CommentSection'
 import ShareButtons from '@/components/ShareButtons'
 import RelatedPosts from '@/components/RelatedPosts'
+import CategoryBreadcrumb from '@/components/CategoryBreadcrumb'
+import { CATEGORIES, getCategoryById } from '@/lib/categories'
 
 interface Post {
   id: string
@@ -81,6 +83,24 @@ export default function PostDetail() {
     })
   }
 
+  const getCategoryDisplayName = (categoryId: string) => {
+    const category = getCategoryById(categoryId)
+    return category?.name || categoryId
+  }
+
+  const getSubcategoryDisplayName = (subcategory: string) => {
+    const categoryData = CATEGORIES.find(cat => 
+      cat.subcategories.some(sub => sub.id === subcategory)
+    )
+    
+    if (categoryData) {
+      const subcategoryData = categoryData.subcategories.find(sub => sub.id === subcategory)
+      return subcategoryData?.name || subcategory
+    }
+    
+    return subcategory
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -119,24 +139,31 @@ export default function PostDetail() {
       <Header />
       
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <nav className="mb-6">
-          <Link 
-            href="/" 
-            className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 transition-colors"
-          >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Trang chủ
-          </Link>
-        </nav>
+        <CategoryBreadcrumb 
+          category={post.category}
+          subcategory={post.subcategory}
+        />
 
         <article className="bg-white shadow rounded-lg overflow-hidden">
           <div className="px-6 py-8 border-b border-gray-200">
             <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
-              <span className="capitalize">{post.category}</span>
-              <span>•</span>
               <span>{formatDate(post.createdAt)}</span>
+              {post.category && (
+                <>
+                  <span>•</span>
+                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
+                    {getCategoryDisplayName(post.category)}
+                  </span>
+                </>
+              )}
+              {post.subcategory && (
+                <>
+                  <span>•</span>
+                  <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">
+                    {getSubcategoryDisplayName(post.subcategory)}
+                  </span>
+                </>
+              )}
               <span>•</span>
               <span>Bởi {post.author.name}</span>
             </div>
