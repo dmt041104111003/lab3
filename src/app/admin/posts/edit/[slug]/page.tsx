@@ -91,9 +91,12 @@ export default function EditPost() {
         imagesRes.json()
       ])
 
-      setTags(tagsData)
-      setImages(imagesData)
+      setTags(Array.isArray(tagsData) ? tagsData : [])
+      setImages(Array.isArray(imagesData) ? imagesData : [])
     } catch (error) {
+      console.error('Error fetching data:', error)
+      setTags([])
+      setImages([])
     } finally {
       setLoadingData(false)
     }
@@ -521,7 +524,7 @@ export default function EditPost() {
                     title="Chọn hình ảnh từ thư viện"
                   >
                     <option value="">Chọn hình ảnh (tùy chọn)</option>
-                    {images.map((image) => (
+                    {Array.isArray(images) && images.map((image) => (
                       <option key={image.id} value={image.id}>
                         {image.originalName} {image.alt && `(${image.alt})`}
                       </option>
@@ -531,7 +534,7 @@ export default function EditPost() {
                 {formData.selectedImage && (
                   <div className="mt-2">
                     {(() => {
-                      const selectedImage = images.find(img => img.id === formData.selectedImage)
+                      const selectedImage = Array.isArray(images) ? images.find(img => img.id === formData.selectedImage) : null
                       return selectedImage ? (
                         <div className="flex items-center space-x-2">
                           <img

@@ -57,6 +57,7 @@ export function TooltipPopup({
         
         <div className="flex flex-col sm:flex-row gap-3">
           <button
+            type="button"
             onClick={onAddTooltip}
             disabled={!tooltipText.trim()}
             className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors"
@@ -64,6 +65,7 @@ export function TooltipPopup({
             Add Tooltip
           </button>
           <button
+            type="button"
             onClick={onRemoveTooltip}
             className="flex-1 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 text-sm font-medium transition-colors"
           >

@@ -126,6 +126,7 @@ export function TooltipButton({ editor }: TooltipButtonProps) {
   return (
     <div className="relative" data-tooltip-button>
       <button
+        type="button"
         onClick={handleButtonClick}
         disabled={isDisabled}
         className={`p-2 rounded transition-colors border ${
