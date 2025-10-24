@@ -34,15 +34,15 @@ export default function AdminImageUpload({
         const formData = new FormData()
         formData.append('file', file)
 
-        const response = await fetch('/api/images', {
+        const response = await fetch('/api/upload', {
           method: 'POST',
           body: formData
         })
         
         if (response.ok) {
-          const uploadedImage = await response.json()
-          setUploadedUrl(uploadedImage.path)
-          onImageUploaded(uploadedImage.path)
+          const uploadResult = await response.json()
+          setUploadedUrl(uploadResult.url)
+          onImageUploaded(uploadResult.url)
           setSelectedFile(null)
           setPreviewUrl(null)
         } else {

@@ -14,6 +14,7 @@ import AdminCheckbox from '@/components/admin/AdminCheckbox'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminErrorAlert from '@/components/admin/AdminErrorAlert'
 import AdminLoadingState from '@/components/admin/AdminLoadingState'
+import AdminImageUpload from '@/components/admin/AdminImageUpload'
 import { CATEGORIES, type Category, type Subcategory } from '@/lib/categories'
 import { generateSlug } from '@/lib/slug'
 
@@ -274,15 +275,6 @@ export default function EditPost() {
     })
   }
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setFormData({
-        ...formData,
-        newImageFile: file
-      })
-    }
-  }
 
   if (isLoading) {
     return (
@@ -561,32 +553,13 @@ export default function EditPost() {
             )}
 
             {formData.imageType === 'upload' && (
-              <div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileSelect}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
-                  title="Chọn file ảnh để tải lên"
-                />
-                {formData.newImageFile && (
-                  <div className="mt-2">
-                    <div className="flex items-center space-x-2">
-                      <img
-                        src={URL.createObjectURL(formData.newImageFile)}
-                        alt="Preview"
-                        className="w-16 h-16 object-cover rounded border"
-                      />
-                      <div>
-                        <p className="text-sm font-medium">{formData.newImageFile.name}</p>
-                        <p className="text-xs text-gray-500">
-                          {(formData.newImageFile.size / 1024 / 1024).toFixed(2)} MB
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <AdminImageUpload
+                onImageUploaded={(url) => {
+                  setFormData(prev => ({ ...prev, imageUrl: url }))
+                }}
+                onError={setError}
+                disabled={isSaving}
+              />
             )}
 
             {formData.imageType === 'url' && (
