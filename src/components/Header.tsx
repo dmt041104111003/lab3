@@ -347,8 +347,8 @@ export default function Header() {
               <Image
                 src="/footer.png"
                 alt="TechNova Logo"
-                width={120}
-                height={60}
+                width={220}
+                height={220}
                 className="mb-1"
               />
               {/* <div className="tech-slogan text-black">

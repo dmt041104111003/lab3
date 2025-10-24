@@ -146,48 +146,83 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
             {posts.length > 0 && (
               <div className="space-y-6">
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                  {posts[0].images?.[0]?.image?.path && (
-                    <div className="aspect-w-16 aspect-h-9">
-                      <img
-                        src={posts[0].images[0].image.path}
-                        alt={posts[0].images[0].image.alt || posts[0].title}
-                        className="w-full h-64 object-cover"
-                      />
-                    </div>
-                  )}
-                  <div className="p-6">
-                    <div className="flex items-center text-sm text-gray-500 mb-4">
-                      <span className="capitalize">{posts[0].subcategory}</span>
-                      <span className="mx-2">•</span>
-                      <span>{new Date(posts[0].createdAt).toLocaleDateString('vi-VN')}</span>
-                      <span className="mx-2">•</span>
-                      <span>Bởi {posts[0].author.name}</span>
-                    </div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                      <a href={`/${basePath}/${posts[0].subcategory}/${posts[0].slug}`} className="hover:text-blue-600">
-                        {posts[0].title}
-                      </a>
-                    </h1>
-                    {posts[0].excerpt && (
-                      <p className="text-lg text-gray-600 leading-relaxed">
-                        {posts[0].excerpt}
-                      </p>
+                  <a href={`/${basePath}/${posts[0].subcategory}/${posts[0].slug}`} className="block">
+                    {posts[0].images?.[0]?.image?.path ? (
+                      <div className="relative h-80 overflow-hidden group">
+                        <img
+                          src={posts[0].images[0].image.path}
+                          alt={posts[0].images[0].image.alt || posts[0].title}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-80 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                        <div className="text-center">
+                          <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                          </svg>
+                          <span className="text-gray-500 text-lg">Sắp ra mắt</span>
+                        </div>
+                      </div>
                     )}
-                  </div>
+                    <div className="p-6">
+                      <div className="flex items-center text-sm text-gray-500 mb-4">
+                        <span className="capitalize">{posts[0].subcategory}</span>
+                        <span className="mx-2">•</span>
+                        <span>{new Date(posts[0].createdAt).toLocaleDateString('vi-VN')}</span>
+                        <span className="mx-2">•</span>
+                        <span>Bởi {posts[0].author.name}</span>
+                      </div>
+                      <h1 className="text-3xl font-bold text-gray-900 mb-4 hover:text-red-600 transition-colors">
+                        {posts[0].title}
+                      </h1>
+                      {posts[0].excerpt && (
+                        <p className="text-lg text-gray-600 leading-relaxed">
+                          {posts[0].excerpt}
+                        </p>
+                      )}
+                    </div>
+                  </a>
                 </div>
 
                 {posts.length > 1 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {posts.slice(1, 3).map((post) => (
-                      <ArticleCard
-                        key={post.id}
-                        title={post.title}
-                        href={`/${basePath}/${post.subcategory}/${post.slug}`}
-                        imageUrl={post.images?.[0]?.image?.path}
-                        imageAlt={post.images?.[0]?.image?.alt || post.title}
-                        excerpt={post.excerpt}
-                        layout="vertical"
-                      />
+                      <div key={post.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                        <a href={`/${basePath}/${post.subcategory}/${post.slug}`} className="block">
+                          {post.images?.[0]?.image?.path ? (
+                            <div className="relative h-48 overflow-hidden group">
+                              <img
+                                src={post.images[0].image.path}
+                                alt={post.images[0].image.alt || post.title}
+                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                              />
+                            </div>
+                          ) : (
+                            <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                              <div className="text-center">
+                                <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                                <span className="text-gray-500 text-sm">Sắp ra mắt</span>
+                              </div>
+                            </div>
+                          )}
+                          <div className="p-4">
+                            <div className="flex items-center text-xs text-gray-500 mb-2">
+                              <span className="capitalize">{post.subcategory}</span>
+                              <span className="mx-2">•</span>
+                              <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900 mb-2 leading-tight hover:text-red-600 transition-colors">
+                              {post.title}
+                            </h3>
+                            <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                              {post.excerpt || "Mô tả ngắn về bài viết..."}
+                            </p>
+                          </div>
+                        </a>
+                      </div>
                     ))}
                   </div>
                 )}

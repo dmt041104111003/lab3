@@ -176,11 +176,13 @@ export default function PostDetailPage() {
             
             {post.images && post.images.length > 0 && (
               <div className="mb-8">
-                <img 
-                  src={post.images[0].image.path} 
-                  alt={post.images[0].image.alt || post.title}
-                  className="w-full max-w-full h-auto border-radius rounded-lg mx-auto block shadow-md"
-                />
+                <div className="relative overflow-hidden rounded-lg shadow-md">
+                  <img 
+                    src={post.images[0].image.path} 
+                    alt={post.images[0].image.alt || post.title}
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
               </div>
             )}
             

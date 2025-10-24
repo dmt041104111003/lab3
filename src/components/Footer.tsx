@@ -26,8 +26,8 @@ export default function Footer() {
             <Image 
               src="/footer.png" 
               alt="TechNova Logo" 
-              width={200} 
-              height={80}
+              width={120} 
+              height={60}
               className="mb-2"
             />
             {/* <div className="text-sm text-gray-300 text-center">

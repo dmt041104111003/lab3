@@ -34,131 +34,227 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
       {variant === 'split' ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2">
-            <ArticleCard
-              title={mainArticle.title}
-              href={mainArticle.href}
-              isMain={true}
-              imageUrl={mainArticle.imageUrl}
-              imageAlt={mainArticle.imageAlt}
-              excerpt={mainArticle.excerpt}
-            />
+            <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+              <Link href={mainArticle.href} className="block">
+                {mainArticle.imageUrl ? (
+                  <div className="relative h-64 overflow-hidden group">
+                    <img 
+                      src={mainArticle.imageUrl} 
+                      alt={mainArticle.imageAlt || mainArticle.title}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                ) : (
+                  <div className="h-64 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                    <div className="text-center">
+                      <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                      </svg>
+                      <span className="text-gray-500 text-lg">Sắp ra mắt</span>
+                    </div>
+                  </div>
+                )}
+                <div className="p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-3 leading-tight hover:text-red-600 transition-colors">
+                    {mainArticle.title}
+                  </h2>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {mainArticle.excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
+                  </p>
+                </div>
+              </Link>
+            </div>
           </div>
           <div className="space-y-4">
             {subArticles.map((article, index) => (
-              <ArticleCard
-                key={index}
-                title={article.title}
-                href={article.href}
-                imageUrl={article.imageUrl}
-                imageAlt={article.imageAlt}
-                excerpt={article.excerpt}
-                layout='horizontal'
-              />
+              <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                <Link href={article.href} className="block">
+                  <div className="flex">
+                    <div className="flex-shrink-0 w-32 h-24">
+                      {article.imageUrl ? (
+                        <img 
+                          src={article.imageUrl} 
+                          alt={article.imageAlt || article.title}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                          <div className="text-center">
+                            <svg className="w-6 h-6 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                            <span className="text-gray-500 text-xs">Sắp ra mắt</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 p-3">
+                      <h4 className="text-gray-800 text-sm font-bold mb-2 line-clamp-2 hover:text-red-600 transition-colors">{article.title}</h4>
+                      {article.excerpt && (
+                        <p className="text-gray-600 text-xs line-clamp-2 mb-2">{article.excerpt}</p>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              </div>
             ))}
           </div>
         </div>
       ) : variant === 'list' ? (
         <div className="space-y-4">
-          <ArticleCard
-            title={mainArticle.title}
-            href={mainArticle.href}
-            imageUrl={mainArticle.imageUrl}
-            imageAlt={mainArticle.imageAlt}
-            excerpt={mainArticle.excerpt}
-            timestamp={mainArticle.timestamp}
-            category={mainArticle.category}
-            layout='list'
-          />
+          <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+            <Link href={mainArticle.href} className="block">
+              <div className="flex p-4">
+                <div className="flex-shrink-0 w-24 h-24">
+                  {mainArticle.imageUrl ? (
+                    <img 
+                      src={mainArticle.imageUrl} 
+                      alt={mainArticle.imageAlt || mainArticle.title}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
+                      <div className="text-center">
+                        <svg className="w-8 h-8 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                        <span className="text-gray-500 text-xs">Sắp ra mắt</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 ml-4">
+                  {mainArticle.category && (
+                    <div className="text-xs text-blue-600 font-medium mb-1">{mainArticle.category}</div>
+                  )}
+                  <h2 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2 hover:text-red-600 transition-colors">{mainArticle.title}</h2>
+                  {mainArticle.excerpt && (
+                    <p className="text-gray-600 text-sm line-clamp-3 mb-2">{mainArticle.excerpt}</p>
+                  )}
+                  {mainArticle.timestamp && (
+                    <div className="text-gray-400 text-xs">{mainArticle.timestamp}</div>
+                  )}
+                </div>
+              </div>
+            </Link>
+          </div>
           
           {subArticles.map((article, index) => (
-            <ArticleCard
-              key={index}
-              title={article.title}
-              href={article.href}
-              imageUrl={article.imageUrl}
-              imageAlt={article.imageAlt}
-              excerpt={article.excerpt}
-              timestamp={article.timestamp}
-              category={article.category}
-              layout='list'
-            />
+            <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+              <Link href={article.href} className="block">
+                <div className="flex p-4">
+                  <div className="flex-shrink-0 w-20 h-20">
+                    {article.imageUrl ? (
+                      <img 
+                        src={article.imageUrl} 
+                        alt={article.imageAlt || article.title}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
+                        <div className="text-center">
+                          <svg className="w-6 h-6 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                          </svg>
+                          <span className="text-gray-500 text-xs">Sắp ra mắt</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 ml-4">
+                    {article.category && (
+                      <div className="text-xs text-blue-600 font-medium mb-1">{article.category}</div>
+                    )}
+                    <h4 className="text-gray-800 text-sm font-bold mb-2 line-clamp-2 hover:text-red-600 transition-colors">{article.title}</h4>
+                    {article.excerpt && (
+                      <p className="text-gray-600 text-xs line-clamp-3 mb-2">{article.excerpt}</p>
+                    )}
+                    {article.timestamp && (
+                      <div className="text-gray-400 text-xs">{article.timestamp}</div>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            </div>
           ))}
         </div>
       ) : (
         <>
-          <Link href={mainArticle.href} className="block relative h-96 md:h-96 overflow-hidden border-b-4 border-red-600 mb-6 rounded-lg hover:opacity-95 transition-opacity">
-            {mainArticle.imageUrl ? (
-              <img 
-                src={mainArticle.imageUrl} 
-                alt={mainArticle.imageAlt || mainArticle.title}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                <div className="text-center">
-                  <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
-                  <span className="text-gray-500 text-lg">Sắp ra mắt</span>
-                </div>
-              </div>
-            )}
-            
-            <div className="hidden md:block absolute right-0 top-0 bottom-0 w-2/5 bg-white p-8 flex flex-col justify-center">
-              <h1 className="text-2xl font-bold text-gray-900 mb-4 leading-tight">
-                {mainArticle.title}
-              </h1>
-              <p className="text-gray-600 text-sm leading-relaxed mb-3">
-                {mainArticle.excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
-              </p>
-
-            </div>
-            
-            <div className="md:hidden absolute bottom-0 left-0 right-0 bg-white bg-opacity-95 p-4">
-              <h1 className="text-lg font-bold text-gray-900 mb-2 leading-tight">
-                {mainArticle.title}
-              </h1>
-              <p className="text-gray-600 text-sm leading-relaxed mb-2">
-                {mainArticle.excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
-              </p>
-              <p className="text-gray-500 text-xs">
-                2h trước
-              </p>
-            </div>
-          </Link>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {subArticles.map((article, index) => (
-              <Link key={index} href={article.href} className="block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
-                {article.imageUrl ? (
-                  <div className="relative h-32 overflow-hidden group rounded-t-lg">
-                    <img 
-                      src={article.imageUrl} 
-                      alt={article.imageAlt || article.title}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-               
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-b-4 border-red-600 mb-6 rounded-lg overflow-hidden">
+            {/* Ảnh full bên trái */}
+            <div className="relative h-64 md:h-96">
+              <Link href={mainArticle.href} className="block w-full h-full">
+                {mainArticle.imageUrl ? (
+                  <img 
+                    src={mainArticle.imageUrl} 
+                    alt={mainArticle.imageAlt || mainArticle.title}
+                    className="w-full h-full object-cover hover:opacity-95 transition-opacity"
+                  />
                 ) : (
-                  <div className="h-32 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center rounded-t-lg">
+                  <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                     <div className="text-center">
-                      <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                       </svg>
-                      <span className="text-gray-500 text-sm">Sắp ra mắt</span>
+                      <span className="text-gray-500 text-lg">Sắp ra mắt</span>
                     </div>
                   </div>
                 )}
-                
-                <div className="p-4">
-                  <h3 className="text-base font-semibold text-gray-900 mb-2 leading-tight line-clamp-2">
-                    {article.title}
-                  </h3>
-                  <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">
-                    {article.excerpt || "Mô tả ngắn..."}
-                  </p>
-                </div>
               </Link>
+            </div>
+            
+            {/* Nội dung bên phải */}
+            <div className="bg-white p-6 md:p-8 flex flex-col justify-center">
+              <Link href={mainArticle.href} className="block">
+                <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 leading-tight hover:text-red-600 transition-colors">
+                  {mainArticle.title}
+                </h1>
+                <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-3">
+                  {mainArticle.excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
+                </p>
+       
+              </Link>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            {subArticles.map((article, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                <Link href={article.href} className="block">
+                  {article.imageUrl ? (
+                    <div className="relative h-40 overflow-hidden group">
+                      <img 
+                        src={article.imageUrl} 
+                        alt={article.imageAlt || article.title}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-40 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                      <div className="text-center">
+                        <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                        <span className="text-gray-500 text-sm">Sắp ra mắt</span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="p-4">
+                    <h3 className="text-base font-semibold text-gray-900 mb-2 leading-tight line-clamp-2 hover:text-red-600 transition-colors">
+                      {article.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                      {article.excerpt || "Mô tả ngắn..."}
+                    </p>
+                    <div className="mt-3 flex items-center text-gray-500 text-xs">
+                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                  </div>
+                </Link>
+              </div>
             ))}
           </div>
         </>
