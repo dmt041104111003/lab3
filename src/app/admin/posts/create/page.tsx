@@ -13,6 +13,7 @@ import AdminSelect from '@/components/admin/AdminSelect'
 import AdminCheckbox from '@/components/admin/AdminCheckbox'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminErrorAlert from '@/components/admin/AdminErrorAlert'
+import AdminImageUpload from '@/components/admin/AdminImageUpload'
 import { CATEGORIES, type Category, type Subcategory } from '@/lib/categories'
 import { generateSlug } from '@/lib/slug'
 
@@ -135,17 +136,6 @@ export default function CreatePost() {
     }
 
     try {
-      let newImageFileBase64 = null
-      if (formData.imageType === 'upload' && formData.newImageFile) {
-        newImageFileBase64 = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader()
-          reader.onload = () => resolve(reader.result as string)
-          reader.onerror = reject
-          reader.readAsDataURL(formData.newImageFile!)
-        })
-      }
-
-
       const response = await fetch('/api/posts', {
         method: 'POST',
         headers: {
@@ -160,7 +150,6 @@ export default function CreatePost() {
           selectedImage: formData.selectedImage,
           imageType: formData.imageType,
           imageUrl: formData.imageUrl,
-          newImageFile: newImageFileBase64,
           category: formData.category,
           subcategory: formData.subcategory,
           authorId: currentUser?.id || 'cmh10oekw0001x8rjt3cati7w'
@@ -460,32 +449,13 @@ export default function CreatePost() {
             )}
 
             {formData.imageType === 'upload' && (
-              <div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileSelect}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-tech-blue focus:border-tech-blue"
-                  aria-label="Tải lên hình ảnh mới"
-                />
-                {formData.newImageFile && (
-                  <div className="mt-2">
-                    <div className="flex items-center space-x-2">
-                      <img
-                        src={URL.createObjectURL(formData.newImageFile)}
-                        alt="Preview"
-                        className="w-16 h-16 object-cover rounded border"
-                      />
-                      <div>
-                        <p className="text-sm font-medium">{formData.newImageFile.name}</p>
-                        <p className="text-xs text-gray-500">
-                          {(formData.newImageFile.size / 1024 / 1024).toFixed(2)} MB
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <AdminImageUpload
+                onImageUploaded={(url) => {
+                  setFormData(prev => ({ ...prev, imageUrl: url }))
+                }}
+                onError={setError}
+                disabled={isLoading}
+              />
             )}
 
             {formData.imageType === 'url' && (

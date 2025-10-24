@@ -170,7 +170,6 @@ export default function Home() {
       imageUrl: innovationPosts[0].images?.[0]?.image?.path || innovationPosts[0].imageUrl,
       imageAlt: innovationPosts[0].images?.[0]?.image?.alt || innovationPosts[0].title,
       excerpt: innovationPosts[0].excerpt,
-      timestamp: "18 giờ trước",
       category: "Đổi mới sáng tạo"
     } : {
       title: "Chưa có bài viết nào",
@@ -185,7 +184,6 @@ export default function Home() {
           imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
           imageAlt: post.images?.[0]?.image?.alt || post.title,
           excerpt: post.excerpt,
-          timestamp: "19 giờ trước",
           category: "Mobile"
         }
       } else {
@@ -195,7 +193,6 @@ export default function Home() {
           imageUrl: undefined,
           imageAlt: "Bài viết sắp ra mắt",
           excerpt: "Nội dung thú vị đang được chuẩn bị...",
-          timestamp: "20 giờ trước",
           category: "Đồ chơi số"
         }
       }
@@ -210,7 +207,6 @@ export default function Home() {
       imageUrl: productPosts[0].images?.[0]?.image?.path || productPosts[0].imageUrl,
       imageAlt: productPosts[0].images?.[0]?.image?.alt || productPosts[0].title,
       excerpt: productPosts[0].excerpt,
-      timestamp: "18 giờ trước",
       category: "Sản phẩm"
     } : {
       title: "Chưa có bài viết nào",
@@ -225,7 +221,6 @@ export default function Home() {
           imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
           imageAlt: post.images?.[0]?.image?.alt || post.title,
           excerpt: post.excerpt,
-          timestamp: "19 giờ trước",
           category: "Mobile"
         }
       } else {
@@ -235,7 +230,6 @@ export default function Home() {
           imageUrl: undefined,
           imageAlt: "Bài viết sắp ra mắt",
           excerpt: "Nội dung thú vị đang được chuẩn bị...",
-          timestamp: "20 giờ trước",
           category: "Đồ chơi số"
         }
       }
@@ -250,7 +244,6 @@ export default function Home() {
       imageUrl: trendPosts[0].images?.[0]?.image?.path || trendPosts[0].imageUrl,
       imageAlt: trendPosts[0].images?.[0]?.image?.alt || trendPosts[0].title,
       excerpt: trendPosts[0].excerpt,
-      timestamp: "18 giờ trước",
       category: "Xu hướng"
     } : {
       title: "Chưa có bài viết nào",
@@ -265,7 +258,6 @@ export default function Home() {
           imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
           imageAlt: post.images?.[0]?.image?.alt || post.title,
           excerpt: post.excerpt,
-          timestamp: "19 giờ trước",
           category: "Mobile"
         }
       } else {
@@ -275,7 +267,6 @@ export default function Home() {
           imageUrl: undefined,
           imageAlt: "Bài viết sắp ra mắt",
           excerpt: "Nội dung thú vị đang được chuẩn bị...",
-          timestamp: "20 giờ trước",
           category: "Đồ chơi số"
         }
       }

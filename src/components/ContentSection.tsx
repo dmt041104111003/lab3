@@ -111,9 +111,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
               <p className="text-gray-600 text-sm leading-relaxed mb-3">
                 {mainArticle.excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
               </p>
-              <p className="text-gray-500 text-xs">
-                2h trước
-              </p>
+
             </div>
             
             <div className="md:hidden absolute bottom-0 left-0 right-0 bg-white bg-opacity-95 p-4">
@@ -139,9 +137,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                       alt={article.imageAlt || article.title}
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                    <div className="absolute bottom-3 left-3 bg-black bg-opacity-60 text-white w-8 h-8 rounded flex items-center justify-center text-sm">
-                      📷
-                    </div>
+               
                   </div>
                 ) : (
                   <div className="h-32 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center rounded-t-lg">
