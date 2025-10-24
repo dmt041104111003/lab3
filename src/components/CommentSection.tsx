@@ -26,6 +26,16 @@ export default function CommentSection() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalComments, setTotalComments] = useState(0)
   const [loadingMore, setLoadingMore] = useState(false)
+  
+  const getTotalCount = () => {
+    let totalReplies = 0
+    comments.forEach(comment => {
+      if (comment.replies && comment.replies.length > 0) {
+        totalReplies += comment.replies.length
+      }
+    })
+    return totalComments + totalReplies
+  }
   const [deletingComment, setDeletingComment] = useState<string | null>(null)
   const [deletingReply, setDeletingReply] = useState<string | null>(null)
   const [deleteModal, setDeleteModal] = useState<{
@@ -386,7 +396,7 @@ export default function CommentSection() {
     <>
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-2xl font-semibold text-gray-900">Ý kiến</h2>
+          <h2 className="text-2xl font-semibold text-gray-900">Ý kiến ({getTotalCount()})</h2>
         </div>
         
         <div className="p-6">

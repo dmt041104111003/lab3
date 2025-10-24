@@ -152,13 +152,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </div>
           </button>
           
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">
+          <div className="flex items-center space-x-2">
+            <span className="text-xs sm:text-sm text-gray-600 truncate max-w-32 sm:max-w-none">
               Xin chào, <span className="font-medium">{user?.name}</span>
             </span>
             <button
               onClick={handleSignOut}
-              className="text-gray-600 hover:text-gray-900 text-sm"
+              className="text-gray-600 hover:text-gray-900 text-xs sm:text-sm px-2 py-1 rounded hover:bg-gray-100"
             >
               Đăng xuất
             </button>
@@ -334,8 +334,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </div>
         )}
 
-        <main className="flex-1 p-6">
-          {children}
+        <main className="flex-1 p-4 lg:p-6">
+          <div className="max-w-7xl mx-auto">
+            {children}
+          </div>
         </main>
       </div>
     </div>

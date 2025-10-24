@@ -51,8 +51,8 @@ export default function AdminFilter({
   }
 
   return (
-    <div className={`bg-white p-4 rounded-lg shadow-sm border border-gray-200 ${className}`}>
-      <div className="flex flex-col sm:flex-row gap-4 items-center">
+    <div className={`bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200 ${className}`}>
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
         <div className="flex-1 w-full">
           <AdminInput
             name="search"
@@ -64,11 +64,12 @@ export default function AdminFilter({
           />
         </div>
         
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <AdminButton
             variant="secondary"
             size="sm"
             onClick={() => setIsExpanded(!isExpanded)}
+            className="flex-1 sm:flex-none"
           >
             Bộ lọc
           </AdminButton>
@@ -78,6 +79,7 @@ export default function AdminFilter({
             variant="secondary"
             size="sm"
             onClick={handleReset}
+            className="flex-1 sm:flex-none"
           >
             Reset
           </AdminButton>

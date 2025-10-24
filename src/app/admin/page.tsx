@@ -106,16 +106,16 @@ export default function AdminDashboard() {
         description="Tổng quan hệ thống quản trị"
       />
 
-      <div className="bg-white shadow rounded-lg p-6 mb-8">
-        <div className="flex justify-center items-center space-x-12">
+      <div className="bg-white shadow rounded-lg p-4 sm:p-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12">
           <div className="text-center">
-            <div className="text-3xl font-bold text-gray-800 mb-1">
+            <div className="text-2xl sm:text-3xl font-bold text-gray-800 mb-1">
               {stats.totalPosts}
             </div>
             <div className="text-sm text-gray-600">Tổng bài viết</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-gray-800 mb-1">
+            <div className="text-2xl sm:text-3xl font-bold text-gray-800 mb-1">
               {stats.totalUsers}
             </div>
             <div className="text-sm text-gray-600">Tổng người dùng</div>
@@ -144,28 +144,53 @@ export default function AdminDashboard() {
           ]}
           data={stats.recentPosts}
           renderRow={(post) => (
-            <tr key={post.id}>
-              <td className="px-6 py-4">
-                <div className="text-sm font-medium text-gray-900 truncate max-w-xs">
-                  {post.title}
+            <>
+              {/* Desktop Table Row */}
+              <tr key={post.id} className="hidden md:table-row">
+                <td className="px-6 py-4">
+                  <div className="text-sm font-medium text-gray-900 truncate max-w-xs">
+                    {post.title}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {post.author.name}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                    post.published 
+                      ? 'bg-green-100 text-green-800' 
+                      : 'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {post.published ? 'Đã xuất bản' : 'Bản nháp'}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {new Date(post.createdAt).toLocaleDateString('vi-VN')}
+                </td>
+              </tr>
+              
+              {/* Mobile Card */}
+              <div key={`mobile-${post.id}`} className="md:hidden">
+                <div className="space-y-2">
+                  <div className="flex justify-between items-start">
+                    <h3 className="text-sm font-medium text-gray-900 truncate flex-1 mr-2">
+                      {post.title}
+                    </h3>
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full flex-shrink-0 ${
+                      post.published 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {post.published ? 'Đã xuất bản' : 'Bản nháp'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs text-gray-500">
+                    <span>Tác giả: {post.author.name}</span>
+                    <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
+                  </div>
                 </div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {post.author.name}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                  post.published 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-yellow-100 text-yellow-800'
-                }`}>
-                  {post.published ? 'Đã xuất bản' : 'Bản nháp'}
-                </span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {new Date(post.createdAt).toLocaleDateString('vi-VN')}
-              </td>
-            </tr>
+              </div>
+            </>
           )}
           emptyMessage="Không có bài viết"
           emptyDescription="Chưa có bài viết nào trong hệ thống."
@@ -193,26 +218,49 @@ export default function AdminDashboard() {
           ]}
           data={stats.recentUsers}
           renderRow={(user) => (
-            <tr key={user.id}>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm font-medium text-gray-900">{user.name}</div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {user.email}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                  user.role === 'ADMIN' 
-                    ? 'bg-purple-100 text-purple-800' 
-                    : 'bg-blue-100 text-blue-800'
-                }`}>
-                  {user.role === 'ADMIN' ? 'Quản trị' : 'Người dùng'}
-                </span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {new Date(user.createdAt).toLocaleDateString('vi-VN')}
-              </td>
-            </tr>
+            <>
+              {/* Desktop Table Row */}
+              <tr key={user.id} className="hidden md:table-row">
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {user.email}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                    user.role === 'ADMIN' 
+                      ? 'bg-purple-100 text-purple-800' 
+                      : 'bg-blue-100 text-blue-800'
+                  }`}>
+                    {user.role === 'ADMIN' ? 'Quản trị' : 'Người dùng'}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {new Date(user.createdAt).toLocaleDateString('vi-VN')}
+                </td>
+              </tr>
+              
+              {/* Mobile Card */}
+              <div key={`mobile-${user.id}`} className="md:hidden">
+                <div className="space-y-2">
+                  <div className="flex justify-between items-start">
+                    <h3 className="text-sm font-medium text-gray-900">{user.name}</h3>
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                      user.role === 'ADMIN' 
+                        ? 'bg-purple-100 text-purple-800' 
+                        : 'bg-blue-100 text-blue-800'
+                    }`}>
+                      {user.role === 'ADMIN' ? 'Quản trị' : 'Người dùng'}
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    <div>Email: {user.email}</div>
+                    <div>Ngày tạo: {new Date(user.createdAt).toLocaleDateString('vi-VN')}</div>
+                  </div>
+                </div>
+              </div>
+            </>
           )}
           emptyMessage="Không có người dùng"
           emptyDescription="Chưa có người dùng nào trong hệ thống."

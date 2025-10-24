@@ -227,72 +227,153 @@ export default function AdminUsers() {
           ]}
           data={paginatedUsers}
           renderRow={(user) => (
-            <tr key={user.id}>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0 h-10 w-10">
+            <>
+              {/* Desktop Table Row */}
+              <tr key={user.id} className="hidden md:table-row">
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0 h-10 w-10">
+                      <div className="h-10 w-10 rounded-full bg-tech-blue flex items-center justify-center">
+                        <span className="text-sm font-medium text-white">
+                          {user.name.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="ml-4">
+                      <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                      <div className="text-sm text-gray-500">ID: {user.id.slice(-8)}</div>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <button
+                    onClick={() => copyEmail(user.email)}
+                    className="text-sm text-gray-900 hover:text-tech-blue cursor-pointer max-w-32 truncate"
+                    title={user.email}
+                  >
+                    {user.email}
+                  </button>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                    user.role === 'ADMIN' 
+                      ? 'bg-purple-100 text-purple-800' 
+                      : 'bg-green-100 text-green-800'
+                  }`}>
+                    {user.role === 'ADMIN' ? 'Quản trị viên' : 'Người dùng'}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {user.isBanned ? (
+                    <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                      {user.bannedUntil ? 'Bị cấm tạm thời' : 'Bị cấm vĩnh viễn'}
+                    </span>
+                  ) : (
+                    <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                      Hoạt động
+                    </span>
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {user._count.posts} bài viết
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {formatDate(user.createdAt)}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <a
+                    href={`/admin/users/edit/${user.id}`}
+                    className="text-tech-blue hover:text-tech-dark-blue mr-4"
+                  >
+                    Chỉnh sửa
+                  </a>
+                  <button 
+                    onClick={() => handleDeleteClick(user)}
+                    className="text-red-600 hover:text-red-900"
+                  >
+                    Xóa
+                  </button>
+                </td>
+              </tr>
+              
+              {/* Mobile Card */}
+              <div key={`mobile-${user.id}`} className="md:hidden">
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-3">
                     <div className="h-10 w-10 rounded-full bg-tech-blue flex items-center justify-center">
                       <span className="text-sm font-medium text-white">
                         {user.name.charAt(0).toUpperCase()}
                       </span>
                     </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium text-gray-900 truncate">{user.name}</div>
+                      <div className="text-xs text-gray-500">ID: {user.id.slice(-8)}</div>
+                    </div>
+                    <div className="flex space-x-2">
+                      <a
+                        href={`/admin/users/edit/${user.id}`}
+                        className="text-tech-blue hover:text-tech-dark-blue text-xs"
+                      >
+                        Chỉnh sửa
+                      </a>
+                      <button 
+                        onClick={() => handleDeleteClick(user)}
+                        className="text-red-600 hover:text-red-900 text-xs"
+                      >
+                        Xóa
+                      </button>
+                    </div>
                   </div>
-                  <div className="ml-4">
-                    <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                    <div className="text-sm text-gray-500">ID: {user.id.slice(-8)}</div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-500">Email:</span>
+                      <button
+                        onClick={() => copyEmail(user.email)}
+                        className="text-xs text-gray-900 hover:text-tech-blue truncate max-w-32"
+                        title={user.email}
+                      >
+                        {user.email}
+                      </button>
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-500">Vai trò:</span>
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        user.role === 'ADMIN' 
+                          ? 'bg-purple-100 text-purple-800' 
+                          : 'bg-green-100 text-green-800'
+                      }`}>
+                        {user.role === 'ADMIN' ? 'Quản trị viên' : 'Người dùng'}
+                      </span>
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-500">Trạng thái:</span>
+                      {user.isBanned ? (
+                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                          {user.bannedUntil ? 'Bị cấm tạm thời' : 'Bị cấm vĩnh viễn'}
+                        </span>
+                      ) : (
+                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                          Hoạt động
+                        </span>
+                      )}
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-500">Bài viết:</span>
+                      <span className="text-xs text-gray-900">{user._count.posts} bài viết</span>
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-500">Ngày tạo:</span>
+                      <span className="text-xs text-gray-900">{formatDate(user.createdAt)}</span>
+                    </div>
                   </div>
                 </div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <button
-                  onClick={() => copyEmail(user.email)}
-                  className="text-sm text-gray-900 hover:text-tech-blue cursor-pointer max-w-32 truncate"
-                  title={user.email}
-                >
-                  {user.email}
-                </button>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                  user.role === 'ADMIN' 
-                    ? 'bg-purple-100 text-purple-800' 
-                    : 'bg-green-100 text-green-800'
-                }`}>
-                  {user.role === 'ADMIN' ? 'Quản trị viên' : 'Người dùng'}
-                </span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {user.isBanned ? (
-                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
-                    {user.bannedUntil ? 'Bị cấm tạm thời' : 'Bị cấm vĩnh viễn'}
-                  </span>
-                ) : (
-                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                    Hoạt động
-                  </span>
-                )}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {user._count.posts} bài viết
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {formatDate(user.createdAt)}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <a
-                  href={`/admin/users/edit/${user.id}`}
-                  className="text-tech-blue hover:text-tech-dark-blue mr-4"
-                >
-                  Chỉnh sửa
-                </a>
-                <button 
-                  onClick={() => handleDeleteClick(user)}
-                  className="text-red-600 hover:text-red-900"
-                >
-                  Xóa
-                </button>
-              </td>
-            </tr>
+              </div>
+            </>
           )}
           emptyMessage="Không có người dùng"
           emptyDescription="Chưa có người dùng nào trong hệ thống."
