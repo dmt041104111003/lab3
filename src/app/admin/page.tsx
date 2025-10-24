@@ -107,18 +107,18 @@ export default function AdminDashboard() {
       />
 
       <div className="bg-white shadow rounded-lg p-4 sm:p-6 mb-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12">
+        <div className="grid grid-cols-2 gap-4 sm:gap-12">
           <div className="text-center">
             <div className="text-2xl sm:text-3xl font-bold text-gray-800 mb-1">
               {stats.totalPosts}
             </div>
-            <div className="text-sm text-gray-600">Tổng bài viết</div>
+            <div className="text-xs sm:text-sm text-gray-600">Tổng bài viết</div>
           </div>
           <div className="text-center">
             <div className="text-2xl sm:text-3xl font-bold text-gray-800 mb-1">
               {stats.totalUsers}
             </div>
-            <div className="text-sm text-gray-600">Tổng người dùng</div>
+            <div className="text-xs sm:text-sm text-gray-600">Tổng người dùng</div>
           </div>
         </div>
       </div>
@@ -171,9 +171,9 @@ export default function AdminDashboard() {
               
               {/* Mobile Card */}
               <div key={`mobile-${post.id}`} className="md:hidden">
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <div className="flex justify-between items-start">
-                    <h3 className="text-sm font-medium text-gray-900 truncate flex-1 mr-2">
+                    <h3 className="text-sm font-medium text-gray-900 flex-1 mr-2 leading-relaxed">
                       {post.title}
                     </h3>
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full flex-shrink-0 ${
@@ -184,9 +184,9 @@ export default function AdminDashboard() {
                       {post.published ? 'Đã xuất bản' : 'Bản nháp'}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center text-xs text-gray-500">
-                    <span>Tác giả: {post.author.name}</span>
-                    <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
+                  <div className="flex flex-col space-y-1 text-xs text-gray-500">
+                    <div>Tác giả: {post.author.name}</div>
+                    <div>Ngày tạo: {new Date(post.createdAt).toLocaleDateString('vi-VN')}</div>
                   </div>
                 </div>
               </div>

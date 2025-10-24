@@ -154,11 +154,11 @@ export default function AdminPosts() {
           <h2 className="text-lg font-medium text-gray-900">Danh sách bài viết</h2>
         </div>
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <div className="mb-6">
             <a
               href="/admin/posts/create"
-              className="bg-tech-blue text-white px-4 py-2 rounded-md hover:bg-tech-dark-blue transition-colors inline-block"
+              className="bg-tech-blue text-white px-4 py-2 rounded-md hover:bg-tech-dark-blue transition-colors inline-block w-full sm:w-auto text-center sm:text-left"
             >
               Thêm bài viết mới
             </a>
@@ -200,61 +200,134 @@ export default function AdminPosts() {
           ]}
           data={paginatedPosts}
           renderRow={(post) => (
-            <tr key={post.id}>
-              <td className="px-6 py-4">
-                <div className="text-sm font-medium text-gray-900 truncate max-w-xs" title={post.title}>
-                  {post.title}
+            <>
+              {/* Desktop Table Row */}
+              <tr key={post.id} className="hidden md:table-row">
+                <td className="px-6 py-4">
+                  <div className="text-sm font-medium text-gray-900 truncate max-w-xs" title={post.title}>
+                    {post.title}
+                  </div>
+                  {post.excerpt && (
+                    <div className="text-sm text-gray-500 mt-1 truncate max-w-xs" title={post.excerpt}>
+                      {post.excerpt}
+                    </div>
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                    post.published 
+                      ? 'bg-green-100 text-green-800' 
+                      : 'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {post.published ? 'Đã xuất bản' : 'Bản nháp'}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {post.category && post.subcategory ? (
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        {getCategoryById(post.category)?.name || post.category}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {getSubcategoryById(post.subcategory)?.name || post.subcategory}
+                      </div>
+                    </div>
+                  ) : (
+                    <span className="text-gray-400">Chưa phân loại</span>
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {post.author.name}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {new Date(post.createdAt).toLocaleDateString('vi-VN')}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                  <a
+                    href={`/admin/posts/edit/${post.slug}`}
+                    className="text-tech-blue hover:text-tech-dark-blue"
+                  >
+                    Sửa
+                  </a>
+                  <button
+                    onClick={() => handleDeleteClick(post)}
+                    className="text-red-600 hover:text-red-900"
+                  >
+                    Xóa
+                  </button>
+                </td>
+              </tr>
+              
+              {/* Mobile Card */}
+              <div key={`mobile-${post.id}`} className="md:hidden">
+                <div className="space-y-3">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1 min-w-0 mr-3">
+                      <h3 className="text-sm font-medium text-gray-900 leading-relaxed" title={post.title}>
+                        {post.title}
+                      </h3>
+                      {post.excerpt && (
+                        <p className="text-xs text-gray-500 mt-1 leading-relaxed" title={post.excerpt}>
+                          {post.excerpt}
+                        </p>
+                      )}
+                    </div>
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full flex-shrink-0 ${
+                      post.published 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {post.published ? 'Đã xuất bản' : 'Bản nháp'}
+                    </span>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-500">Chuyên mục:</span>
+                      <div className="text-xs text-gray-900 text-right">
+                        {post.category && post.subcategory ? (
+                          <div>
+                            <div className="font-medium">
+                              {getCategoryById(post.category)?.name || post.category}
+                            </div>
+                            <div className="text-gray-500">
+                              {getSubcategoryById(post.subcategory)?.name || post.subcategory}
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="text-gray-400">Chưa phân loại</span>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-500">Tác giả:</span>
+                      <span className="text-xs text-gray-900">{post.author.name}</span>
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-500">Ngày tạo:</span>
+                      <span className="text-xs text-gray-900">{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
+                    </div>
+                    
+                    <div className="flex justify-between items-center pt-2 border-t border-gray-100">
+                      <a
+                        href={`/admin/posts/edit/${post.slug}`}
+                        className="text-tech-blue hover:text-tech-dark-blue text-xs"
+                      >
+                        Sửa
+                      </a>
+                      <button
+                        onClick={() => handleDeleteClick(post)}
+                        className="text-red-600 hover:text-red-900 text-xs"
+                      >
+                        Xóa
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                {post.excerpt && (
-                  <div className="text-sm text-gray-500 mt-1 truncate max-w-xs" title={post.excerpt}>
-                    {post.excerpt}
-                  </div>
-                )}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                  post.published 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-yellow-100 text-yellow-800'
-                }`}>
-                  {post.published ? 'Đã xuất bản' : 'Bản nháp'}
-                </span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {post.category && post.subcategory ? (
-                  <div>
-                    <div className="font-medium text-gray-900">
-                      {getCategoryById(post.category)?.name || post.category}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {getSubcategoryById(post.subcategory)?.name || post.subcategory}
-                    </div>
-                  </div>
-                ) : (
-                  <span className="text-gray-400">Chưa phân loại</span>
-                )}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {post.author.name}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {new Date(post.createdAt).toLocaleDateString('vi-VN')}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                <a
-                  href={`/admin/posts/edit/${post.slug}`}
-                  className="text-tech-blue hover:text-tech-dark-blue"
-                >
-                  Sửa
-                </a>
-                <button
-                  onClick={() => handleDeleteClick(post)}
-                  className="text-red-600 hover:text-red-900"
-                >
-                  Xóa
-                </button>
-              </td>
-            </tr>
+              </div>
+            </>
           )}
           emptyMessage="Không có bài viết"
           emptyDescription="Chưa có bài viết nào trong hệ thống."
