@@ -34,6 +34,14 @@ export async function GET(request: NextRequest) {
             contains: searchTerm,
             mode: 'insensitive'
           }
+        },
+        {
+          author: {
+            name: {
+              contains: searchTerm,
+              mode: 'insensitive'
+            }
+          }
         }
       ]
     }
