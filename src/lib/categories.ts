@@ -81,6 +81,12 @@ export const CATEGORIES: Category[] = [
       { id: 'cong-nghe-xanh', name: 'Công nghệ xanh (GreenTech)', slug: 'cong-nghe-xanh', parentId: 'xu-huong-tuong-lai' },
       { id: 'metaverse', name: 'Metaverse', slug: 'metaverse', parentId: 'xu-huong-tuong-lai' }
     ]
+  },
+  {
+    id: 'ban-doc',
+    name: 'Bạn đọc',
+    slug: 'ban-doc',
+    subcategories: []
   }
 ]
 

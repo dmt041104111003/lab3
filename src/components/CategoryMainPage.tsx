@@ -50,7 +50,18 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
       const subcategories = category?.subcategories || []
       
       if (subcategories.length === 0) {
-        setPosts([])
+        if (categoryId === 'ban-doc') {
+          const response = await fetch(`/api/posts/category/${categoryId}`)
+          const data = await response.json()
+          
+          if (response.ok) {
+            setPosts(data)
+          } else {
+            setError(data.error || 'Không thể tải bài viết')
+          }
+        } else {
+          setPosts([])
+        }
         setLoading(false)
         return
       }
@@ -99,7 +110,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
     title: title.toUpperCase(),
     mainArticle: posts.length > 0 ? {
       title: posts[0].title,
-      href: `/${basePath}/${posts[0].subcategory}/${posts[0].slug}`,
+      href: categoryId === 'ban-doc' ? `/ban-doc/${posts[0].slug}` : `/${basePath}/${posts[0].subcategory}/${posts[0].slug}`,
       imageUrl: posts[0].images?.[0]?.image?.path,
       imageAlt: posts[0].images?.[0]?.image?.alt || posts[0].title,
       excerpt: posts[0].excerpt
@@ -146,7 +157,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
             {posts.length > 0 && (
               <div className="space-y-6">
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                  <a href={`/${basePath}/${posts[0].subcategory}/${posts[0].slug}`} className="block">
+                  <a href={categoryId === 'ban-doc' ? `/ban-doc/${posts[0].slug}` : `/${basePath}/${posts[0].subcategory}/${posts[0].slug}`} className="block">
                     {posts[0].images?.[0]?.image?.path ? (
                       <div className="relative h-80 overflow-hidden group">
                         <img
@@ -189,7 +200,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {posts.slice(1, 3).map((post) => (
                       <div key={post.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
-                        <a href={`/${basePath}/${post.subcategory}/${post.slug}`} className="block">
+                        <a href={categoryId === 'ban-doc' ? `/ban-doc/${post.slug}` : `/${basePath}/${post.subcategory}/${post.slug}`} className="block">
                           {post.images?.[0]?.image?.path ? (
                             <div className="relative h-48 overflow-hidden group">
                               <img

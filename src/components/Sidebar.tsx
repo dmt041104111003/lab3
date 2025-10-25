@@ -59,7 +59,7 @@ interface SidebarProps {
 export default function Sidebar({ quickNews = [], techToday = [], mostRead = [], subcategories = [], basePath = '', title = '', subcategoryCounts = {}, subcategoryPosts = {} }: SidebarProps) {
   const mostReadItems = mostRead.length > 0 ? mostRead.slice(0, 3).map(post => ({
     title: post.title,
-    href: `/tin-tuc/${post.subcategory || 'cong-nghe-viet-nam'}/${post.slug}`
+    href: `/bai-viet/${post.slug}`
   })) : [
     { title: "Bài viết sắp ra mắt", href: "#" },
     { title: "Bài viết sắp ra mắt", href: "#" },

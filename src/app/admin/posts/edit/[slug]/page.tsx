@@ -166,7 +166,8 @@ export default function EditPost() {
       return
     }
 
-    if (!formData.subcategory) {
+    const selectedCategory = CATEGORIES.find(cat => cat.id === formData.category)
+    if (selectedCategory && selectedCategory.subcategories.length > 0 && !formData.subcategory) {
       setError('Vui lòng chọn tiểu mục')
       setIsSaving(false)
       return
@@ -428,7 +429,10 @@ export default function EditPost() {
             />
           </AdminFormField>
 
-          {formData.category && (
+          {formData.category && (() => {
+            const selectedCategory = CATEGORIES.find(cat => cat.id === formData.category)
+            return selectedCategory && selectedCategory.subcategories.length > 0
+          })() && (
             <AdminFormField label="Tiểu mục" required>
               <AdminSelect
                 name="subcategory"

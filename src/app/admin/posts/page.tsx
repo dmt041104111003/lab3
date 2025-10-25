@@ -223,14 +223,16 @@ export default function AdminPosts() {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {post.category && post.subcategory ? (
+                  {post.category ? (
                     <div>
                       <div className="font-medium text-gray-900">
                         {getCategoryById(post.category)?.name || post.category}
                       </div>
-                      <div className="text-xs text-gray-500">
-                        {getSubcategoryById(post.subcategory)?.name || post.subcategory}
-                      </div>
+                      {post.subcategory && post.subcategory.trim() !== '' && (
+                        <div className="text-xs text-gray-500">
+                          {getSubcategoryById(post.subcategory)?.name || post.subcategory}
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <span className="text-gray-400">Chưa phân loại</span>
@@ -285,14 +287,16 @@ export default function AdminPosts() {
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-gray-500">Chuyên mục:</span>
                       <div className="text-xs text-gray-900 text-right">
-                        {post.category && post.subcategory ? (
+                        {post.category ? (
                           <div>
                             <div className="font-medium">
                               {getCategoryById(post.category)?.name || post.category}
                             </div>
-                            <div className="text-gray-500">
-                              {getSubcategoryById(post.subcategory)?.name || post.subcategory}
-                            </div>
+                            {post.subcategory && post.subcategory.trim() !== '' && (
+                              <div className="text-gray-500">
+                                {getSubcategoryById(post.subcategory)?.name || post.subcategory}
+                              </div>
+                            )}
                           </div>
                         ) : (
                           <span className="text-gray-400">Chưa phân loại</span>

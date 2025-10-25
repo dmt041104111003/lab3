@@ -165,7 +165,7 @@ export default function PostDetailPage() {
                     </span>
                   </>
                 )}
-                {post.subcategory && (
+                {post.subcategory && post.subcategory.trim() !== '' && (
                   <>
                     <span className="mx-2">•</span>
                     <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">

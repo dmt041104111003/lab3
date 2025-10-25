@@ -84,6 +84,11 @@ export default function Header() {
         { name: 'Ảnh', href: '/multimedia/anh' },
         { name: 'Infographic', href: '/multimedia/infographic' }
       ]
+    },
+    {
+      title: 'BẠN ĐỌC',
+      baseHref: '/ban-doc',
+      subcategories: []
     }
   ]
 
