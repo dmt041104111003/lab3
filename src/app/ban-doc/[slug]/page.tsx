@@ -13,6 +13,7 @@ import RelatedPosts from '@/components/RelatedPosts'
 import CategoryBreadcrumb from '@/components/CategoryBreadcrumb'
 import SocialMeta from '@/components/SocialMeta'
 import { CATEGORIES, getCategoryById } from '@/lib/categories'
+import { useViewTracking } from '@/hooks/useViewTracking'
 
 interface Post {
   id: string
@@ -81,6 +82,9 @@ export default function PostDetailPage() {
       fetchPost()
     }
   }, [slug, fetchPost])
+
+  // Track view
+  useViewTracking(slug as string)
 
   useEffect(() => {
     if (post) {

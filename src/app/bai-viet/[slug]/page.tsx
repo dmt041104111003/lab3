@@ -13,6 +13,7 @@ import RelatedPosts from '@/components/RelatedPosts'
 import CategoryBreadcrumb from '@/components/CategoryBreadcrumb'
 import SocialMeta from '@/components/SocialMeta'
 import { CATEGORIES, getCategoryById } from '@/lib/categories'
+import { useViewTracking } from '@/hooks/useViewTracking'
 
 interface Post {
   id: string
@@ -83,6 +84,8 @@ export default function PostDetail() {
       fetchPost()
     }
   }, [slug, fetchPost])
+
+  useViewTracking(slug)
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString('vi-VN', {
