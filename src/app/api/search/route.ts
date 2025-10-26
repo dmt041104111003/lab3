@@ -6,6 +6,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const query = searchParams.get('q')
     const category = searchParams.get('category')
+    const tag = searchParams.get('tag')
     const limit = parseInt(searchParams.get('limit') || '10')
 
     if (!query || query.trim().length === 0) {
@@ -36,10 +37,14 @@ export async function GET(request: NextRequest) {
           }
         },
         {
-          author: {
-            name: {
-              contains: searchTerm,
-              mode: 'insensitive'
+          tags: {
+            some: {
+              tag: {
+                name: {
+                  contains: searchTerm,
+                  mode: 'insensitive'
+                }
+              }
             }
           }
         }
@@ -48,6 +53,19 @@ export async function GET(request: NextRequest) {
 
     if (category && category !== 'all') {
       whereConditions.category = category
+    }
+
+    if (tag && tag !== 'all') {
+      whereConditions.tags = {
+        some: {
+          tag: {
+            name: {
+              contains: tag,
+              mode: 'insensitive'
+            }
+          }
+        }
+      }
     }
 
     const posts = await prisma.post.findMany({

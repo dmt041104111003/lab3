@@ -602,7 +602,7 @@ export default function Header() {
                       type="text"
                       value={searchQuery}
                       onChange={handleSearchInputChange}
-                      placeholder="Tìm kiếm bài viết, tác giả..."
+                      placeholder="Tìm kiếm bài viết, tag..."
                       className="w-full px-4 py-3 pl-12 pr-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-tech-blue focus:border-transparent"
                       autoFocus
                     />
