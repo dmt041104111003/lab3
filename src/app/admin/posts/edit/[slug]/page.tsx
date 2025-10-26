@@ -350,7 +350,13 @@ export default function EditPost() {
               <AdminFormField label="Ngày tạo">
                 <input
                   type="text"
-                  value={new Date(post.createdAt).toLocaleDateString('vi-VN')}
+                  value={new Date(post.createdAt).toLocaleString('vi-VN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
                   disabled
                   className="w-full px-3 py-2 bg-gray-50 text-gray-500 border border-gray-300 rounded-md"
                   aria-label="Ngày tạo"

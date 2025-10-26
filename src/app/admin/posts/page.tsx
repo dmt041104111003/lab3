@@ -242,7 +242,13 @@ export default function AdminPosts() {
                   {post.author.name}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(post.createdAt).toLocaleDateString('vi-VN')}
+                  {new Date(post.createdAt).toLocaleString('vi-VN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                   <a
@@ -311,7 +317,13 @@ export default function AdminPosts() {
                     
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-gray-500">Ngày tạo:</span>
-                      <span className="text-xs text-gray-900">{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
+                      <span className="text-xs text-gray-900">{new Date(post.createdAt).toLocaleString('vi-VN', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}</span>
                     </div>
                     
                     <div className="flex justify-between items-center pt-2 border-t border-gray-100">

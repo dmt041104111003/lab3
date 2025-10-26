@@ -204,22 +204,6 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                         </p>
                       )}
                       
-                      {posts[0].tags && posts[0].tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mt-4">
-                          {posts[0].tags.map((tag) => (
-                            <span
-                              key={tag.id}
-                              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white"
-                              style={{ backgroundColor: tag.color || '#3B82F6' }}
-                            >
-                              <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                              </svg>
-                              {tag.name}
-                            </span>
-                          ))}
-                        </div>
-                      )}
                     </div>
                   </a>
                 </div>
@@ -265,28 +249,6 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                             <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
                               {post.excerpt || "Mô tả ngắn về bài viết..."}
                             </p>
-                            
-                            {post.tags && post.tags.length > 0 && (
-                              <div className="flex flex-wrap gap-1 mt-2">
-                                {post.tags.slice(0, 3).map((tag) => (
-                                  <span
-                                    key={tag.id}
-                                    className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-white"
-                                    style={{ backgroundColor: tag.color || '#3B82F6' }}
-                                  >
-                                    <svg className="w-2.5 h-2.5 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                      <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                                    </svg>
-                                    {tag.name}
-                                  </span>
-                                ))}
-                                {post.tags.length > 3 && (
-                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                                    +{post.tags.length - 3}
-                                  </span>
-                                )}
-                              </div>
-                            )}
                           </div>
                         </a>
                       </div>

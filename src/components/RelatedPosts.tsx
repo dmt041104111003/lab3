@@ -150,13 +150,13 @@ export default function RelatedPosts({ currentPostSlug, className = '' }: Relate
                 {post.tags.length > 0 && (
                   <>
                     <span className="mx-2">•</span>
-                    <span 
-                      className="text-xs px-2 py-0.5 rounded-full"
-                      style={{ 
-                        backgroundColor: post.tags[0].color + '20',
-                        color: post.tags[0].color 
-                      }}
+                    <span
+                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white"
+                      style={{ backgroundColor: post.tags[0].color || '#3B82F6' }}
                     >
+                      <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                      </svg>
                       {post.tags[0].name}
                     </span>
                   </>
