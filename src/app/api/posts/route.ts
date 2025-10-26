@@ -13,7 +13,6 @@ export async function GET(request: NextRequest) {
         slug: true,
         published: true,
         createdAt: true,
-        viewCount: true,
         authorName: true,
         category: true,
         subcategory: true,
@@ -31,6 +30,11 @@ export async function GET(request: NextRequest) {
         images: {
           include: {
             image: true
+          }
+        },
+        _count: {
+          select: {
+            views: true
           }
         }
       },

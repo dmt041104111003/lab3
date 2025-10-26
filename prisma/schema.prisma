@@ -35,7 +35,6 @@ model Post {
   published    Boolean  @default(false)
   category     String?  // Main category ID
   subcategory  String?  // Subcategory ID
-  viewCount    Int      @default(0)
   authorName   String?  
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

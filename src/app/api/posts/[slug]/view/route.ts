@@ -45,15 +45,6 @@ export async function POST(
           viewedAt: new Date()
         }
       })
-
-      await prisma.post.update({
-        where: { id: post.id },
-        data: {
-          viewCount: {
-            increment: 1
-          }
-        }
-      })
     }
 
     return NextResponse.json({ success: true })
