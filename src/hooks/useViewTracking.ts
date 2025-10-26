@@ -19,7 +19,7 @@ export function useViewTracking(postSlug: string) {
           colorDepth: screen.colorDepth,
           pixelRatio: window.devicePixelRatio || 1,
           canvasFingerprint: '',
-        }
+        };
 
         await fetch(`/api/posts/${postSlug}/view`, {
           method: 'POST',
