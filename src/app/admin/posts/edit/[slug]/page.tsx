@@ -199,7 +199,8 @@ export default function EditPost() {
           imageType: formData.imageType,
           imageUrl: formData.imageUrl,
           category: formData.category,
-          subcategory: formData.subcategory
+          subcategory: formData.subcategory,
+          authorName: formData.authorName
         }),
       })
 

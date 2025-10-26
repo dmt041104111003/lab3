@@ -154,6 +154,7 @@ export default function CreatePost() {
           imageUrl: formData.imageUrl,
           category: formData.category,
           subcategory: formData.subcategory,
+          authorName: formData.authorName,
           authorId: currentUser?.id || 'cmh10oekw0001x8rjt3cati7w'
         }),
       })
