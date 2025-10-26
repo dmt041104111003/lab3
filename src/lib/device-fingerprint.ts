@@ -1,23 +1,21 @@
 export async function generateDeviceFingerprint(userAgent: string, deviceData: any): Promise<string> {
-  // Tạo fingerprint từ các thông tin device
   const fingerprintData = {
-    userAgent: userAgent,
-    language: deviceData.language,
-    platform: deviceData.platform,
-    screenResolution: deviceData.screenResolution,
-    timezone: deviceData.timezone,
+    canvasFingerprint: deviceData.canvasFingerprint || '',
+    colorDepth: deviceData.colorDepth,
     cookieEnabled: deviceData.cookieEnabled,
     doNotTrack: deviceData.doNotTrack,
     hardwareConcurrency: deviceData.hardwareConcurrency,
+    language: deviceData.language,
     maxTouchPoints: deviceData.maxTouchPoints,
-    colorDepth: deviceData.colorDepth,
-    pixelRatio: deviceData.pixelRatio
+    pixelRatio: deviceData.pixelRatio,
+    platform: deviceData.platform,
+    screenResolution: deviceData.screenResolution,
+    timezone: deviceData.timezone,
+    userAgent: userAgent
   }
 
-  // Tạo hash từ fingerprint data
   const fingerprintString = JSON.stringify(fingerprintData)
   
-  // Sử dụng Web Crypto API để tạo hash
   const encoder = new TextEncoder()
   const data = encoder.encode(fingerprintString)
   const hashBuffer = await crypto.subtle.digest('SHA-256', data)
