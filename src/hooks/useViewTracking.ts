@@ -7,18 +7,18 @@ export function useViewTracking(postSlug: string) {
     const trackView = async () => {
       try {
         const deviceData = {
-          canvasFingerprint: '',
-          colorDepth: screen.colorDepth,
-          cookieEnabled: navigator.cookieEnabled,
-          doNotTrack: navigator.doNotTrack || 'unknown',
-          hardwareConcurrency: navigator.hardwareConcurrency || 0,
+          userAgent: navigator.userAgent,
           language: navigator.language,
-          maxTouchPoints: navigator.maxTouchPoints || 0,
-          pixelRatio: window.devicePixelRatio || 1,
           platform: navigator.platform,
           screenResolution: `${screen.width}x${screen.height}`,
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          userAgent: navigator.userAgent,
+          cookieEnabled: navigator.cookieEnabled,
+          doNotTrack: navigator.doNotTrack || 'unknown',
+          hardwareConcurrency: navigator.hardwareConcurrency || 0,
+          maxTouchPoints: navigator.maxTouchPoints || 0,
+          colorDepth: screen.colorDepth,
+          pixelRatio: window.devicePixelRatio || 1,
+          canvasFingerprint: '',
         }
 
         await fetch(`/api/posts/${postSlug}/view`, {

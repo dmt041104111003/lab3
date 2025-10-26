@@ -1,17 +1,17 @@
 export async function generateDeviceFingerprint(userAgent: string, deviceData: any): Promise<string> {
   const fingerprintData = {
-    canvasFingerprint: deviceData.canvasFingerprint || '',
-    colorDepth: deviceData.colorDepth,
-    cookieEnabled: deviceData.cookieEnabled,
-    doNotTrack: deviceData.doNotTrack,
-    hardwareConcurrency: deviceData.hardwareConcurrency,
+    userAgent: userAgent,
     language: deviceData.language,
-    maxTouchPoints: deviceData.maxTouchPoints,
-    pixelRatio: deviceData.pixelRatio,
     platform: deviceData.platform,
     screenResolution: deviceData.screenResolution,
     timezone: deviceData.timezone,
-    userAgent: userAgent
+    cookieEnabled: deviceData.cookieEnabled,
+    doNotTrack: deviceData.doNotTrack,
+    hardwareConcurrency: deviceData.hardwareConcurrency,
+    maxTouchPoints: deviceData.maxTouchPoints,
+    colorDepth: deviceData.colorDepth,
+    pixelRatio: deviceData.pixelRatio,
+    canvasFingerprint: deviceData.canvasFingerprint || ''
   }
 
   const fingerprintString = JSON.stringify(fingerprintData)
