@@ -419,7 +419,7 @@ export default function EditPost() {
                 placeholder="Nhập tên tác giả (tùy chọn)"
               />
               <div className="mt-1 text-sm text-gray-500">
-                Để trống sẽ hiển thị "Tác giả"
+                Để trống sẽ hiển thị &quot;Tác giả&quot;
               </div>
             </AdminFormField>
 
