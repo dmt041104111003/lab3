@@ -32,12 +32,12 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
       <SectionBanner title={title} />
       <div className="mt-6">
       {variant === 'split' ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
           <div className="md:col-span-2">
             <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
               <Link href={mainArticle.href} className="block">
                 {mainArticle.imageUrl ? (
-                  <div className="relative h-64 overflow-hidden group">
+                  <div className="relative aspect-video overflow-hidden group">
                     <img 
                       src={mainArticle.imageUrl} 
                       alt={mainArticle.imageAlt || mainArticle.title}
@@ -45,7 +45,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                     />
                   </div>
                 ) : (
-                  <div className="h-64 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                  <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                     <div className="text-center">
                       <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -54,23 +54,29 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                     </div>
                   </div>
                 )}
-                <div className="p-6">
-                  <h2 className="text-xl font-bold text-gray-900 mb-3 leading-tight hover:text-red-600 transition-colors">
+                <div className="p-4">
+                  <h2 className="text-lg font-bold text-gray-900 mb-3 leading-tight hover:text-red-600 transition-colors line-clamp-2">
                     {mainArticle.title}
                   </h2>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {mainArticle.excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
+                  <p className="text-gray-600 text-sm leading-relaxed line-clamp-1">
+                    {mainArticle.excerpt ? 
+                      (mainArticle.excerpt.length > 80 ? 
+                        mainArticle.excerpt.substring(0, 80) + '...' : 
+                        mainArticle.excerpt
+                      ) : 
+                      "Mô tả ngắn về bài viết chính trong chuyên mục này..."
+                    }
                   </p>
                 </div>
               </Link>
             </div>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3 h-full">
             {subArticles.map((article, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
-                <Link href={article.href} className="block">
-                  <div className="flex">
-                    <div className="flex-shrink-0 w-32 h-24">
+              <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden flex-1">
+                <Link href={article.href} className="block h-full">
+                  <div className="flex h-full">
+                    <div className="flex-shrink-0 w-28 aspect-video">
                       {article.imageUrl ? (
                         <img 
                           src={article.imageUrl} 
@@ -88,11 +94,16 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                         </div>
                       )}
                     </div>
-                    <div className="flex-1 p-3">
-                      <h4 className="text-gray-800 text-sm font-bold mb-2 line-clamp-2 hover:text-red-600 transition-colors">{article.title}</h4>
-                      {article.excerpt && (
-                        <p className="text-gray-600 text-xs line-clamp-2 mb-2">{article.excerpt}</p>
-                      )}
+                    <div className="flex-1 p-3 flex flex-col justify-between">
+                      <div>
+                        <h4 className="text-gray-800 text-sm font-bold mb-2 line-clamp-2 hover:text-red-600 transition-colors">{article.title}</h4>
+                        {article.excerpt && (
+                          <p className="text-gray-600 text-xs line-clamp-3">{article.excerpt}</p>
+                        )}
+                      </div>
+                      <div className="mt-2">
+                        <span className="text-xs text-gray-400">Đọc thêm →</span>
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -182,7 +193,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-b-4 border-red-600 mb-6 rounded-lg overflow-hidden">
             {/* Ảnh full bên trái */}
-            <div className="relative h-64 md:h-96">
+            <div className="relative aspect-video">
               <Link href={mainArticle.href} className="block w-full h-full">
                 {mainArticle.imageUrl ? (
                   <img 
