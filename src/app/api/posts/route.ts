@@ -5,7 +5,18 @@ import { generateSlug, generateUniqueSlug } from '@/lib/slug'
 export async function GET(request: NextRequest) {
   try {
     const posts = await prisma.post.findMany({
-      include: {
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        excerpt: true,
+        slug: true,
+        published: true,
+        createdAt: true,
+        viewCount: true,
+        authorName: true,
+        category: true,
+        subcategory: true,
         author: {
           select: {
             name: true,
