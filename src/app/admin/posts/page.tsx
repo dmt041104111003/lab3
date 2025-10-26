@@ -22,6 +22,7 @@ interface Post {
   viewCount: number
   category?: string
   subcategory?: string
+  authorName?: string
   author: {
     name: string
     email: string
@@ -96,7 +97,7 @@ export default function AdminPosts() {
 
   const filteredPosts = posts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.author.name.toLowerCase().includes(searchTerm.toLowerCase())
+                         (post.authorName || post.author.name).toLowerCase().includes(searchTerm.toLowerCase())
     
     const matchesFilter = filterBy === '' || post.category === filterBy
     
@@ -108,7 +109,7 @@ export default function AdminPosts() {
       case 'title':
         return a.title.localeCompare(b.title)
       case 'author':
-        return a.author.name.localeCompare(b.author.name)
+        return (a.authorName || a.author.name).localeCompare(b.authorName || b.author.name)
       case 'createdAt':
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       case 'published':
@@ -241,7 +242,7 @@ export default function AdminPosts() {
                   )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {post.author.name}
+                  {post.authorName || post.author.name}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -319,7 +320,7 @@ export default function AdminPosts() {
                     
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-gray-500">Tác giả:</span>
-                      <span className="text-xs text-gray-900">{post.author.name}</span>
+                      <span className="text-xs text-gray-900">{post.authorName || post.author.name}</span>
                     </div>
                     
                     <div className="flex justify-between items-center">
