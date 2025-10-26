@@ -33,6 +33,11 @@ export async function GET(
             include: {
               image: true
             }
+          },
+          _count: {
+            select: {
+              comments: true
+            }
           }
         },
         orderBy: {

@@ -25,6 +25,7 @@ interface Post {
   createdAt: string
   category?: string
   subcategory?: string
+  authorName?: string
   author: {
     name: string
     email: string
@@ -233,7 +234,7 @@ export default function PostDetailPage() {
           <div className="px-6 py-4 border-t border-gray-200">
             <div className="text-right">
               <span className="font-bold text-gray-900">
-                Tác giả
+                {post.authorName || 'Tác giả'}
               </span>
             </div>
           </div>

@@ -662,7 +662,7 @@ export default function Header() {
                                   </p>
                                 )}
                                 <div className="flex items-center text-xs text-gray-500">
-                                  <span className="font-medium">{result.author}</span>
+                                  <span className="font-medium">{result.authorName || 'Tác giả'}</span>
                                   <span className="mx-2">•</span>
                                   <span>{new Date(result.createdAt).toLocaleString('vi-VN', {
                                     year: 'numeric',

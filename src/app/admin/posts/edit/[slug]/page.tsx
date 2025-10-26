@@ -73,7 +73,8 @@ export default function EditPost() {
     newImageFile: null as File | null,
     imageUrl: '',
     category: '',
-    subcategory: ''
+    subcategory: '',
+    authorName: ''
   })
   const [tags, setTags] = useState<Tag[]>([])
   const [images, setImages] = useState<Image[]>([])
@@ -120,6 +121,7 @@ export default function EditPost() {
           selectedImage: postData.images?.[0]?.image?.id || '',
           category: postData.category || '',
           subcategory: postData.subcategory || '',
+          authorName: postData.authorName || '',
           imageType: 'existing' as 'existing' | 'upload' | 'url',
           newImageFile: null,
           imageUrl: ''
@@ -407,6 +409,18 @@ export default function EditPost() {
                 placeholder="Nhập mô tả ngắn về bài viết"
                 rows={3}
               />
+            </AdminFormField>
+
+            <AdminFormField label="Tên tác giả">
+              <AdminInput
+                name="authorName"
+                value={formData.authorName}
+                onChange={handleChange}
+                placeholder="Nhập tên tác giả (tùy chọn)"
+              />
+              <div className="mt-1 text-sm text-gray-500">
+                Để trống sẽ hiển thị "Tác giả"
+              </div>
             </AdminFormField>
 
             <AdminFormField label="Nội dung bài viết" required>

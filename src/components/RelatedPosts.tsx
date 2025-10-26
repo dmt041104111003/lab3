@@ -9,6 +9,7 @@ interface RelatedPost {
   slug: string
   excerpt: string
   createdAt: string
+  authorName?: string
   author: {
     id: string
     name: string
@@ -144,9 +145,15 @@ export default function RelatedPosts({ currentPostSlug, className = '' }: Relate
                 </p>
               )}
               <div className="flex items-center text-xs text-gray-500">
-                <span className="font-medium">{post.author.name}</span>
+                <span className="font-medium">{post.authorName || 'Tác giả'}</span>
                 <span className="mx-2">•</span>
-                <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
+                <span>{new Date(post.createdAt).toLocaleString('vi-VN', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}</span>
                 {post.tags.length > 0 && (
                   <>
                     <span className="mx-2">•</span>

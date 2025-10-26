@@ -26,6 +26,7 @@ interface Post {
   updatedAt: string
   category: string
   subcategory: string
+  authorName?: string
   author: {
     id: string
     name: string
@@ -208,7 +209,7 @@ export default function PostDetail() {
                 </>
               )}
               <span>•</span>
-              <span>Bởi {post.author.name}</span>
+              <span>{post.authorName || 'Tác giả'}</span>
             </div>
             
             <h1 className="text-3xl font-bold text-gray-900 mb-4">

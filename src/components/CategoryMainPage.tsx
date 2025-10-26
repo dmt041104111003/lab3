@@ -18,6 +18,7 @@ interface Post {
   createdAt: string
   category?: string
   subcategory?: string
+  authorName?: string
   author: {
     name: string
     email: string
@@ -193,7 +194,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                           minute: '2-digit'
                         })}</span>
                         <span className="mx-2">•</span>
-                        <span>Bởi {posts[0].author.name}</span>
+                        <span>{posts[0].authorName || 'Tác giả'}</span>
                       </div>
                       <h1 className="text-3xl font-bold text-gray-900 mb-4 hover:text-red-600 transition-colors">
                         {posts[0].title}

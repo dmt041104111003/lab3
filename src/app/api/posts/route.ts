@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
       authorId, 
       category, 
       subcategory,
+      authorName,
       selectedTags = [],
       selectedImage,
       imageType,
@@ -129,6 +130,7 @@ export async function POST(request: NextRequest) {
         authorId,
         category,
         subcategory,
+        authorName,
 
         tags: selectedTags.length > 0 ? {
           create: selectedTags.map((tagId: string) => ({
@@ -188,6 +190,7 @@ export async function PUT(request: NextRequest) {
       published, 
       category, 
       subcategory,
+      authorName,
       selectedTags = [],
       selectedImage,
       imageType,
@@ -278,6 +281,7 @@ export async function PUT(request: NextRequest) {
         published,
         category,
         subcategory,
+        authorName,
 
         tags: selectedTags.length > 0 ? {
           create: selectedTags.map((tagId: string) => ({

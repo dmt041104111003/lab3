@@ -18,6 +18,10 @@ interface Post {
   createdAt: string
   category?: string
   subcategory?: string
+  authorName?: string
+  _count?: {
+    comments: number
+  }
   author: {
     name: string
     email: string
@@ -165,9 +169,15 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true, 
                           <div className="flex items-center text-sm text-gray-500 mb-3">
                             <span className="capitalize">{post.subcategory}</span>
                             <span className="mx-2">•</span>
-                            <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
+                            <span>{new Date(post.createdAt).toLocaleString('vi-VN', {
+                              year: 'numeric',
+                              month: '2-digit',
+                              day: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}</span>
                             <span className="mx-2">•</span>
-                            <span>Bởi {post.author.name}</span>
+                            <span>{post.authorName || 'Tác giả'}</span>
                           </div>
                           <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight hover:text-red-600 transition-colors">
                             {post.title}
@@ -179,7 +189,7 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true, 
                             <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                             </svg>
-                            <span>{Math.floor(Math.random() * 50) + 1} bình luận</span>
+                            <span>{post._count?.comments || 0} bình luận</span>
                           </div>
                         </div>
                       </div>

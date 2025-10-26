@@ -44,7 +44,8 @@ export default function CreatePost() {
     newImageFile: null as File | null,
     imageUrl: '',
     category: '',
-    subcategory: ''
+    subcategory: '',
+    authorName: ''
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -287,6 +288,18 @@ export default function CreatePost() {
               placeholder="Nhập mô tả ngắn về bài viết"
               rows={3}
             />
+          </AdminFormField>
+
+          <AdminFormField label="Tên tác giả">
+            <AdminInput
+              name="authorName"
+              value={formData.authorName}
+              onChange={handleChange}
+              placeholder="Nhập tên tác giả (tùy chọn)"
+            />
+            <div className="mt-1 text-sm text-gray-500">
+              Để trống sẽ hiển thị "Tác giả"
+            </div>
           </AdminFormField>
 
           <AdminCheckbox
