@@ -185,7 +185,13 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                       <div className="flex items-center text-sm text-gray-500 mb-4">
                         <span className="capitalize">{posts[0].subcategory}</span>
                         <span className="mx-2">•</span>
-                        <span>{new Date(posts[0].createdAt).toLocaleDateString('vi-VN')}</span>
+                        <span>{new Date(posts[0].createdAt).toLocaleString('vi-VN', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}</span>
                         <span className="mx-2">•</span>
                         <span>Bởi {posts[0].author.name}</span>
                       </div>
@@ -245,7 +251,13 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                             <div className="flex items-center text-xs text-gray-500 mb-2">
                               <span className="capitalize">{post.subcategory}</span>
                               <span className="mx-2">•</span>
-                              <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
+                              <span>{new Date(post.createdAt).toLocaleString('vi-VN', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })}</span>
                             </div>
                             <h3 className="text-lg font-bold text-gray-900 mb-2 leading-tight hover:text-red-600 transition-colors">
                               {post.title}

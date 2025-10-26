@@ -164,7 +164,13 @@ export default function PostDetailPage() {
                 <p className="text-xl text-gray-600 mb-4">{post.excerpt}</p>
               )}
               <div className="flex items-center text-sm text-gray-500 mb-4 flex-wrap gap-2">
-                <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
+                <span>{new Date(post.createdAt).toLocaleString('vi-VN', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}</span>
                 {post.category && (
                   <>
                     <span>•</span>
@@ -222,7 +228,7 @@ export default function PostDetailPage() {
           <div className="px-6 py-4 border-t border-gray-200">
             <div className="text-right">
               <span className="font-bold text-gray-900">
-                {post.author.name}
+                Tác giả
               </span>
             </div>
           </div>

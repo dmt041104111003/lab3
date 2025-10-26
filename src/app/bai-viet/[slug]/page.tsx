@@ -85,10 +85,12 @@ export default function PostDetail() {
   }, [slug, fetchPost])
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('vi-VN', {
+    return new Date(dateString).toLocaleString('vi-VN', {
       year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
     })
   }
 
@@ -260,7 +262,7 @@ export default function PostDetail() {
           <div className="px-6 py-4 border-t border-gray-200">
             <div className="text-right">
               <span className="font-bold text-gray-900">
-                {post.author.name}
+                Tác giả
               </span>
             </div>
           </div>
