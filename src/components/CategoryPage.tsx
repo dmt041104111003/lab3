@@ -147,12 +147,13 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true, 
                   <div key={post.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
                     <a href={`/${basePath}/${post.subcategory}/${post.slug}`} className="block">
                       <div className="flex">
-                        <div className="flex-shrink-0 w-20 aspect-video">
+                        <div className="flex-shrink-0 w-32 aspect-video">
                           {post.images?.[0]?.image?.path ? (
                             <img 
                               src={post.images[0].image.path} 
                               alt={post.images[0].image.alt || post.title}
                               className="w-full h-full object-cover"
+                              style={{ aspectRatio: '16/9' }}
                             />
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center" style={{ aspectRatio: '16/9' }}>
