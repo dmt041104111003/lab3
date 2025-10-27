@@ -55,13 +55,19 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                   </div>
                 )}
                 <div className="p-4">
-                  <h2 className="text-lg font-bold text-gray-900 mb-3 leading-tight hover:text-red-600 transition-colors line-clamp-2">
+                  <h2 
+                    className="text-lg font-bold text-gray-900 mb-3 leading-tight hover:text-red-600 transition-colors line-clamp-2"
+                    title={mainArticle.title}
+                  >
                     {mainArticle.title.length > 60 ? 
                       mainArticle.title.substring(0, 60) + '...' : 
                       mainArticle.title
                     }
                   </h2>
-                  <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                  <p 
+                    className="text-gray-600 text-sm leading-relaxed line-clamp-2"
+                    title={mainArticle.excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
+                  >
                     {mainArticle.excerpt ? 
                       (mainArticle.excerpt.length > 100 ? 
                         mainArticle.excerpt.substring(0, 100) + '...' : 
@@ -99,9 +105,19 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                     </div>
                     <div className="flex-1 p-3 flex flex-col justify-between">
                       <div>
-                        <h4 className="text-gray-800 text-sm font-bold mb-2 line-clamp-2 hover:text-red-600 transition-colors">{article.title}</h4>
+                        <h4 
+                          className="text-gray-800 text-sm font-bold mb-2 line-clamp-2 hover:text-red-600 transition-colors"
+                          title={article.title}
+                        >
+                          {article.title}
+                        </h4>
                         {article.excerpt && (
-                          <p className="text-gray-600 text-xs line-clamp-3">{article.excerpt}</p>
+                          <p 
+                            className="text-gray-600 text-xs line-clamp-3"
+                            title={article.excerpt}
+                          >
+                            {article.excerpt}
+                          </p>
                         )}
                       </div>
                       <div className="mt-2">
@@ -141,14 +157,22 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                   {mainArticle.category && (
                     <div className="text-xs text-blue-600 font-medium mb-1">{mainArticle.category}</div>
                   )}
-                  <h2 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2 hover:text-red-600 transition-colors">
+                  <h2 
+                    className="text-lg font-bold text-gray-800 mb-2 line-clamp-2 hover:text-red-600 transition-colors"
+                    title={mainArticle.title}
+                  >
                     {mainArticle.title.length > 70 ? 
                       mainArticle.title.substring(0, 70) + '...' : 
                       mainArticle.title
                     }
                   </h2>
                   {mainArticle.excerpt && (
-                    <p className="text-gray-600 text-sm line-clamp-3 mb-2">{mainArticle.excerpt}</p>
+                    <p 
+                      className="text-gray-600 text-sm line-clamp-3 mb-2"
+                      title={mainArticle.excerpt}
+                    >
+                      {mainArticle.excerpt}
+                    </p>
                   )}
                   {mainArticle.timestamp && (
                     <div className="text-gray-400 text-xs">{mainArticle.timestamp}</div>
@@ -184,9 +208,19 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                     {article.category && (
                       <div className="text-xs text-blue-600 font-medium mb-1">{article.category}</div>
                     )}
-                    <h4 className="text-gray-800 text-sm font-bold mb-2 line-clamp-2 hover:text-red-600 transition-colors">{article.title}</h4>
+                    <h4 
+                      className="text-gray-800 text-sm font-bold mb-2 line-clamp-2 hover:text-red-600 transition-colors"
+                      title={article.title}
+                    >
+                      {article.title}
+                    </h4>
                     {article.excerpt && (
-                      <p className="text-gray-600 text-xs line-clamp-3 mb-2">{article.excerpt}</p>
+                      <p 
+                        className="text-gray-600 text-xs line-clamp-3 mb-2"
+                        title={article.excerpt}
+                      >
+                        {article.excerpt}
+                      </p>
                     )}
                     {article.timestamp && (
                       <div className="text-gray-400 text-xs">{article.timestamp}</div>
@@ -225,13 +259,19 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
             {/* Nội dung bên phải */}
             <div className="bg-white p-6 md:p-8 flex flex-col justify-center">
               <Link href={mainArticle.href} className="block">
-                <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 leading-tight hover:text-red-600 transition-colors line-clamp-2">
+                <h1 
+                  className="text-xl md:text-2xl font-bold text-gray-900 mb-4 leading-tight hover:text-red-600 transition-colors line-clamp-2"
+                  title={mainArticle.title}
+                >
                   {mainArticle.title.length > 80 ? 
                     mainArticle.title.substring(0, 80) + '...' : 
                     mainArticle.title
                   }
                 </h1>
-                <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-3 line-clamp-3">
+                <p 
+                  className="text-gray-600 text-sm md:text-base leading-relaxed mb-3 line-clamp-3"
+                  title={mainArticle.excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
+                >
                   {mainArticle.excerpt ? 
                     (mainArticle.excerpt.length > 150 ? 
                       mainArticle.excerpt.substring(0, 150) + '...' : 
@@ -269,10 +309,16 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                   )}
                   
                   <div className="p-4">
-                    <h3 className="text-base font-semibold text-gray-900 mb-2 leading-tight line-clamp-2 hover:text-red-600 transition-colors">
+                    <h3 
+                      className="text-base font-semibold text-gray-900 mb-2 leading-tight line-clamp-2 hover:text-red-600 transition-colors"
+                      title={article.title}
+                    >
                       {article.title}
                     </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                    <p 
+                      className="text-gray-600 text-sm leading-relaxed line-clamp-2"
+                      title={article.excerpt || "Mô tả ngắn..."}
+                    >
                       {article.excerpt || "Mô tả ngắn..."}
                     </p>
              
