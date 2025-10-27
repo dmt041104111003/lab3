@@ -96,7 +96,7 @@ export default function RelatedPosts({ currentPostSlug, className = '' }: Relate
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex gap-4 animate-pulse">
-              <div className="w-20 h-16 bg-gray-200 rounded-lg flex-shrink-0"></div>
+              <div className="w-28 aspect-video bg-gray-200 rounded-lg flex-shrink-0"></div>
               <div className="flex-1">
                 <div className="h-4 bg-gray-200 rounded mb-2"></div>
                 <div className="h-3 bg-gray-200 rounded w-3/4"></div>
@@ -122,12 +122,12 @@ export default function RelatedPosts({ currentPostSlug, className = '' }: Relate
             href={`/bai-viet/${post.slug}`}
             className="flex gap-4 hover:bg-gray-50 p-3 rounded-lg transition-colors group"
           >
-            <div className="w-28 h-20 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+            <div className="w-28 aspect-video flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
               <ImageWithFallback
                 src={post.image && post.image.path 
                   ? (post.image.path.startsWith('http') 
                       ? post.image.path 
-                      : `https://res.cloudinary.com/demo/image/fetch/w_112,h_80,c_fill,g_auto/${post.image.path}`)
+                      : `https://res.cloudinary.com/demo/image/fetch/w_112,h_63,c_fill,g_auto/${post.image.path}`)
                   : ''
                 }
                 alt={post.image?.alt || post.title}
@@ -136,11 +136,17 @@ export default function RelatedPosts({ currentPostSlug, className = '' }: Relate
             </div>
 
             <div className="flex-1 min-w-0">
-              <h4 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-tech-blue transition-colors mb-1">
+              <h4 
+                className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-tech-blue transition-colors mb-1"
+                title={post.title}
+              >
                 {post.title}
               </h4>
               {post.excerpt && (
-                <p className="text-xs text-gray-600 line-clamp-2 mb-2">
+                <p 
+                  className="text-xs text-gray-600 line-clamp-2 mb-2"
+                  title={post.excerpt}
+                >
                   {post.excerpt}
                 </p>
               )}
