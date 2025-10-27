@@ -110,6 +110,32 @@ export default function CommentSection() {
     loadComments()
   }, [params?.slug, loadComments])
 
+  // Handle hash navigation and highlight
+  useEffect(() => {
+    if (typeof window === 'undefined' || comments.length === 0) return
+
+    const hash = window.location.hash
+    if (hash && hash.startsWith('#comment-')) {
+      const commentId = hash.replace('#comment-', '')
+      const element = document.getElementById(`comment-${commentId}`)
+      
+      if (element) {
+        // Scroll to comment with smooth behavior
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          
+          // Add highlight effect
+          element.classList.add('bg-blue-50')
+          
+          // Remove highlight after 3 seconds
+          setTimeout(() => {
+            element.classList.remove('bg-blue-50')
+          }, 3000)
+        }, 500) // Wait for comments to render
+      }
+    }
+  }, [comments])
+
   const loadMoreComments = () => {
     const nextPage = currentPage + 1
     loadComments(nextPage, 5, true)
@@ -460,7 +486,11 @@ export default function CommentSection() {
             </div>
           ) : (
             comments.map((comment) => (
-            <div key={comment.id} className="flex gap-3 pb-5 border-b border-gray-100">
+            <div 
+              key={comment.id} 
+              id={`comment-${comment.id}`}
+              className="flex gap-3 pb-5 border-b border-gray-100 scroll-mt-24 transition-colors duration-500"
+            >
               <div className="w-10 h-10 rounded-full bg-tech-blue/10 flex items-center justify-center text-sm font-semibold text-tech-blue flex-shrink-0">
                 {comment.author.name.charAt(0).toUpperCase()}
               </div>

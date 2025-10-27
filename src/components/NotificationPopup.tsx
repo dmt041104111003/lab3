@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { getSession } from '@/lib/session'
 
 interface Notification {
   id: string
@@ -17,6 +18,22 @@ interface Notification {
   imageAlt?: string
 }
 
+interface Reply {
+  id: string
+  content: string
+  createdAt: string
+  authorName: string
+  commentId: string
+  parentContent: string
+  post: {
+    id: string
+    title: string
+    slug: string
+    category?: string
+    subcategory?: string
+  }
+}
+
 interface NotificationPopupProps {
   isOpen: boolean
   onClose: () => void
@@ -26,6 +43,7 @@ interface NotificationPopupProps {
 export default function NotificationPopup({ isOpen, onClose, onNotificationToggle }: NotificationPopupProps) {
   const [activeTab, setActiveTab] = useState<'thongbao' | 'ykien' | 'daxem'>('thongbao')
   const [notifications, setNotifications] = useState<Notification[]>([])
+  const [replies, setReplies] = useState<Reply[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [isSubscribed, setIsSubscribed] = useState(true)
@@ -91,11 +109,42 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
     }
   }
 
+  const fetchReplies = async () => {
+    setIsLoading(true)
+    try {
+      const session = getSession()
+      if (!session) {
+        setReplies([])
+        return
+      }
+
+      const deviceData = getDeviceData()
+      const params = new URLSearchParams({
+        type: 'replies',
+        deviceData: JSON.stringify(deviceData),
+        userId: session.id
+      })
+      
+      const response = await fetch(`/api/notifications?${params}`)
+      const data = await response.json()
+      
+      if (data.success) {
+        setReplies(data.replies)
+      }
+    } catch (error) {
+      console.error('Error fetching replies:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   useEffect(() => {
     if (isOpen) {
       fetchUnreadCount()
       if (activeTab === 'thongbao') {
         fetchNotifications('unread')
+      } else if (activeTab === 'ykien') {
+        fetchReplies()
       } else if (activeTab === 'daxem') {
         fetchNotifications('read')
       }
@@ -172,6 +221,25 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
     
     // Fallback to slug only
     return `/bai-viet/${notification.slug}`
+  }
+
+  const getReplyUrl = (reply: Reply) => {
+    const { post } = reply
+    let baseUrl = ''
+    
+    // Special case for "ban-doc" category
+    if (post.category === 'ban-doc') {
+      baseUrl = `/ban-doc/${post.slug}`
+    } else if (post.category && post.subcategory) {
+      // Regular format: /{category}/{subcategory}/{slug}
+      baseUrl = `/${post.category}/${post.subcategory}/${post.slug}`
+    } else {
+      // Fallback to slug only
+      baseUrl = `/bai-viet/${post.slug}`
+    }
+    
+    // Add hash anchor to scroll to comment
+    return `${baseUrl}#comment-${reply.commentId}`
   }
 
   const handleTabChange = (tab: 'thongbao' | 'ykien' | 'daxem') => {
@@ -302,11 +370,55 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
           )}
 
           {activeTab === 'ykien' && (
-            <div className="text-center py-12">
-              <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
-              <p className="text-sm text-gray-500">Chưa có ý kiến nào</p>
+            <div>
+              {isLoading ? (
+                <div className="flex justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                </div>
+              ) : replies.length > 0 ? (
+                <div className="divide-y divide-gray-100">
+                  {replies.map((reply) => (
+                    <Link
+                      key={reply.id}
+                      href={getReplyUrl(reply)}
+                      className="block p-4 hover:bg-gray-50 transition-colors"
+                      onClick={onClose}
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="text-xs font-medium text-blue-600">
+                          {reply.authorName} đã trả lời
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {formatTimeAgo(reply.createdAt)}
+                        </span>
+                      </div>
+                      
+                      {/* Parent comment */}
+                      <div className="mb-2 p-2 bg-gray-50 rounded text-xs text-gray-600 border-l-2 border-gray-300">
+                        <span className="font-medium">Bình luận của bạn:</span>
+                        <p className="line-clamp-2 mt-1">{reply.parentContent}</p>
+                      </div>
+                      
+                      {/* Reply content */}
+                      <p className="text-sm text-gray-900 mb-2 line-clamp-3">
+                        {reply.content}
+                      </p>
+                      
+                      {/* Post title */}
+                      <div className="text-xs text-gray-500">
+                        Trong bài: <span className="font-medium text-gray-700">{reply.post.title}</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                  </svg>
+                  <p className="text-sm text-gray-500">Chưa có ý kiến nào</p>
+                </div>
+              )}
             </div>
           )}
 

@@ -7,10 +7,79 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type') || 'unread'
     const deviceData = JSON.parse(searchParams.get('deviceData') || '{}')
+    const userId = searchParams.get('userId') // Get userId from query params
     
     const fingerprint = await generateDeviceFingerprint(deviceData.userAgent || '', deviceData)
     
-    if (type === 'unread') {
+    if (type === 'replies') {
+      // Get replies to user's comments (requires logged in user)
+      if (!userId) {
+        return NextResponse.json({
+          success: true,
+          replies: []
+        })
+      }
+
+      const replies = await prisma.reply.findMany({
+        where: {
+          comment: {
+            authorId: userId
+          },
+          authorId: {
+            not: userId // Don't show user's own replies
+          }
+        },
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          commentId: true,
+          author: {
+            select: {
+              name: true
+            }
+          },
+          comment: {
+            select: {
+              id: true,
+              content: true,
+              post: {
+                select: {
+                  id: true,
+                  title: true,
+                  slug: true,
+                  category: true,
+                  subcategory: true
+                }
+              }
+            }
+          }
+        },
+        orderBy: {
+          createdAt: 'desc'
+        },
+        take: 20
+      })
+
+      return NextResponse.json({
+        success: true,
+        replies: replies.map(reply => ({
+          id: reply.id,
+          content: reply.content,
+          createdAt: reply.createdAt,
+          authorName: reply.author.name,
+          commentId: reply.commentId,
+          parentContent: reply.comment.content,
+          post: {
+            id: reply.comment.post.id,
+            title: reply.comment.post.title,
+            slug: reply.comment.post.slug,
+            category: reply.comment.post.category,
+            subcategory: reply.comment.post.subcategory
+          }
+        }))
+      })
+    } else if (type === 'unread') {
       const unreadPosts = await prisma.post.findMany({
         where: {
           published: true,
