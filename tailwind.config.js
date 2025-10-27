@@ -16,6 +16,7 @@ module.exports = {
         'asap': ['Asap', 'sans-serif'],
         'roboto': ['Roboto', 'sans-serif'],
         'roboto-condensed': ['Roboto Condensed', 'sans-serif'],
+        'merriweather': ['var(--font-merriweather)', 'Merriweather', 'serif'],
       },
     },
   },

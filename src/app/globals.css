@@ -63,7 +63,7 @@ a {
 }
 
 .article-title {
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: var(--font-merriweather), 'Merriweather', serif;
   font-size: 36px;
   font-weight: 700;
   color: #111111;

@@ -163,7 +163,7 @@ export default function PostDetailPage() {
         <article className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="p-8">
             <header className="mb-8">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4 leading-relaxed">{post.title}</h1>
+              <h1 className="text-4xl font-bold text-gray-900 mb-4 leading-relaxed font-merriweather">{post.title}</h1>
               {post.excerpt && (
                 <p className="text-base text-gray-700 mb-4 font-bold text-justify leading-relaxed">{post.excerpt}</p>
               )}

@@ -212,7 +212,7 @@ export default function PostDetail() {
               <span>{formatDate(post.createdAt)}</span>
             </div>
             
-            <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-relaxed">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-relaxed font-merriweather">
               {post.title}
             </h1>
             

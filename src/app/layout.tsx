@@ -1,7 +1,13 @@
-import { Inter } from 'next/font/google'
+import { Inter, Merriweather } from 'next/font/google'
 import './globals.css'
 import { GoogleOAuthProvider } from '@react-oauth/google'
+
 const inter = Inter({ subsets: ['latin'] })
+const merriweather = Merriweather({ 
+  subsets: ['latin'],
+  weight: ['300', '400', '700', '900'],
+  variable: '--font-merriweather'
+})
 
 export const metadata = {
   title: 'TechNova - Nền tảng tin tức công nghệ hàng đầu Việt Nam',
@@ -33,7 +39,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#3b82f6" />
         <link rel="canonical" href="https://technova.id.vn" />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} ${merriweather.variable}`}>
         <GoogleOAuthProvider clientId={process.env.GOOGLE_ID!}>
           {children}
         </GoogleOAuthProvider>
