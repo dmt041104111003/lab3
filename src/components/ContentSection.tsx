@@ -45,7 +45,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                     />
                   </div>
                 ) : (
-                  <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                  <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                     <div className="text-center">
                       <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -85,7 +85,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
               <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden flex-1">
                 <Link href={article.href} className="block h-full">
                   <div className="flex h-full">
-                    <div className="flex-shrink-0 w-28 aspect-video">
+                    <div className="flex-shrink-0 w-28 aspect-video" style={{ aspectRatio: '16/9' }}>
                       {article.imageUrl ? (
                         <img 
                           src={article.imageUrl} 
@@ -93,7 +93,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                        <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center" style={{ aspectRatio: '16/9' }}>
                           <div className="text-center">
                             <svg className="w-6 h-6 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -135,7 +135,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
           <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
             <Link href={mainArticle.href} className="block">
               <div className="flex p-4">
-                <div className="flex-shrink-0 w-24 h-24">
+                <div className="flex-shrink-0 w-32 aspect-video" style={{ aspectRatio: '16/9' }}>
                   {mainArticle.imageUrl ? (
                     <img 
                       src={mainArticle.imageUrl} 
@@ -143,7 +143,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                       className="w-full h-full object-cover rounded-lg"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
+                    <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center" style={{ aspectRatio: '16/9' }}>
                       <div className="text-center">
                         <svg className="w-8 h-8 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -186,7 +186,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
             <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
               <Link href={article.href} className="block">
                 <div className="flex p-4">
-                  <div className="flex-shrink-0 w-20 h-20">
+                  <div className="flex-shrink-0 w-32 aspect-video" style={{ aspectRatio: '16/9' }}>
                     {article.imageUrl ? (
                       <img 
                         src={article.imageUrl} 
@@ -194,7 +194,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                         className="w-full h-full object-cover rounded-lg"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
+                      <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center" style={{ aspectRatio: '16/9' }}>
                         <div className="text-center">
                           <svg className="w-6 h-6 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -244,7 +244,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                     className="w-full h-full object-cover hover:opacity-95 transition-opacity"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                  <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center" style={{ aspectRatio: '16/9' }}>
                     <div className="text-center">
                       <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -290,7 +290,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
               <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
                 <Link href={article.href} className="block">
                   {article.imageUrl ? (
-                    <div className="relative h-40 overflow-hidden group">
+                    <div className="relative aspect-video overflow-hidden group">
                       <img 
                         src={article.imageUrl} 
                         alt={article.imageAlt || article.title}
@@ -298,7 +298,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                       />
                     </div>
                   ) : (
-                    <div className="h-40 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                    <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                       <div className="text-center">
                         <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />

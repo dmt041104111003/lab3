@@ -147,7 +147,7 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true, 
                   <div key={post.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
                     <a href={`/${basePath}/${post.subcategory}/${post.slug}`} className="block">
                       <div className="flex">
-                        <div className="flex-shrink-0 w-48 h-32">
+                        <div className="flex-shrink-0 w-48 aspect-video">
                           {post.images?.[0]?.image?.path ? (
                             <img 
                               src={post.images[0].image.path} 
@@ -155,7 +155,7 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true, 
                               className="w-full h-full object-cover"
                             />
                           ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                            <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center" style={{ aspectRatio: '16/9' }}>
                               <div className="text-center">
                                 <svg className="w-8 h-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />

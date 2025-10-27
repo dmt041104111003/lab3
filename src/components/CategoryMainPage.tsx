@@ -165,7 +165,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                   <a href={categoryId === 'ban-doc' ? `/ban-doc/${posts[0].slug}` : `/${basePath}/${posts[0].subcategory}/${posts[0].slug}`} className="block">
                     {posts[0].images?.[0]?.image?.path ? (
-                      <div className="relative h-80 overflow-hidden group">
+                      <div className="relative aspect-video overflow-hidden group">
                         <img
                           src={posts[0].images[0].image.path}
                           alt={posts[0].images[0].image.alt || posts[0].title}
@@ -173,7 +173,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                         />
                       </div>
                     ) : (
-                      <div className="h-80 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                      <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                         <div className="text-center">
                           <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />

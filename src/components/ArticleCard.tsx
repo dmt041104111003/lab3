@@ -23,10 +23,10 @@ export default function ArticleCard({ title, href, isMain = false, className = "
             <img 
               src={imageUrl} 
               alt={imageAlt || title}
-              className="w-full h-48 object-cover rounded-lg mb-4"
+              className="w-full aspect-video object-cover rounded-lg mb-4"
             />
           ) : (
-            <div className="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-4 flex items-center justify-center">
+            <div className="w-full aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-4 flex items-center justify-center">
               <div className="text-center">
                 <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -51,7 +51,7 @@ export default function ArticleCard({ title, href, isMain = false, className = "
       <div className={`bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden ${className}`}>
         <Link href={href} className="block">
           <div className="flex">
-            <div className="flex-shrink-0 w-40 h-28">
+            <div className="flex-shrink-0 w-40 aspect-video">
               {imageUrl ? (
                 <img 
                   src={imageUrl} 
@@ -95,7 +95,7 @@ export default function ArticleCard({ title, href, isMain = false, className = "
       <div className={`bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden ${className}`}>
         <Link href={href} className="block">
           <div className="flex p-4">
-            <div className="flex-shrink-0 w-24 h-24">
+            <div className="flex-shrink-0 w-24 aspect-video">
               {imageUrl ? (
                 <img 
                   src={imageUrl} 
@@ -137,7 +137,7 @@ export default function ArticleCard({ title, href, isMain = false, className = "
       <Link href={href} className="block">
         <div className="p-4">
           {imageUrl ? (
-            <div className="relative h-40 overflow-hidden group mb-3">
+            <div className="relative aspect-video overflow-hidden group mb-3">
               <img 
                 src={imageUrl} 
                 alt={imageAlt || title}
@@ -145,7 +145,7 @@ export default function ArticleCard({ title, href, isMain = false, className = "
               />
             </div>
           ) : (
-            <div className="w-full h-40 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-3 flex items-center justify-center">
+            <div className="w-full aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-3 flex items-center justify-center">
               <div className="text-center">
                 <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
