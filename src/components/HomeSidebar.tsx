@@ -18,7 +18,7 @@ interface SidebarSectionProps {
 function SidebarSection({ title, items }: SidebarSectionProps) {
   return (
     <div className="mb-8">
-      <h3 className="text-lg font-bold text-gray-800 mb-4 uppercase tracking-wide">
+      <h3 className="text-sm font-bold text-gray-800 mb-3 uppercase tracking-wide">
         {title}
       </h3>
       <div className="space-y-3">
@@ -26,9 +26,9 @@ function SidebarSection({ title, items }: SidebarSectionProps) {
           <Link
             key={index}
             href={item.href}
-            className="block bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200"
+            className="block bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200"
           >
-            <div className="text-gray-600 text-sm">
+            <div className="text-gray-600 text-xs">
               {item.title}
             </div>
           </Link>

@@ -54,9 +54,9 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                     </div>
                   </div>
                 )}
-                <div className="p-4">
+                <div className="p-3">
                   <h2 
-                    className="text-lg font-bold text-gray-900 mb-3 leading-tight hover:text-red-600 transition-colors line-clamp-2"
+                    className="text-sm font-bold text-gray-900 mb-2 leading-tight hover:text-red-600 transition-colors line-clamp-2"
                     title={mainArticle.title}
                   >
                     {mainArticle.title.length > 60 ? 
@@ -65,7 +65,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                     }
                   </h2>
                   <p 
-                    className="text-gray-600 text-sm leading-relaxed line-clamp-2"
+                    className="text-gray-600 text-xs leading-relaxed line-clamp-2"
                     title={mainArticle.excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
                   >
                     {mainArticle.excerpt ? 
@@ -106,14 +106,14 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                     <div className="flex-1 p-3 flex flex-col justify-between">
                       <div>
                         <h4 
-                          className="text-gray-800 text-sm font-bold mb-2 line-clamp-2 hover:text-red-600 transition-colors"
+                          className="text-gray-800 text-xs font-bold mb-1 line-clamp-2 hover:text-red-600 transition-colors"
                           title={article.title}
                         >
                           {article.title}
                         </h4>
                         {article.excerpt && (
                           <p 
-                            className="text-gray-600 text-xs line-clamp-3"
+                            className="text-gray-600 text-xs line-clamp-2"
                             title={article.excerpt}
                           >
                             {article.excerpt}
@@ -158,7 +158,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                     <div className="text-xs text-blue-600 font-medium mb-1">{mainArticle.category}</div>
                   )}
                   <h2 
-                    className="text-lg font-bold text-gray-800 mb-2 line-clamp-2 hover:text-red-600 transition-colors"
+                    className="text-sm font-bold text-gray-800 mb-1 line-clamp-2 hover:text-red-600 transition-colors"
                     title={mainArticle.title}
                   >
                     {mainArticle.title.length > 70 ? 
@@ -168,7 +168,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                   </h2>
                   {mainArticle.excerpt && (
                     <p 
-                      className="text-gray-600 text-sm line-clamp-3 mb-2"
+                      className="text-gray-600 text-xs line-clamp-2 mb-1"
                       title={mainArticle.excerpt}
                     >
                       {mainArticle.excerpt}
@@ -209,14 +209,14 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                       <div className="text-xs text-blue-600 font-medium mb-1">{article.category}</div>
                     )}
                     <h4 
-                      className="text-gray-800 text-sm font-bold mb-2 line-clamp-2 hover:text-red-600 transition-colors"
+                      className="text-gray-800 text-xs font-bold mb-1 line-clamp-2 hover:text-red-600 transition-colors"
                       title={article.title}
                     >
                       {article.title}
                     </h4>
                     {article.excerpt && (
                       <p 
-                        className="text-gray-600 text-xs line-clamp-3 mb-2"
+                        className="text-gray-600 text-xs line-clamp-2 mb-1"
                         title={article.excerpt}
                       >
                         {article.excerpt}
@@ -257,10 +257,10 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
             </div>
             
             {/* Nội dung bên phải */}
-            <div className="bg-white p-6 md:p-8 flex flex-col justify-center">
+            <div className="bg-white p-4 md:p-6 flex flex-col justify-center">
               <Link href={mainArticle.href} className="block">
                 <h1 
-                  className="text-xl md:text-2xl font-bold text-gray-900 mb-4 leading-tight hover:text-red-600 transition-colors line-clamp-2"
+                  className="text-lg md:text-xl font-bold text-gray-900 mb-3 leading-tight hover:text-red-600 transition-colors line-clamp-2"
                   title={mainArticle.title}
                 >
                   {mainArticle.title.length > 80 ? 
@@ -269,7 +269,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                   }
                 </h1>
                 <p 
-                  className="text-gray-600 text-sm md:text-base leading-relaxed mb-3 line-clamp-3"
+                  className="text-gray-600 text-sm leading-relaxed mb-2 line-clamp-2"
                   title={mainArticle.excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
                 >
                   {mainArticle.excerpt ? 
@@ -308,15 +308,15 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                     </div>
                   )}
                   
-                  <div className="p-4">
+                  <div className="p-3">
                     <h3 
-                      className="text-base font-semibold text-gray-900 mb-2 leading-tight line-clamp-2 hover:text-red-600 transition-colors"
+                      className="text-sm font-semibold text-gray-900 mb-1 leading-tight line-clamp-2 hover:text-red-600 transition-colors"
                       title={article.title}
                     >
                       {article.title}
                     </h3>
                     <p 
-                      className="text-gray-600 text-sm leading-relaxed line-clamp-2"
+                      className="text-gray-600 text-xs leading-relaxed line-clamp-2"
                       title={article.excerpt || "Mô tả ngắn..."}
                     >
                       {article.excerpt || "Mô tả ngắn..."}

@@ -18,15 +18,15 @@ export default function ArticleCard({ title, href, isMain = false, className = "
   if (isMain) {
     return (
       <Link href={href} className={`block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 ${className}`}>
-        <div className="p-6">
+        <div className="p-4">
           {imageUrl ? (
             <img 
               src={imageUrl} 
               alt={imageAlt || title}
-              className="w-full aspect-video object-cover rounded-lg mb-4"
+              className="w-full aspect-video object-cover rounded-lg mb-3"
             />
           ) : (
-            <div className="w-full aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-4 flex items-center justify-center">
+            <div className="w-full aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-3 flex items-center justify-center">
               <div className="text-center">
                 <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -35,10 +35,10 @@ export default function ArticleCard({ title, href, isMain = false, className = "
               </div>
             </div>
           )}
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+          <h3 className="text-sm font-semibold text-gray-800 mb-1">
             {title}
           </h3>
-          <p className="text-gray-600 text-sm">
+          <p className="text-gray-600 text-xs">
             {excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
           </p>
         </div>
@@ -70,10 +70,10 @@ export default function ArticleCard({ title, href, isMain = false, className = "
               )}
             </div>
             
-            <div className="flex-1 p-4">
-              <h4 className="text-gray-800 text-sm font-bold mb-2 line-clamp-2 hover:text-red-600 transition-colors">{title}</h4>
+            <div className="flex-1 p-3">
+              <h4 className="text-gray-800 text-xs font-bold mb-1 line-clamp-2 hover:text-red-600 transition-colors">{title}</h4>
               {excerpt && (
-                <p className="text-gray-600 text-xs line-clamp-2 mb-2">{excerpt}</p>
+                <p className="text-gray-600 text-xs line-clamp-2 mb-1">{excerpt}</p>
               )}
               {comments !== undefined && (
                 <div className="flex items-center text-gray-400 text-xs">
@@ -94,7 +94,7 @@ export default function ArticleCard({ title, href, isMain = false, className = "
     return (
       <div className={`bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden ${className}`}>
         <Link href={href} className="block">
-          <div className="flex p-4">
+          <div className="flex p-3">
             <div className="flex-shrink-0 w-24 aspect-video">
               {imageUrl ? (
                 <img 
@@ -114,13 +114,13 @@ export default function ArticleCard({ title, href, isMain = false, className = "
               )}
             </div>
             
-            <div className="flex-1 ml-4">
+            <div className="flex-1 ml-3">
               {category && (
                 <div className="text-xs text-blue-600 font-medium mb-1">{category}</div>
               )}
-              <h4 className="text-gray-800 text-sm font-bold mb-2 line-clamp-2 hover:text-red-600 transition-colors">{title}</h4>
+              <h4 className="text-gray-800 text-xs font-bold mb-1 line-clamp-2 hover:text-red-600 transition-colors">{title}</h4>
               {excerpt && (
-                <p className="text-gray-600 text-xs line-clamp-3 mb-2">{excerpt}</p>
+                <p className="text-gray-600 text-xs line-clamp-2 mb-1">{excerpt}</p>
               )}
               {timestamp && (
                 <div className="text-gray-400 text-xs">{timestamp}</div>
@@ -135,7 +135,7 @@ export default function ArticleCard({ title, href, isMain = false, className = "
   return (
     <div className={`bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden ${className}`}>
       <Link href={href} className="block">
-        <div className="p-4">
+        <div className="p-3">
           {imageUrl ? (
             <div className="relative aspect-video overflow-hidden group mb-3">
               <img 
@@ -155,7 +155,7 @@ export default function ArticleCard({ title, href, isMain = false, className = "
             </div>
           )}
           <div className="text-center">
-            <h4 className="text-gray-800 text-sm font-medium mb-1 hover:text-red-600 transition-colors">{title}</h4>
+            <h4 className="text-gray-800 text-xs font-medium mb-1 hover:text-red-600 transition-colors">{title}</h4>
             {excerpt && (
               <p className="text-gray-600 text-xs line-clamp-2">{excerpt}</p>
             )}

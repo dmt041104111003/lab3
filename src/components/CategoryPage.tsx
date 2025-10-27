@@ -142,12 +142,12 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true, 
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
                 Tất cả bài viết {title} ({totalCount} bài)
               </h2>
-              <div className="space-y-6">
+              <div className="space-y-3">
                 {posts.map((post) => (
                   <div key={post.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
                     <a href={`/${basePath}/${post.subcategory}/${post.slug}`} className="block">
                       <div className="flex">
-                        <div className="flex-shrink-0 w-48 aspect-video">
+                        <div className="flex-shrink-0 w-20 aspect-video">
                           {post.images?.[0]?.image?.path ? (
                             <img 
                               src={post.images[0].image.path} 
@@ -165,8 +165,8 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true, 
                             </div>
                           )}
                         </div>
-                        <div className="flex-1 p-6">
-                          <div className="flex items-center text-sm text-gray-500 mb-3">
+                        <div className="flex-1 p-3">
+                          <div className="flex items-center text-xs text-gray-500 mb-2">
                             <span className="capitalize">{post.subcategory}</span>
                             <span className="mx-2">•</span>
                             <span>{new Date(post.createdAt).toLocaleString('vi-VN', {
@@ -179,13 +179,13 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true, 
                             <span className="mx-2">•</span>
                             <span>{post.authorName || 'Tác giả'}</span>
                           </div>
-                          <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight hover:text-red-600 transition-colors">
+                          <h3 className="text-sm font-bold text-gray-900 mb-1 leading-tight hover:text-red-600 transition-colors">
                             {post.title}
                           </h3>
-                          <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                          <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">
                             {post.excerpt || "Mô tả ngắn về bài viết..."}
                           </p>
-                          <div className="mt-4 flex items-center text-gray-500 text-xs">
+                          <div className="mt-2 flex items-center text-gray-500 text-xs">
                             <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                             </svg>

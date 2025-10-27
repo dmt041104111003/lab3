@@ -161,7 +161,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-3">
             {posts.length > 0 && (
-              <div className="space-y-6">
+              <div className="space-y-3">
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                   <a href={categoryId === 'ban-doc' ? `/ban-doc/${posts[0].slug}` : `/${basePath}/${posts[0].subcategory}/${posts[0].slug}`} className="block">
                     {posts[0].images?.[0]?.image?.path ? (
@@ -182,8 +182,8 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                         </div>
                       </div>
                     )}
-                    <div className="p-6">
-                      <div className="flex items-center text-sm text-gray-500 mb-4">
+                    <div className="p-3">
+                      <div className="flex items-center text-xs text-gray-500 mb-2">
                         <span className="capitalize">{posts[0].subcategory}</span>
                         <span className="mx-2">•</span>
                         <span>{new Date(posts[0].createdAt).toLocaleString('vi-VN', {
@@ -196,11 +196,11 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                         <span className="mx-2">•</span>
                         <span>{posts[0].authorName || 'Tác giả'}</span>
                       </div>
-                      <h1 className="text-3xl font-bold text-gray-900 mb-4 hover:text-red-600 transition-colors">
+                      <h1 className="text-lg font-bold text-gray-900 mb-2 hover:text-red-600 transition-colors">
                         {posts[0].title}
                       </h1>
                       {posts[0].excerpt && (
-                        <p className="text-lg text-gray-600 leading-relaxed">
+                        <p className="text-sm text-gray-600 leading-relaxed">
                           {posts[0].excerpt}
                         </p>
                       )}
@@ -210,12 +210,12 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                 </div>
 
                 {posts.length > 1 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {posts.slice(1, 3).map((post) => (
                       <div key={post.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
                         <a href={categoryId === 'ban-doc' ? `/ban-doc/${post.slug}` : `/${basePath}/${post.subcategory}/${post.slug}`} className="block">
                           {post.images?.[0]?.image?.path ? (
-                            <div className="relative h-48 overflow-hidden group">
+                            <div className="relative aspect-video overflow-hidden group">
                               <img
                                 src={post.images[0].image.path}
                                 alt={post.images[0].image.alt || post.title}
@@ -223,7 +223,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                               />
                             </div>
                           ) : (
-                            <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                            <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                               <div className="text-center">
                                 <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -232,7 +232,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                               </div>
                             </div>
                           )}
-                          <div className="p-4">
+                          <div className="p-3">
                             <div className="flex items-center text-xs text-gray-500 mb-2">
                               <span className="capitalize">{post.subcategory}</span>
                               <span className="mx-2">•</span>
@@ -244,10 +244,10 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                                 minute: '2-digit'
                               })}</span>
                             </div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-2 leading-tight hover:text-red-600 transition-colors">
+                            <h3 className="text-sm font-bold text-gray-900 mb-1 leading-tight hover:text-red-600 transition-colors">
                               {post.title}
                             </h3>
-                            <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                            <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">
                               {post.excerpt || "Mô tả ngắn về bài viết..."}
                             </p>
                           </div>
