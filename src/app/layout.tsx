@@ -3,6 +3,21 @@ import './globals.css'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 const inter = Inter({ subsets: ['latin'] })
 
+export const metadata = {
+  title: 'TechNova - Nền tảng tin tức công nghệ hàng đầu Việt Nam',
+  description: 'Cập nhật tin tức công nghệ mới nhất, đánh giá sản phẩm, xu hướng công nghệ và chuyển đổi số tại Việt Nam.',
+  keywords: 'công nghệ, tin tức công nghệ, AI, chuyển đổi số, startup, đổi mới sáng tạo, blockchain, metaverse',
+  robots: 'index, follow',
+  openGraph: {
+    title: 'TechNova - Nền tảng tin tức công nghệ hàng đầu Việt Nam',
+    description: 'Cập nhật tin tức công nghệ mới nhất, đánh giá sản phẩm, xu hướng công nghệ và chuyển đổi số tại Việt Nam.',
+    url: 'https://technova.id.vn',
+    siteName: 'TechNova',
+    locale: 'vi_VN',
+    type: 'website',
+  },
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -11,13 +26,15 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <head>
-         <link rel="icon" href="/footer.png" />
- 
+        <link rel="icon" href="/footer.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#3b82f6" />
+        <link rel="canonical" href="https://technova.id.vn" />
       </head>
       <body className={inter.className}>
         <GoogleOAuthProvider clientId={process.env.GOOGLE_ID!}>
           {children}
-          </GoogleOAuthProvider>
+        </GoogleOAuthProvider>
       </body>
     </html>
   )
