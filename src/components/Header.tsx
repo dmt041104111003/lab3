@@ -5,6 +5,8 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { getSession, setSession, clearSession, isAdmin, type User } from '@/lib/session'
+import NotificationPopup from './NotificationPopup'
+import TagBadge from './TagBadge'
 
 export default function Header() {
   const pathname = usePathname()
@@ -21,6 +23,8 @@ export default function Header() {
   const [searchResults, setSearchResults] = useState<any[]>([])
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false)
+  const [unreadCount, setUnreadCount] = useState(0)
 
   const megaMenuCategories = [
     {
@@ -100,6 +104,9 @@ export default function Header() {
       setIsLoggedIn(true)
       setIsAdminUser(session.role === 'ADMIN')
     }
+
+    // Fetch unread count
+    fetchUnreadCount()
 
     const handleStorage = (e: StorageEvent) => {
       if (e.key === 'user_session') {
@@ -313,6 +320,42 @@ export default function Header() {
     setSearchResults([])
   }
 
+  const fetchUnreadCount = async () => {
+    try {
+      const deviceData = {
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        platform: navigator.platform,
+        screenResolution: `${screen.width}x${screen.height}`,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        cookieEnabled: navigator.cookieEnabled,
+        doNotTrack: navigator.doNotTrack || 'unknown',
+        hardwareConcurrency: navigator.hardwareConcurrency || 0,
+        maxTouchPoints: navigator.maxTouchPoints || 0,
+        colorDepth: screen.colorDepth,
+        pixelRatio: window.devicePixelRatio || 1,
+      }
+
+      const response = await fetch('/api/notifications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'count',
+          deviceData
+        })
+      })
+      const data = await response.json()
+      
+      if (data.success) {
+        setUnreadCount(data.count)
+      }
+    } catch (error) {
+      console.error('Error fetching unread count:', error)
+    }
+  }
+
   const highlightSearchTerm = (text: string, searchTerm: string) => {
     if (!searchTerm.trim()) return text
     
@@ -405,6 +448,22 @@ export default function Header() {
           </nav>
 
           <div className="hidden md:flex items-center">
+            <button
+              onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+              className="relative p-2 rounded-lg text-gray-700 hover:text-tech-blue hover:bg-gray-100 transition-colors flex items-center justify-center"
+              aria-label="Thông báo"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
+            </button>
+            
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
               className="p-2 rounded-lg text-gray-700 hover:text-tech-blue hover:bg-gray-100 transition-colors flex items-center justify-center"
@@ -507,6 +566,22 @@ export default function Header() {
 
               </>
             )}
+            
+            <button 
+              className="md:hidden relative p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
+              onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+              aria-label="Thông báo"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
+            </button>
             
             <button 
               className="md:hidden p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
@@ -679,15 +754,12 @@ export default function Header() {
                                   {result.tags.length > 0 && (
                                     <>
                                       <span className="mx-2">•</span>
-                                      <span
-                                        className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white"
-                                        style={{ backgroundColor: result.tags[0].color || '#3B82F6' }}
-                                      >
+                                      <TagBadge color={result.tags[0].color}>
                                         <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                           <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
                                         </svg>
                                         {result.tags[0].name}
-                                      </span>
+                                      </TagBadge>
                                     </>
                                   )}
                                 </div>
@@ -826,6 +898,15 @@ export default function Header() {
             </div>
           </div>
         )}
+
+        {/* Notification Popup */}
+        <NotificationPopup 
+          isOpen={isNotificationOpen} 
+          onClose={() => {
+            setIsNotificationOpen(false)
+            fetchUnreadCount() // Refresh count when popup closes
+          }} 
+        />
       </div>
     </header>
   )

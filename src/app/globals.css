@@ -18,6 +18,10 @@
   animation: slide-down 0.3s ease;
 }
 
+.tag-color {
+  background-color: var(--tag-color);
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 255, 255, 255;
