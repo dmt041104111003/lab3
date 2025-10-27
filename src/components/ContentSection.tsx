@@ -32,8 +32,8 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
       <SectionBanner title={title} />
       <div className="mt-6">
       {variant === 'split' ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-          <div className="md:col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
             <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
               <Link href={mainArticle.href} className="block">
                 {mainArticle.imageUrl ? (
@@ -80,12 +80,12 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
               </Link>
             </div>
           </div>
-          <div className="space-y-3 h-full">
+          <div className="space-y-4">
             {subArticles.map((article, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden flex-1">
-                <Link href={article.href} className="block h-full">
-                  <div className="flex h-full">
-                    <div className="flex-shrink-0 w-28 aspect-video" style={{ aspectRatio: '16/9' }}>
+              <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                <Link href={article.href} className="block">
+                  <div className="flex">
+                    <div className="flex-shrink-0 w-32 aspect-video" style={{ aspectRatio: '16/9' }}>
                       {article.imageUrl ? (
                         <img 
                           src={article.imageUrl} 
