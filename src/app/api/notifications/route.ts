@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
         replies: replies.map(reply => ({
           id: reply.id,
           content: reply.content,
-          createdAt: reply.createdAt,
+          createdAt: reply.createdAt.toISOString(),
           authorName: reply.author.name,
           commentId: reply.commentId,
           parentContent: reply.comment.content,
@@ -125,7 +125,7 @@ export async function GET(request: NextRequest) {
           title: post.title,
           slug: post.slug,
           excerpt: post.excerpt,
-          createdAt: post.createdAt,
+          createdAt: post.createdAt.toISOString(),
           category: post.category,
           subcategory: post.subcategory,
           authorName: post.authorName,
@@ -175,22 +175,27 @@ export async function GET(request: NextRequest) {
             },
             take: 1
           }
-        },
-        orderBy: {
-          createdAt: 'desc'
-        },
-        take: 20
+        }
       })
+
+      // Sort by viewedAt (most recent first) and take top 20
+      const sortedPosts = readPosts
+        .sort((a, b) => {
+          const aTime = a.views[0]?.viewedAt?.getTime() || 0
+          const bTime = b.views[0]?.viewedAt?.getTime() || 0
+          return bTime - aTime
+        })
+        .slice(0, 20)
 
       return NextResponse.json({
         success: true,
-        notifications: readPosts.map(post => ({
+        notifications: sortedPosts.map(post => ({
           id: post.id,
           title: post.title,
           slug: post.slug,
           excerpt: post.excerpt,
-          createdAt: post.createdAt,
-          viewedAt: post.views[0]?.viewedAt,
+          createdAt: post.createdAt.toISOString(),
+          viewedAt: post.views[0]?.viewedAt?.toISOString(),
           category: post.category,
           subcategory: post.subcategory,
           authorName: post.authorName,

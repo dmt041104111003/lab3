@@ -155,13 +155,25 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString)
     const now = new Date()
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60))
+    const diffInMs = now.getTime() - date.getTime()
+    const diffInMinutes = Math.floor(diffInMs / (1000 * 60))
+    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60))
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24))
     
-    if (diffInHours < 1) return 'Vừa xong'
-    if (diffInHours < 24) return `${diffInHours}h trước`
-    const diffInDays = Math.floor(diffInHours / 24)
+    if (diffInMinutes < 1) return 'Vừa xong'
+    if (diffInMinutes < 60) return `${diffInMinutes} phút trước`
+    if (diffInHours < 24) return `${diffInHours} giờ trước`
     if (diffInDays < 7) return `${diffInDays} ngày trước`
-    return date.toLocaleDateString('vi-VN')
+    if (diffInDays < 30) {
+      const weeks = Math.floor(diffInDays / 7)
+      return `${weeks} tuần trước`
+    }
+    
+    return date.toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    })
   }
 
   const getCategoryName = (category?: string, subcategory?: string) => {
