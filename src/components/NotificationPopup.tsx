@@ -20,9 +20,10 @@ interface Notification {
 interface NotificationPopupProps {
   isOpen: boolean
   onClose: () => void
+  onNotificationToggle?: (isEnabled: boolean) => void
 }
 
-export default function NotificationPopup({ isOpen, onClose }: NotificationPopupProps) {
+export default function NotificationPopup({ isOpen, onClose, onNotificationToggle }: NotificationPopupProps) {
   const [activeTab, setActiveTab] = useState<'thongbao' | 'ykien' | 'daxem'>('thongbao')
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
@@ -184,8 +185,9 @@ export default function NotificationPopup({ isOpen, onClose }: NotificationPopup
   }
 
   const handleSubscribeToggle = () => {
-    setIsSubscribed(!isSubscribed)
-    // Here you can add logic to save subscription preference
+    const newState = !isSubscribed
+    setIsSubscribed(newState)
+    onNotificationToggle?.(newState)
   }
 
   if (!isOpen) return null
@@ -251,7 +253,7 @@ export default function NotificationPopup({ isOpen, onClose }: NotificationPopup
             <div>
               <button
                 onClick={handleSubscribeToggle}
-                className={`w-full mx-4 my-3 px-6 py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
+                className={`mx-4 my-3 px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
                   isSubscribed
                     ? 'bg-blue-500 text-white hover:bg-blue-600'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -261,7 +263,7 @@ export default function NotificationPopup({ isOpen, onClose }: NotificationPopup
                   <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                   <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
                 </svg>
-                {isSubscribed ? 'Tắt nhận thông báo' : 'Bật nhận thông báo'}
+                {isSubscribed ? 'Tắt' : 'Bật'}
               </button>
 
               {isLoading ? (

@@ -25,6 +25,7 @@ export default function Header() {
   const [isSearching, setIsSearching] = useState(false)
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
+  const [isNotificationEnabled, setIsNotificationEnabled] = useState(true)
 
   const megaMenuCategories = [
     {
@@ -96,6 +97,42 @@ export default function Header() {
     }
   ]
 
+  const fetchUnreadCount = async () => {
+    try {
+      const deviceData = {
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        platform: navigator.platform,
+        screenResolution: `${screen.width}x${screen.height}`,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        cookieEnabled: navigator.cookieEnabled,
+        doNotTrack: navigator.doNotTrack || 'unknown',
+        hardwareConcurrency: navigator.hardwareConcurrency || 0,
+        maxTouchPoints: navigator.maxTouchPoints || 0,
+        colorDepth: screen.colorDepth,
+        pixelRatio: window.devicePixelRatio || 1,
+      }
+
+      const response = await fetch('/api/notifications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'count',
+          deviceData
+        })
+      })
+      const data = await response.json()
+      
+      if (data.success) {
+        setUnreadCount(data.count)
+      }
+    } catch (error) {
+      console.error('Error fetching unread count:', error)
+    }
+  }
+
   useEffect(() => {
     setMounted(true)
     const session = getSession()
@@ -107,6 +144,12 @@ export default function Header() {
 
     // Fetch unread count
     fetchUnreadCount()
+
+    // Load notification preference from localStorage
+    const savedNotificationState = localStorage.getItem('notificationEnabled')
+    if (savedNotificationState !== null) {
+      setIsNotificationEnabled(savedNotificationState === 'true')
+    }
 
     const handleStorage = (e: StorageEvent) => {
       if (e.key === 'user_session') {
@@ -320,42 +363,6 @@ export default function Header() {
     setSearchResults([])
   }
 
-  const fetchUnreadCount = async () => {
-    try {
-      const deviceData = {
-        userAgent: navigator.userAgent,
-        language: navigator.language,
-        platform: navigator.platform,
-        screenResolution: `${screen.width}x${screen.height}`,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        cookieEnabled: navigator.cookieEnabled,
-        doNotTrack: navigator.doNotTrack || 'unknown',
-        hardwareConcurrency: navigator.hardwareConcurrency || 0,
-        maxTouchPoints: navigator.maxTouchPoints || 0,
-        colorDepth: screen.colorDepth,
-        pixelRatio: window.devicePixelRatio || 1,
-      }
-
-      const response = await fetch('/api/notifications', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          type: 'count',
-          deviceData
-        })
-      })
-      const data = await response.json()
-      
-      if (data.success) {
-        setUnreadCount(data.count)
-      }
-    } catch (error) {
-      console.error('Error fetching unread count:', error)
-    }
-  }
-
   const highlightSearchTerm = (text: string, searchTerm: string) => {
     if (!searchTerm.trim()) return text
     
@@ -457,7 +464,7 @@ export default function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
               </svg>
-              {unreadCount > 0 && (
+              {isNotificationEnabled && unreadCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
                   {unreadCount > 99 ? '99+' : unreadCount}
                 </span>
@@ -576,7 +583,7 @@ export default function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
               </svg>
-              {unreadCount > 0 && (
+              {isNotificationEnabled && unreadCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
                   {unreadCount > 99 ? '99+' : unreadCount}
                 </span>
@@ -911,7 +918,12 @@ export default function Header() {
           onClose={() => {
             setIsNotificationOpen(false)
             fetchUnreadCount() // Refresh count when popup closes
-          }} 
+          }}
+          onNotificationToggle={(isEnabled) => {
+            setIsNotificationEnabled(isEnabled)
+            // Save to localStorage
+            localStorage.setItem('notificationEnabled', isEnabled.toString())
+          }}
         />
       </div>
     </header>
