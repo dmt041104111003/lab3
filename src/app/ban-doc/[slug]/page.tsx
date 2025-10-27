@@ -166,9 +166,6 @@ export default function PostDetailPage() {
           <div className="p-8">
             <header className="mb-8">
               <h1 className="text-4xl font-bold text-gray-900 mb-4 leading-relaxed font-merriweather">{post.title}</h1>
-              {post.excerpt && (
-                <p className="text-base text-gray-700 mb-4 font-bold text-justify leading-relaxed">{post.excerpt}</p>
-              )}
               <div className="flex items-center justify-end text-sm text-gray-500 mb-4 flex-wrap gap-2">
                 <span>{new Date(post.createdAt).toLocaleString('vi-VN', {
                   year: 'numeric',
@@ -209,6 +206,9 @@ export default function PostDetailPage() {
                   </>
                 )}
               </div>
+              {post.excerpt && (
+                <p className="text-base text-gray-700 mb-4 font-bold text-justify leading-relaxed">{post.excerpt}</p>
+              )}
             </header>
             
             

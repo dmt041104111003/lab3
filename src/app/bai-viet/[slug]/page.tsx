@@ -173,6 +173,9 @@ export default function PostDetail() {
 
         <article className="bg-white shadow rounded-lg overflow-hidden">
           <div className="px-6 py-8 border-b border-gray-200">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-relaxed font-merriweather">
+              {post.title}
+            </h1>
             <div className="flex items-center justify-end text-sm text-gray-500 mb-4 flex-wrap gap-2">
               <span>{formatDate(post.createdAt)}</span>
               <span>•</span>
@@ -209,10 +212,6 @@ export default function PostDetail() {
               <span>•</span>
               <span>{post.authorName || 'Tác giả'}</span>
             </div>
-            
-            <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-relaxed font-merriweather">
-              {post.title}
-            </h1>
             
             {post.excerpt && (
               <p className="text-base text-gray-700 leading-relaxed font-bold text-justify mb-6">
