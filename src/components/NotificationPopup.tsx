@@ -266,14 +266,15 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
         <div className="max-h-96 overflow-y-auto overflow-x-hidden scrollbar-thin">
           {activeTab === 'thongbao' && (
             <div>
-              <button
-                onClick={handleSubscribeToggle}
-                className={`w-full mx-4 my-3 px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
-                  isSubscribed
-                    ? 'bg-blue-500 text-white hover:bg-blue-600'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
+              <div className="px-4 my-3">
+                <button
+                  onClick={handleSubscribeToggle}
+                  className={`w-full px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
+                    isSubscribed
+                      ? 'bg-blue-500 text-white hover:bg-blue-600'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                   <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
@@ -320,6 +321,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
                   <p className="text-sm text-gray-500">Không có thông báo mới</p>
                 </div>
               )}
+              </div>
             </div>
           )}
 
