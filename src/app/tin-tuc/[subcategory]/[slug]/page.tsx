@@ -167,7 +167,7 @@ export default function PostDetailPage() {
               {post.excerpt && (
                 <p className="text-base text-gray-700 mb-4 font-bold text-justify leading-relaxed">{post.excerpt}</p>
               )}
-              <div className="flex items-center text-sm text-gray-500 mb-4 flex-wrap gap-2">
+              <div className="flex items-center justify-between text-sm text-gray-500 mb-4 flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                   {post.category && (
                     <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
@@ -200,7 +200,6 @@ export default function PostDetailPage() {
                     </>
                   )}
                 </div>
-                <span>•</span>
                 <span>{new Date(post.createdAt).toLocaleString('vi-VN', {
                   year: 'numeric',
                   month: '2-digit',
