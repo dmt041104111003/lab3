@@ -119,12 +119,15 @@ export default function Sidebar({ quickNews = [], techToday = [], mostRead = [],
                           <img
                             src={post.images[0].image.path}
                             alt={post.images[0].image.alt || post.title}
-                            className="w-14 h-14 object-cover rounded"
+                            className="w-14 aspect-video object-cover rounded"
                           />
                         )}
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs text-gray-700 group-hover:text-gray-900 line-clamp-2">
+                            <span 
+                              className="text-xs text-gray-700 group-hover:text-gray-900 line-clamp-2"
+                              title={post.title}
+                            >
                               {post.title}
                             </span>
                             <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-red-500 text-white text-[10px] uppercase">New</span>

@@ -244,10 +244,16 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                                 minute: '2-digit'
                               })}</span>
                             </div>
-                            <h3 className="text-sm font-bold text-gray-900 mb-1 leading-tight hover:text-red-600 transition-colors">
+                            <h3 
+                              className="text-sm font-bold text-gray-900 mb-1 leading-tight hover:text-red-600 transition-colors"
+                              title={post.title}
+                            >
                               {post.title}
                             </h3>
-                            <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">
+                            <p 
+                              className="text-gray-600 text-xs leading-relaxed line-clamp-2"
+                              title={post.excerpt || "Mô tả ngắn về bài viết..."}
+                            >
                               {post.excerpt || "Mô tả ngắn về bài viết..."}
                             </p>
                           </div>
