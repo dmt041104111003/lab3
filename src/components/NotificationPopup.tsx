@@ -175,6 +175,21 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
     return 'Khác'
   }
 
+  const getPostUrl = (notification: Notification) => {
+    // Special case for "ban-doc" category
+    if (notification.category === 'ban-doc') {
+      return `/ban-doc/${notification.slug}`
+    }
+    
+    // Regular format: /{category}/{subcategory}/{slug}
+    if (notification.category && notification.subcategory) {
+      return `/${notification.category}/${notification.subcategory}/${notification.slug}`
+    }
+    
+    // Fallback to slug only
+    return `/bai-viet/${notification.slug}`
+  }
+
   const handleTabChange = (tab: 'thongbao' | 'ykien' | 'daxem') => {
     setActiveTab(tab)
     if (tab === 'thongbao') {
@@ -253,7 +268,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
             <div>
               <button
                 onClick={handleSubscribeToggle}
-                className={`mx-4 my-3 px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
+                className={`w-full mx-4 my-3 px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
                   isSubscribed
                     ? 'bg-blue-500 text-white hover:bg-blue-600'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -275,7 +290,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
                   {notifications.map((notification) => (
                     <Link
                       key={notification.id}
-                      href={`/bai-viet/${notification.slug}`}
+                      href={getPostUrl(notification)}
                       className="block p-4 hover:bg-gray-50 transition-colors"
                       onClick={onClose}
                     >
@@ -328,7 +343,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
                   {notifications.map((notification) => (
                     <Link
                       key={notification.id}
-                      href={`/bai-viet/${notification.slug}`}
+                      href={getPostUrl(notification)}
                       className="block p-4 hover:bg-gray-50 transition-colors"
                       onClick={onClose}
                     >
