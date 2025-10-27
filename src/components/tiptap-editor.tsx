@@ -5,6 +5,7 @@ import StarterKit from '@tiptap/starter-kit';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { Link } from '@tiptap/extension-link';
 import { Image } from '@tiptap/extension-image';
+import { Youtube } from '@tiptap/extension-youtube';
 import { Table } from '@tiptap/extension-table';
 import { TableRow } from '@tiptap/extension-table-row';
 import { TableCell } from '@tiptap/extension-table-cell';
@@ -44,6 +45,7 @@ import {
   Redo,
   Link as LinkIcon,
   Image as ImageIcon,
+  Youtube as YoutubeIcon,
   Table as TableIcon,
   Highlighter,
   Strikethrough,
@@ -71,8 +73,10 @@ export { TipTapPreview } from './tiptap-preview';
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
   const [showLinkModal, setShowLinkModal] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
+  const [showYoutubeModal, setShowYoutubeModal] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [youtubeUrl, setYoutubeUrl] = useState('');
 
   useEffect(() => {
     if (!editor) return;
@@ -119,6 +123,20 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     editor.chain().focus().setImage({ src: imageUrl }).run();
     setImageUrl('');
     setShowImageModal(false);
+  };
+
+  const addYoutube = () => {
+    setShowYoutubeModal(true);
+  };
+
+  const handleAddYoutube = () => {
+    if (!youtubeUrl.trim()) {
+      alert('Please enter a valid YouTube URL');
+      return;
+    }
+    editor.chain().focus().setYoutubeVideo({ src: youtubeUrl }).run();
+    setYoutubeUrl('');
+    setShowYoutubeModal(false);
   };
 
   const addTable = () => {
@@ -449,6 +467,14 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           >
             <ImageIcon className="h-4 w-4" />
           </button>
+          <button
+            type="button"
+            onClick={addYoutube}
+            className="p-2 rounded hover:bg-gray-200 text-gray-600  transition-colors"
+            title="Add YouTube Video"
+          >
+            <YoutubeIcon className="h-4 w-4" />
+          </button>
         </div>
 
         <div className="w-px h-6 bg-gray-300 "></div>
@@ -566,6 +592,52 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           </div>
         </div>
       </AdminModal>
+
+      <AdminModal
+        isOpen={showYoutubeModal}
+        onClose={() => {
+          setShowYoutubeModal(false);
+          setYoutubeUrl('');
+        }}
+        title="Add YouTube Video"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700  mb-2">
+              YouTube URL
+            </label>
+            <input
+              type="url"
+              value={youtubeUrl}
+              onChange={(e) => setYoutubeUrl(e.target.value)}
+              placeholder="https://www.youtube.com/watch?v=VIDEO_ID"
+              className="w-full px-3 py-2 border border-gray-300  rounded-md bg-white  text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Supports: youtube.com/watch?v=, youtu.be/, youtube.com/embed/
+            </p>
+          </div>
+          <div className="flex justify-end gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                setShowYoutubeModal(false);
+                setYoutubeUrl('');
+              }}
+              className="px-4 py-2 border border-gray-300  rounded-md bg-white  text-gray-700  hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleAddYoutube}
+              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+            >
+              Add Video
+            </button>
+          </div>
+        </div>
+      </AdminModal>
     </>
   );
 };
@@ -615,6 +687,14 @@ export function TipTapEditor({ content, onChange, placeholder }: TipTapEditorPro
           class: 'max-w-full h-auto rounded-lg shadow-md mx-auto',
         },
       }),
+      Youtube.configure({
+        width: undefined,
+        height: undefined,
+        HTMLAttributes: {
+          class: 'w-full h-auto rounded-lg shadow-md mx-auto my-4',
+          style: 'aspect-ratio: 16/9; max-width: 100%;',
+        },
+      }),
       Table.configure({
         resizable: true,
         HTMLAttributes: {
@@ -659,6 +739,23 @@ export function TipTapEditor({ content, onChange, placeholder }: TipTapEditorPro
       },
       handleKeyDown: (view, event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
+          const { state } = view;
+          const { selection } = state;
+          const text = state.doc.textBetween(selection.from, selection.to);
+          
+          const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+          const match = text.match(youtubeRegex);
+          
+          if (match) {
+            event.preventDefault();
+            const videoId = match[1];
+            const youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
+            
+            const tr = state.tr.delete(selection.from, selection.to);
+            editor?.chain().focus().setYoutubeVideo({ src: youtubeUrl }).run();
+            return true;
+          }
+          
           return false;
         }
         return false;
@@ -670,6 +767,27 @@ export function TipTapEditor({ content, onChange, placeholder }: TipTapEditorPro
         } catch {
           return html;
         }
+      },
+      handlePaste: (view, event) => {
+        const clipboardData = event.clipboardData || (window as any).clipboardData;
+        if (!clipboardData) return false;
+        
+        const text = clipboardData.getData('text/plain');
+        if (!text) return false;
+        
+        const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+        const match = text.match(youtubeRegex);
+        
+        if (match) {
+          event.preventDefault();
+          const videoId = match[1];
+          const youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
+          
+          editor?.chain().focus().setYoutubeVideo({ src: youtubeUrl }).run();
+          return true;
+        }
+        
+        return false;
       },
     },
     onUpdate: ({ editor }) => {

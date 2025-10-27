@@ -5,6 +5,7 @@ import StarterKit from '@tiptap/starter-kit';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { Link } from '@tiptap/extension-link';
 import { Image } from '@tiptap/extension-image';
+import { Youtube } from '@tiptap/extension-youtube';
 import { Table } from '@tiptap/extension-table';
 import { TableRow } from '@tiptap/extension-table-row';
 import { TableCell } from '@tiptap/extension-table-cell';
@@ -159,6 +160,14 @@ export function TipTapPreview({ content, className = "" }: TipTapPreviewProps) {
       Image.configure({
         HTMLAttributes: {
           class: 'max-w-full h-auto rounded-lg shadow-md mx-auto',
+        },
+      }),
+      Youtube.configure({
+        width: undefined,
+        height: undefined,
+        HTMLAttributes: {
+          class: 'w-full h-auto rounded-lg shadow-md mx-auto my-4',
+          style: 'aspect-ratio: 16/9; max-width: 100%;',
         },
       }),
       Table.configure({
