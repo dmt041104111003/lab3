@@ -337,7 +337,7 @@ export default function Header() {
         <div className="flex justify-between items-center h-20">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
+            className="md:hidden p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100 flex items-center justify-center"
             aria-label="Toggle mobile menu"
           >
             <span className="sr-only">Menu</span>
@@ -362,7 +362,7 @@ export default function Header() {
             </Link>
           </div>
 
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex space-x-8 items-center">
             <Link href="/" className={getNavLinkClasses('/')}>
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
@@ -407,7 +407,7 @@ export default function Header() {
           <div className="hidden md:flex items-center">
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="p-2 rounded-lg text-gray-700 hover:text-tech-blue hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-lg text-gray-700 hover:text-tech-blue hover:bg-gray-100 transition-colors flex items-center justify-center"
               aria-label="Tìm kiếm"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
