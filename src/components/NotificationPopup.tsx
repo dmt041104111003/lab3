@@ -192,7 +192,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
   if (!isOpen) return null
 
   return (
-    <div className="w-[calc(100vw-2rem)] sm:w-96 bg-white rounded-lg shadow-xl border border-gray-200 animate-slideDown">
+    <div className="w-full sm:w-96 bg-white sm:rounded-lg sm:shadow-xl sm:border sm:border-gray-200 animate-slideDown">
         {/* Tabs */}
         <div className="flex border-b border-gray-200">
           <button

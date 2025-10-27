@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { getSession, setSession, clearSession, isAdmin, type User } from '@/lib/session'
 import NotificationPopup from './NotificationPopup'
@@ -26,6 +26,8 @@ export default function Header() {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(true)
+  const notificationButtonRef = useRef<HTMLDivElement | null>(null)
+  const [notificationPosition, setNotificationPosition] = useState<'right' | 'left'>('right')
 
   const megaMenuCategories = [
     {
@@ -221,6 +223,21 @@ export default function Header() {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [isMegaMenuOpen, isProfileMenuOpen, isNotificationOpen, isSearchOpen])
+
+  useEffect(() => {
+    if (isNotificationOpen && notificationButtonRef.current) {
+      const buttonRect = notificationButtonRef.current.getBoundingClientRect()
+      const popupWidth = window.innerWidth < 640 ? window.innerWidth - 32 : 384 // 384px = w-96
+      const spaceOnRight = window.innerWidth - buttonRect.right
+      
+      // If not enough space on right, position on left
+      if (spaceOnRight < popupWidth) {
+        setNotificationPosition('left')
+      } else {
+        setNotificationPosition('right')
+      }
+    }
+  }, [isNotificationOpen])
 
   if (!mounted) {
     return (
@@ -458,7 +475,7 @@ export default function Header() {
           </nav>
 
           <div className="hidden md:flex items-center">
-            <div className="relative" data-notification-menu>
+            <div className="relative" data-notification-menu ref={notificationButtonRef}>
               <button
                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
                 className="relative p-2 rounded-lg text-gray-700 hover:text-tech-blue hover:bg-gray-100 transition-colors flex items-center justify-center"
@@ -477,7 +494,7 @@ export default function Header() {
               
               {/* Desktop Notification Popup */}
               {isNotificationOpen && (
-                <div className="absolute right-0 mt-2 z-50">
+                <div className="absolute left-1/2 -translate-x-1/2 mt-2 z-50">
                   <NotificationPopup 
                     isOpen={isNotificationOpen} 
                     onClose={() => {
@@ -596,40 +613,21 @@ export default function Header() {
               </>
             )}
             
-            <div className="md:hidden relative" data-notification-menu>
-              <button 
-                className="relative p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
-                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                aria-label="Thông báo"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                </svg>
-                {isNotificationEnabled && unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
-                    {unreadCount > 99 ? '99+' : unreadCount}
-                  </span>
-                )}
-              </button>
-              
-              {/* Mobile Notification Popup */}
-              {isNotificationOpen && (
-                <div className="fixed top-16 right-2 z-[100] md:absolute md:top-auto md:right-0 md:mt-2">
-                  <NotificationPopup 
-                    isOpen={isNotificationOpen} 
-                    onClose={() => {
-                      setIsNotificationOpen(false)
-                      fetchUnreadCount()
-                    }}
-                    onNotificationToggle={(isEnabled) => {
-                      setIsNotificationEnabled(isEnabled)
-                      localStorage.setItem('notificationEnabled', isEnabled.toString())
-                    }}
-                  />
-                </div>
+            <button 
+              className="md:hidden relative p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
+              onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+              aria-label="Thông báo"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+              {isNotificationEnabled && unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
               )}
-            </div>
+            </button>
             
             <button 
               className="md:hidden p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
@@ -924,6 +922,22 @@ export default function Header() {
                 </div>
               )}
             </div>
+          </div>
+        )}
+
+        {isNotificationOpen && (
+          <div className="md:hidden bg-white border-t border-gray-200">
+            <NotificationPopup 
+              isOpen={isNotificationOpen} 
+              onClose={() => {
+                setIsNotificationOpen(false)
+                fetchUnreadCount()
+              }}
+              onNotificationToggle={(isEnabled) => {
+                setIsNotificationEnabled(isEnabled)
+                localStorage.setItem('notificationEnabled', isEnabled.toString())
+              }}
+            />
           </div>
         )}
 
