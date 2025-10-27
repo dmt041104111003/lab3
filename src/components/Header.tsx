@@ -208,6 +208,9 @@ export default function Header() {
       if (isProfileMenuOpen && !target.closest('[data-profile-menu]')) {
         setIsProfileMenuOpen(false)
       }
+      if (isNotificationOpen && !target.closest('[data-notification-menu]')) {
+        setIsNotificationOpen(false)
+      }
       if (isSearchOpen && !target.closest('[data-mobile-search]') && window.innerWidth < 768) {
         setIsSearchOpen(false)
       }
@@ -217,7 +220,7 @@ export default function Header() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isMegaMenuOpen, isProfileMenuOpen, isSearchOpen])
+  }, [isMegaMenuOpen, isProfileMenuOpen, isNotificationOpen, isSearchOpen])
 
   if (!mounted) {
     return (
@@ -455,21 +458,40 @@ export default function Header() {
           </nav>
 
           <div className="hidden md:flex items-center">
-            <button
-              onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-              className="relative p-2 rounded-lg text-gray-700 hover:text-tech-blue hover:bg-gray-100 transition-colors flex items-center justify-center"
-              aria-label="Thông báo"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
-              </svg>
-              {isNotificationEnabled && unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
-                  {unreadCount > 99 ? '99+' : unreadCount}
-                </span>
+            <div className="relative" data-notification-menu>
+              <button
+                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                className="relative p-2 rounded-lg text-gray-700 hover:text-tech-blue hover:bg-gray-100 transition-colors flex items-center justify-center"
+                aria-label="Thông báo"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+                {isNotificationEnabled && unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
+              </button>
+              
+              {/* Desktop Notification Popup */}
+              {isNotificationOpen && (
+                <div className="absolute right-0 mt-2 z-50">
+                  <NotificationPopup 
+                    isOpen={isNotificationOpen} 
+                    onClose={() => {
+                      setIsNotificationOpen(false)
+                      fetchUnreadCount()
+                    }}
+                    onNotificationToggle={(isEnabled) => {
+                      setIsNotificationEnabled(isEnabled)
+                      localStorage.setItem('notificationEnabled', isEnabled.toString())
+                    }}
+                  />
+                </div>
               )}
-            </button>
+            </div>
             
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
@@ -574,21 +596,40 @@ export default function Header() {
               </>
             )}
             
-            <button 
-              className="md:hidden relative p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
-              onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-              aria-label="Thông báo"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
-              </svg>
-              {isNotificationEnabled && unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
-                  {unreadCount > 99 ? '99+' : unreadCount}
-                </span>
+            <div className="md:hidden relative" data-notification-menu>
+              <button 
+                className="relative p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
+                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                aria-label="Thông báo"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+                {isNotificationEnabled && unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
+              </button>
+              
+              {/* Mobile Notification Popup */}
+              {isNotificationOpen && (
+                <div className="fixed top-16 right-2 z-[100] md:absolute md:top-auto md:right-0 md:mt-2">
+                  <NotificationPopup 
+                    isOpen={isNotificationOpen} 
+                    onClose={() => {
+                      setIsNotificationOpen(false)
+                      fetchUnreadCount()
+                    }}
+                    onNotificationToggle={(isEnabled) => {
+                      setIsNotificationEnabled(isEnabled)
+                      localStorage.setItem('notificationEnabled', isEnabled.toString())
+                    }}
+                  />
+                </div>
               )}
-            </button>
+            </div>
             
             <button 
               className="md:hidden p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
@@ -911,20 +952,6 @@ export default function Header() {
             </div>
           </div>
         )}
-
-        {/* Notification Popup */}
-        <NotificationPopup 
-          isOpen={isNotificationOpen} 
-          onClose={() => {
-            setIsNotificationOpen(false)
-            fetchUnreadCount() // Refresh count when popup closes
-          }}
-          onNotificationToggle={(isEnabled) => {
-            setIsNotificationEnabled(isEnabled)
-            // Save to localStorage
-            localStorage.setItem('notificationEnabled', isEnabled.toString())
-          }}
-        />
       </div>
     </header>
   )

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 interface Notification {
@@ -29,7 +29,6 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
   const [unreadCount, setUnreadCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [isSubscribed, setIsSubscribed] = useState(true)
-  const popupRef = useRef<HTMLDivElement>(null)
 
   const getDeviceData = () => {
     return {
@@ -103,21 +102,6 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
     }
   }, [isOpen, activeTab])
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-        onClose()
-      }
-    }
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isOpen, onClose])
 
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString)
@@ -208,15 +192,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
   if (!isOpen) return null
 
   return (
-    <>
-      {/* Overlay */}
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={onClose} />
-      
-      {/* Popup */}
-      <div 
-        ref={popupRef}
-        className="fixed top-12 right-3 w-96 bg-white rounded-lg shadow-xl z-50 animate-slideDown"
-      >
+    <div className="w-[calc(100vw-2rem)] sm:w-96 bg-white rounded-lg shadow-xl border border-gray-200 animate-slideDown">
         {/* Tabs */}
         <div className="flex border-b border-gray-200">
           <button
@@ -263,7 +239,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
         </div>
 
         {/* Content */}
-        <div className="max-h-96 overflow-y-auto overflow-x-hidden scrollbar-thin">
+        <div className="max-h-[calc(100vh-12rem)] sm:max-h-96 overflow-y-auto overflow-x-hidden scrollbar-thin">
           {activeTab === 'thongbao' && (
             <div>
               <div className="px-4 my-3">
@@ -378,23 +354,22 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
             </div>
           )}
         </div>
+        
+        <style jsx>{`
+          @keyframes slideDown {
+            from {
+              opacity: 0;
+              transform: translateY(-10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          .animate-slideDown {
+            animation: slideDown 0.3s ease-out;
+          }
+        `}</style>
       </div>
-
-      <style jsx>{`
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-slideDown {
-          animation: slideDown 0.3s ease-out;
-        }
-      `}</style>
-    </>
   )
 }
