@@ -708,7 +708,7 @@ export default function Header() {
                   </button>
                 </div>
 
-                <div className="max-h-96 overflow-y-auto">
+                <div className="max-h-96 overflow-y-auto overflow-x-hidden scrollbar-thin">
                   {searchResults.length > 0 ? (
                     <div className="p-4">
                       <div className="text-sm text-gray-500 mb-4 px-2">
@@ -733,7 +733,10 @@ export default function Header() {
                                 </div>
                               )}
                               <div className="flex-1 min-w-0">
-                                <h4 className="text-base font-semibold text-gray-900 line-clamp-2 mb-2">
+                                <h4 
+                                  className="text-base font-semibold text-gray-900 line-clamp-2 mb-2 cursor-pointer hover:text-blue-600 transition-colors"
+                                  title={result.title}
+                                >
                                   {highlightSearchTerm(result.title, searchQuery)}
                                 </h4>
                                 {result.excerpt && (
@@ -822,7 +825,7 @@ export default function Header() {
               </form>
 
               {searchResults.length > 0 && (
-                <div className="mt-3 max-h-64 overflow-y-auto">
+                <div className="mt-3 max-h-64 overflow-y-auto overflow-x-hidden scrollbar-thin">
                   <div className="text-xs text-gray-500 mb-2">
                     Tìm thấy {searchResults.length} kết quả
                   </div>
@@ -844,7 +847,10 @@ export default function Header() {
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-medium text-gray-900 line-clamp-2">
+                          <h4 
+                            className="text-sm font-medium text-gray-900 line-clamp-2 cursor-pointer hover:text-blue-600 transition-colors"
+                            title={result.title}
+                          >
                             {highlightSearchTerm(result.title, searchQuery)}
                           </h4>
                           {result.excerpt && (

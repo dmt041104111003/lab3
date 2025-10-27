@@ -246,7 +246,7 @@ export default function NotificationPopup({ isOpen, onClose }: NotificationPopup
         </div>
 
         {/* Content */}
-        <div className="max-h-96 overflow-y-auto">
+        <div className="max-h-96 overflow-y-auto overflow-x-hidden scrollbar-thin">
           {activeTab === 'thongbao' && (
             <div>
               <button
@@ -285,7 +285,10 @@ export default function NotificationPopup({ isOpen, onClose }: NotificationPopup
                           {formatTimeAgo(notification.createdAt)}
                         </span>
                       </div>
-                      <h4 className="text-sm font-medium text-gray-900 line-clamp-2">
+                      <h4 
+                        className="text-sm font-medium text-gray-900 line-clamp-2 cursor-pointer hover:text-blue-600 transition-colors"
+                        title={notification.title}
+                      >
                         {notification.title}
                       </h4>
                     </Link>
@@ -335,7 +338,10 @@ export default function NotificationPopup({ isOpen, onClose }: NotificationPopup
                           {notification.viewedAt ? formatTimeAgo(notification.viewedAt) : formatTimeAgo(notification.createdAt)}
                         </span>
                       </div>
-                      <h4 className="text-sm font-medium text-gray-900 line-clamp-2">
+                      <h4 
+                        className="text-sm font-medium text-gray-900 line-clamp-2 cursor-pointer hover:text-blue-600 transition-colors"
+                        title={notification.title}
+                      >
                         {notification.title}
                       </h4>
                     </Link>
