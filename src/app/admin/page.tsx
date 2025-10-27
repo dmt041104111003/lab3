@@ -12,6 +12,7 @@ interface Post {
   title: string
   published: boolean
   createdAt: string
+  authorName?: string
   author: {
     name: string
   }
@@ -148,12 +149,12 @@ export default function AdminDashboard() {
               {/* Desktop Table Row */}
               <tr key={post.id} className="hidden md:table-row">
                 <td className="px-6 py-4">
-                  <div className="text-sm font-medium text-gray-900 truncate max-w-xs">
+                  <div className="text-sm font-medium text-gray-900 truncate max-w-xs" title={post.title}>
                     {post.title}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {post.author.name}
+                  {post.authorName || post.author.name}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -173,7 +174,7 @@ export default function AdminDashboard() {
               <div key={`mobile-${post.id}`} className="md:hidden">
                 <div className="space-y-3">
                   <div className="flex justify-between items-start">
-                    <h3 className="text-sm font-medium text-gray-900 flex-1 mr-2 leading-relaxed">
+                    <h3 className="text-sm font-medium text-gray-900 flex-1 mr-2 leading-relaxed truncate" title={post.title}>
                       {post.title}
                     </h3>
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full flex-shrink-0 ${
@@ -185,7 +186,7 @@ export default function AdminDashboard() {
                     </span>
                   </div>
                   <div className="flex flex-col space-y-1 text-xs text-gray-500">
-                    <div>Tác giả: {post.author.name}</div>
+                    <div>Tác giả: {post.authorName || post.author.name}</div>
                     <div>Ngày tạo: {new Date(post.createdAt).toLocaleDateString('vi-VN')}</div>
                   </div>
                 </div>

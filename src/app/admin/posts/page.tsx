@@ -229,12 +229,12 @@ export default function AdminPosts() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {post.category ? (
-                    <div>
-                      <div className="font-medium text-gray-900">
+                    <div className="max-w-32">
+                      <div className="font-medium text-gray-900 truncate" title={`${getCategoryById(post.category)?.name || post.category}${post.subcategory && post.subcategory.trim() !== '' ? ' - ' + (getSubcategoryById(post.subcategory)?.name || post.subcategory) : ''}`}>
                         {getCategoryById(post.category)?.name || post.category}
                       </div>
                       {post.subcategory && post.subcategory.trim() !== '' && (
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-gray-500 truncate" title={getSubcategoryById(post.subcategory)?.name || post.subcategory}>
                           {getSubcategoryById(post.subcategory)?.name || post.subcategory}
                         </div>
                       )}
@@ -252,13 +252,7 @@ export default function AdminPosts() {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(post.createdAt).toLocaleString('vi-VN', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  })}
+                  {new Date(post.createdAt).toLocaleDateString('vi-VN')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                   <a
@@ -281,7 +275,7 @@ export default function AdminPosts() {
                 <div className="space-y-3">
                   <div className="flex justify-between items-start">
                     <div className="flex-1 min-w-0 mr-3">
-                      <h3 className="text-sm font-medium text-gray-900 leading-relaxed" title={post.title}>
+                      <h3 className="text-sm font-medium text-gray-900 leading-relaxed truncate" title={post.title}>
                         {post.title}
                       </h3>
                       {post.excerpt && (
@@ -302,14 +296,14 @@ export default function AdminPosts() {
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-gray-500">Chuyên mục:</span>
-                      <div className="text-xs text-gray-900 text-right">
+                      <div className="text-xs text-gray-900 text-right max-w-32">
                         {post.category ? (
                           <div>
-                            <div className="font-medium">
+                            <div className="font-medium truncate" title={`${getCategoryById(post.category)?.name || post.category}${post.subcategory && post.subcategory.trim() !== '' ? ' - ' + (getSubcategoryById(post.subcategory)?.name || post.subcategory) : ''}`}>
                               {getCategoryById(post.category)?.name || post.category}
                             </div>
                             {post.subcategory && post.subcategory.trim() !== '' && (
-                              <div className="text-gray-500">
+                              <div className="text-gray-500 truncate" title={getSubcategoryById(post.subcategory)?.name || post.subcategory}>
                                 {getSubcategoryById(post.subcategory)?.name || post.subcategory}
                               </div>
                             )}
@@ -334,13 +328,7 @@ export default function AdminPosts() {
                     
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-gray-500">Ngày tạo:</span>
-                      <span className="text-xs text-gray-900">{new Date(post.createdAt).toLocaleString('vi-VN', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}</span>
+                      <span className="text-xs text-gray-900">{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
                     </div>
                     
                     <div className="flex justify-between items-center pt-2 border-t border-gray-100">
