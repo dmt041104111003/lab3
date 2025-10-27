@@ -26,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <head>
-        <link rel="icon" href="/footer.png" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/footer.png" type="image/png" sizes="32x32" />
+        <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#3b82f6" />
         <link rel="canonical" href="https://technova.id.vn" />
