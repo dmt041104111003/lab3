@@ -411,10 +411,10 @@ export default function Header() {
             aria-label="Toggle mobile menu"
           >
             <span className="sr-only">Menu</span>
-            <div className="w-6 h-6 flex flex-col items-center justify-center space-y-1">
-              <span className={`block h-0.5 w-6 bg-current transition-transform duration-200 ${isMobileMenuOpen ? 'translate-y-1.5 rotate-45' : ''}`}></span>
-              <span className={`block h-0.5 w-6 bg-current transition-opacity duration-200 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
-              <span className={`block h-0.5 w-6 bg-current transition-transform duration-200 ${isMobileMenuOpen ? '-translate-y-1.5 -rotate-45' : ''}`}></span>
+            <div className="w-5 h-5 flex flex-col items-center justify-center space-y-1">
+              <span className={`block h-0.5 w-5 bg-current transition-transform duration-200 ${isMobileMenuOpen ? 'translate-y-1.5 rotate-45' : ''}`}></span>
+              <span className={`block h-0.5 w-5 bg-current transition-opacity duration-200 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+              <span className={`block h-0.5 w-5 bg-current transition-transform duration-200 ${isMobileMenuOpen ? '-translate-y-1.5 -rotate-45' : ''}`}></span>
             </div>
           </button>
           <div className="flex items-center space-x-4">
@@ -466,10 +466,10 @@ export default function Header() {
               aria-label="Mở mega menu"
               data-mega-menu
             >
-              <div className="w-6 h-6 flex flex-col items-center justify-center space-y-1">
-                <span className={`block h-0.5 w-6 bg-current transition-transform duration-200 ${isMegaMenuOpen ? 'translate-y-1.5 rotate-45' : ''}`}></span>
-                <span className={`block h-0.5 w-6 bg-current transition-opacity duration-200 ${isMegaMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
-                <span className={`block h-0.5 w-6 bg-current transition-transform duration-200 ${isMegaMenuOpen ? '-translate-y-1.5 -rotate-45' : ''}`}></span>
+              <div className="w-5 h-5 flex flex-col items-center justify-center space-y-1">
+                <span className={`block h-0.5 w-5 bg-current transition-transform duration-200 ${isMegaMenuOpen ? 'translate-y-1.5 rotate-45' : ''}`}></span>
+                <span className={`block h-0.5 w-5 bg-current transition-opacity duration-200 ${isMegaMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+                <span className={`block h-0.5 w-5 bg-current transition-transform duration-200 ${isMegaMenuOpen ? '-translate-y-1.5 -rotate-45' : ''}`}></span>
               </div>
             </button>
           </nav>
@@ -481,7 +481,7 @@ export default function Header() {
                 className="relative p-2 rounded-lg text-gray-700 hover:text-tech-blue hover:bg-gray-100 transition-colors flex items-center justify-center"
                 aria-label="Thông báo"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
                 </svg>
@@ -515,7 +515,7 @@ export default function Header() {
               className="p-2 rounded-lg text-gray-700 hover:text-tech-blue hover:bg-gray-100 transition-colors flex items-center justify-center"
               aria-label="Tìm kiếm"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
@@ -618,7 +618,7 @@ export default function Header() {
               onClick={() => setIsNotificationOpen(!isNotificationOpen)}
               aria-label="Thông báo"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
               </svg>
