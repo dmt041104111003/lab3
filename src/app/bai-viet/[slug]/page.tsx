@@ -223,23 +223,6 @@ export default function PostDetail() {
             )}
           </div>
 
-          {post.images && post.images.length > 0 ? (
-            <div className="px-6 py-4">
-              <img
-                src={post.images[0].image.path}
-                alt={post.images[0].image.alt || post.title}
-                className="w-full max-w-full h-auto border-radius rounded-lg mx-auto block shadow-md"
-              />
-            </div>
-          ) : post.imageUrl ? (
-            <div className="px-6 py-4">
-              <img
-                src={post.imageUrl}
-                alt={post.title}
-                className="w-full max-w-full h-auto border-radius rounded-lg mx-auto block shadow-md"
-              />
-            </div>
-          ) : null}
 
           <div className="px-6 py-8">
             <TipTapPreview 

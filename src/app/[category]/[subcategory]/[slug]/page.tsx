@@ -211,17 +211,6 @@ export default function PostDetailPage() {
               </div>
             </header>
             
-            {post.images && post.images.length > 0 && (
-              <div className="mb-8">
-                <div className="relative overflow-hidden rounded-lg shadow-md">
-                  <img 
-                    src={post.images[0].image.path} 
-                    alt={post.images[0].image.alt || post.title}
-                    className="w-full h-auto object-cover"
-                  />
-                </div>
-              </div>
-            )}
             
             <TipTapPreview 
               content={post.content}
