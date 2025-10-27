@@ -174,7 +174,7 @@ export default function AdminDashboard() {
               <div key={`mobile-${post.id}`} className="md:hidden">
                 <div className="space-y-3">
                   <div className="flex justify-between items-start">
-                    <h3 className="text-sm font-medium text-gray-900 flex-1 mr-2 leading-relaxed truncate" title={post.title}>
+                    <h3 className="text-sm font-medium text-gray-900 flex-1 mr-2 leading-relaxed line-clamp-2" title={post.title}>
                       {post.title}
                     </h3>
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full flex-shrink-0 ${

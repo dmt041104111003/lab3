@@ -275,11 +275,11 @@ export default function AdminPosts() {
                 <div className="space-y-3">
                   <div className="flex justify-between items-start">
                     <div className="flex-1 min-w-0 mr-3">
-                      <h3 className="text-sm font-medium text-gray-900 leading-relaxed truncate" title={post.title}>
+                      <h3 className="text-sm font-medium text-gray-900 leading-relaxed line-clamp-2" title={post.title}>
                         {post.title}
                       </h3>
                       {post.excerpt && (
-                        <p className="text-xs text-gray-500 mt-1 leading-relaxed" title={post.excerpt}>
+                        <p className="text-xs text-gray-500 mt-1 leading-relaxed line-clamp-2" title={post.excerpt}>
                           {post.excerpt}
                         </p>
                       )}
