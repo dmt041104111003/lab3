@@ -167,39 +167,7 @@ export default function PostDetailPage() {
               {post.excerpt && (
                 <p className="text-base text-gray-700 mb-4 font-bold text-justify leading-relaxed">{post.excerpt}</p>
               )}
-              <div className="flex items-center justify-between text-sm text-gray-500 mb-4 flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  {post.category && (
-                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
-                      {getCategoryDisplayName(post.category)}
-                    </span>
-                  )}
-                  {post.subcategory && post.subcategory.trim() !== '' && (
-                    <>
-                      <span>•</span>
-                      <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">
-                        {getSubcategoryDisplayName(post.subcategory)}
-                      </span>
-                    </>
-                  )}
-                  {post.tags && post.tags.length > 0 && (
-                    <>
-                      <span>•</span>
-                      {post.tags.map((tag) => (
-                        <span
-                          key={tag.id}
-                          className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white"
-                          style={{ backgroundColor: tag.color || '#3B82F6' }}
-                        >
-                          <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                          </svg>
-                          {tag.name}
-                        </span>
-                      ))}
-                    </>
-                  )}
-                </div>
+              <div className="flex items-center justify-end text-sm text-gray-500 mb-4 flex-wrap gap-2">
                 <span>{new Date(post.createdAt).toLocaleString('vi-VN', {
                   year: 'numeric',
                   month: '2-digit',
@@ -207,6 +175,37 @@ export default function PostDetailPage() {
                   hour: '2-digit',
                   minute: '2-digit'
                 })}</span>
+                <span>•</span>
+                {post.category && (
+                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
+                    {getCategoryDisplayName(post.category)}
+                  </span>
+                )}
+                {post.subcategory && post.subcategory.trim() !== '' && (
+                  <>
+                    <span>•</span>
+                    <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">
+                      {getSubcategoryDisplayName(post.subcategory)}
+                    </span>
+                  </>
+                )}
+                {post.tags && post.tags.length > 0 && (
+                  <>
+                    <span>•</span>
+                    {post.tags.map((tag) => (
+                      <span
+                        key={tag.id}
+                        className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white"
+                        style={{ backgroundColor: tag.color || '#3B82F6' }}
+                      >
+                        <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                        </svg>
+                        {tag.name}
+                      </span>
+                    ))}
+                  </>
+                )}
               </div>
             </header>
             
