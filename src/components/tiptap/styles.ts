@@ -275,6 +275,19 @@ export const tiptapStyles = `
     display: list-item;
   }
   
+  /* Force list styles to show */
+  .ProseMirror ul.list-disc {
+    list-style-type: disc !important;
+  }
+  
+  .ProseMirror ol.list-decimal {
+    list-style-type: decimal !important;
+  }
+  
+  .ProseMirror li {
+    list-style-position: outside !important;
+  }
+  
   /* Dark Mode Lists */
   .dark .ProseMirror ul, .dark .ProseMirror ol, .dark .ProseMirror li {
     color: #e5e7eb !important;
@@ -777,8 +790,30 @@ export const tiptapPreviewStyles = `
     padding-left: 1.5rem;
   }
   
+  .ProseMirror ul {
+    list-style-type: disc;
+  }
+  
+  .ProseMirror ol {
+    list-style-type: decimal;
+  }
+  
   .ProseMirror li {
     margin-bottom: 0.25rem;
+    display: list-item;
+  }
+  
+  /* Force list styles to show */
+  .ProseMirror ul.list-disc {
+    list-style-type: disc !important;
+  }
+  
+  .ProseMirror ol.list-decimal {
+    list-style-type: decimal !important;
+  }
+  
+  .ProseMirror li {
+    list-style-position: outside !important;
   }
   
   /* Dark Mode Lists */

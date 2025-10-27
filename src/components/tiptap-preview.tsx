@@ -126,7 +126,23 @@ export function TipTapPreview({ content, className = "" }: TipTapPreviewProps) {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        bulletList: {
+          HTMLAttributes: {
+            class: 'list-disc list-outside ml-6 mx-auto',
+          },
+        },
+        orderedList: {
+          HTMLAttributes: {
+            class: 'list-decimal list-outside ml-6 mx-auto',
+          },
+        },
+        listItem: {
+          HTMLAttributes: {
+            class: 'mb-1 mx-auto',
+          },
+        },
+      }),
       CodeBlockLowlight.configure({
         lowlight,
         defaultLanguage: 'javascript',
