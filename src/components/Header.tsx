@@ -142,10 +142,8 @@ export default function Header() {
       setUser(session)
       setIsLoggedIn(true)
       setIsAdminUser(session.role === 'ADMIN')
+      fetchUnreadCount()
     }
-
-    // Fetch unread count
-    fetchUnreadCount()
 
     // Load notification preference from localStorage
     const savedNotificationState = localStorage.getItem('notificationEnabled')
@@ -475,40 +473,42 @@ export default function Header() {
           </nav>
 
           <div className="hidden md:flex items-center">
-            <div className="relative" data-notification-menu ref={notificationButtonRef}>
-              <button
-                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                className="relative p-2 rounded-lg text-gray-700 hover:text-tech-blue hover:bg-gray-100 transition-colors flex items-center justify-center"
-                aria-label="Thông báo"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                </svg>
-                {isNotificationEnabled && unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
-                    {unreadCount > 99 ? '99+' : unreadCount}
-                  </span>
+            {isLoggedIn && (
+              <div className="relative" data-notification-menu ref={notificationButtonRef}>
+                <button
+                  onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                  className="relative p-2 rounded-lg text-gray-700 hover:text-tech-blue hover:bg-gray-100 transition-colors flex items-center justify-center"
+                  aria-label="Thông báo"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                  </svg>
+                  {isNotificationEnabled && unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                      {unreadCount > 99 ? '99+' : unreadCount}
+                    </span>
+                  )}
+                </button>
+                
+                {/* Desktop Notification Popup */}
+                {isNotificationOpen && (
+                  <div className="absolute left-1/2 -translate-x-1/2 mt-2 z-50">
+                    <NotificationPopup 
+                      isOpen={isNotificationOpen} 
+                      onClose={() => {
+                        setIsNotificationOpen(false)
+                        fetchUnreadCount()
+                      }}
+                      onNotificationToggle={(isEnabled) => {
+                        setIsNotificationEnabled(isEnabled)
+                        localStorage.setItem('notificationEnabled', isEnabled.toString())
+                      }}
+                    />
+                  </div>
                 )}
-              </button>
-              
-              {/* Desktop Notification Popup */}
-              {isNotificationOpen && (
-                <div className="absolute left-1/2 -translate-x-1/2 mt-2 z-50">
-                  <NotificationPopup 
-                    isOpen={isNotificationOpen} 
-                    onClose={() => {
-                      setIsNotificationOpen(false)
-                      fetchUnreadCount()
-                    }}
-                    onNotificationToggle={(isEnabled) => {
-                      setIsNotificationEnabled(isEnabled)
-                      localStorage.setItem('notificationEnabled', isEnabled.toString())
-                    }}
-                  />
-                </div>
-              )}
-            </div>
+              </div>
+            )}
             
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
@@ -613,21 +613,23 @@ export default function Header() {
               </>
             )}
             
-            <button 
-              className="md:hidden relative p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
-              onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-              aria-label="Thông báo"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
-              </svg>
-              {isNotificationEnabled && unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
-                  {unreadCount > 99 ? '99+' : unreadCount}
-                </span>
-              )}
-            </button>
+            {isLoggedIn && (
+              <button 
+                className="md:hidden relative p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
+                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                aria-label="Thông báo"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+                {isNotificationEnabled && unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
+              </button>
+            )}
             
             <button 
               className="md:hidden p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100"
