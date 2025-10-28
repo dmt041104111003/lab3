@@ -139,7 +139,7 @@ export default function Home() {
       title: "Chưa có bài viết nào",
       href: "#"
     },
-    subArticles: Array.from({ length: 3 }, (_, index) => {
+    subArticles: Array.from({ length: 4 }, (_, index) => {
       const post = aiPosts[index + 1]
       if (post) {
         return {

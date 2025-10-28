@@ -84,7 +84,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
             {subArticles.map((article, index) => (
               <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
                 <Link href={article.href} className="block">
-                  <div className="flex">
+                  <div className="flex items-stretch">
                     <div className="flex-shrink-0 w-32 aspect-video" style={{ aspectRatio: '16/9' }}>
                       {article.imageUrl ? (
                         <img 
@@ -103,26 +103,13 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                         </div>
                       )}
                     </div>
-                    <div className="flex-1 p-3 flex flex-col justify-between">
-                      <div>
-                        <h4 
-                          className="text-gray-800 text-xs font-bold mb-1 line-clamp-2 hover:text-red-600 transition-colors"
-                          title={article.title}
-                        >
-                          {article.title}
-                        </h4>
-                        {article.excerpt && (
-                          <p 
-                            className="text-gray-600 text-xs line-clamp-2"
-                            title={article.excerpt}
-                          >
-                            {article.excerpt}
-                          </p>
-                        )}
-                      </div>
-                      <div className="mt-2">
-                        <span className="text-xs text-gray-400">Đọc thêm →</span>
-                      </div>
+                    <div className="flex-1 h-full p-2 flex items-center">
+                      <h4 
+                        className="text-gray-800 text-xs font-bold line-clamp-2 hover:text-red-600 transition-colors"
+                        title={article.title}
+                      >
+                        {article.title}
+                      </h4>
                     </div>
                   </div>
                 </Link>
