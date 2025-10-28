@@ -56,25 +56,16 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                 )}
                 <div className="p-3">
                   <h2 
-                    className="text-sm font-bold text-gray-900 mb-2 leading-tight hover:text-red-600 transition-colors line-clamp-2"
+                    className="text-sm font-bold text-gray-900 mb-2 leading-tight hover:text-red-600 transition-colors line-clamp-1"
                     title={mainArticle.title}
                   >
-                    {mainArticle.title.length > 60 ? 
-                      mainArticle.title.substring(0, 60) + '...' : 
-                      mainArticle.title
-                    }
+                    {mainArticle.title}
                   </h2>
                   <p 
                     className="text-gray-600 text-xs leading-relaxed line-clamp-2"
                     title={mainArticle.excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
                   >
-                    {mainArticle.excerpt ? 
-                      (mainArticle.excerpt.length > 100 ? 
-                        mainArticle.excerpt.substring(0, 100) + '...' : 
-                        mainArticle.excerpt
-                      ) : 
-                      "Mô tả ngắn về bài viết chính trong chuyên mục này..."
-                    }
+                    {mainArticle.excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
                   </p>
                 </div>
               </Link>
