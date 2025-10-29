@@ -45,6 +45,15 @@
   background: #94a3b8;
 }
 
+/* Hide scrollbar utility for horizontal navs */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
 /* Line clamp utility */
 .line-clamp-2 {
   display: -webkit-box;

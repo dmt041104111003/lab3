@@ -402,7 +402,7 @@ export default function Header() {
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-20 flex-nowrap">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-2 rounded-md text-gray-700 hover:text-tech-blue hover:bg-gray-100 flex items-center justify-center"
@@ -415,7 +415,7 @@ export default function Header() {
               <span className={`block h-0.5 w-5 bg-current transition-transform duration-200 ${isMobileMenuOpen ? '-translate-y-1.5 -rotate-45' : ''}`}></span>
             </div>
           </button>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 flex-shrink-0">
             <Link href="/" className="flex flex-col items-center">
               <Image
                 src="/footer.png"
@@ -430,25 +430,25 @@ export default function Header() {
             </Link>
           </div>
 
-          <nav className="hidden md:flex space-x-8 items-center">
+          <nav className="hidden md:flex flex-1 items-center justify-center space-x-6 overflow-x-auto whitespace-nowrap no-scrollbar">
             <Link href="/" className={getNavLinkClasses('/')}>
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </Link>
-            <Link href="/tin-tuc" className={getNavLinkClasses('/tin-tuc')}>
+            <Link href="/tin-tuc" className={`${getNavLinkClasses('/tin-tuc')} flex-shrink-0`}>
               Tin tức
             </Link>
-            <Link href="/ai-chuyen-doi-so" className={getNavLinkClasses('/ai-chuyen-doi-so')}>
+            <Link href="/ai-chuyen-doi-so" className={`${getNavLinkClasses('/ai-chuyen-doi-so')} flex-shrink-0`}>
               AI – Chuyển đổi số
             </Link>
-            <Link href="/doi-moi-sang-tao" className={getNavLinkClasses('/doi-moi-sang-tao')}>
+            <Link href="/doi-moi-sang-tao" className={`${getNavLinkClasses('/doi-moi-sang-tao')} flex-shrink-0`}>
               Đổi mới sáng tạo
             </Link>
-            <Link href="/san-pham-review" className={getNavLinkClasses('/san-pham-review')}>
+            <Link href="/san-pham-review" className={`${getNavLinkClasses('/san-pham-review')} flex-shrink-0`}>
               Sản phẩm & Review
             </Link>
-            <Link href="/xu-huong-tuong-lai" className={getNavLinkClasses('/xu-huong-tuong-lai')}>
+            <Link href="/xu-huong-tuong-lai" className={`${getNavLinkClasses('/xu-huong-tuong-lai')} flex-shrink-0`}>
               Xu hướng tương lai
             </Link>
             {/* <Link href="/nhan-vat-goc-nhin" className={getNavLinkClasses('/nhan-vat-goc-nhin')}>
@@ -472,7 +472,7 @@ export default function Header() {
             </button>
           </nav>
 
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center flex-shrink-0">
             {isLoggedIn && (
               <div className="relative" data-notification-menu ref={notificationButtonRef}>
                 <button
@@ -521,7 +521,7 @@ export default function Header() {
             </button>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 flex-shrink-0">
             {isLoggedIn ? (
               <>
                 <div className="relative" data-profile-menu>
