@@ -64,7 +64,7 @@ export default function Home() {
     try {
       const [newsRes, aiRes, innovationRes, productRes, trendRes, quickNewsRes] = await Promise.all([
         fetch('/api/posts/category/tin-tuc?limit=4'),
-        fetch('/api/posts/category/ai-chuyen-doi-so?limit=4'),
+        fetch('/api/posts/category/ai-chuyen-doi-so?limit=5'),
         fetch('/api/posts/category/doi-moi-sang-tao?limit=4'),
         fetch('/api/posts/category/san-pham-review?limit=4'),
         fetch('/api/posts/category/xu-huong-tuong-lai?limit=4'),
