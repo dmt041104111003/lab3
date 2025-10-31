@@ -48,6 +48,14 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
   const [isLoading, setIsLoading] = useState(false)
   const [isSubscribed, setIsSubscribed] = useState(true)
 
+  // Load notification preference from localStorage on mount
+  useEffect(() => {
+    const savedNotificationState = localStorage.getItem('notificationEnabled')
+    if (savedNotificationState !== null) {
+      setIsSubscribed(savedNotificationState === 'true')
+    }
+  }, [])
+
   const getDeviceData = () => {
     return {
       userAgent: navigator.userAgent,
@@ -140,6 +148,11 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
 
   useEffect(() => {
     if (isOpen) {
+      const savedNotificationState = localStorage.getItem('notificationEnabled')
+      if (savedNotificationState !== null) {
+        setIsSubscribed(savedNotificationState === 'true')
+      }
+      
       fetchUnreadCount()
       if (activeTab === 'thongbao') {
         fetchNotifications('unread')
@@ -266,6 +279,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
   const handleSubscribeToggle = () => {
     const newState = !isSubscribed
     setIsSubscribed(newState)
+    localStorage.setItem('notificationEnabled', newState.toString())
     onNotificationToggle?.(newState)
   }
 
