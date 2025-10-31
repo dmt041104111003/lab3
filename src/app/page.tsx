@@ -39,6 +39,9 @@ export default function Home() {
   const [productPosts, setProductPosts] = useState<Post[]>([])
   const [trendPosts, setTrendPosts] = useState<Post[]>([])
   const [quickNews, setQuickNews] = useState<Post[]>([])
+  const [nhanVatPosts, setNhanVatPosts] = useState<Post[]>([])
+  const [multimediaPosts, setMultimediaPosts] = useState<Post[]>([])
+  const [banDocPosts, setBanDocPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -62,22 +65,44 @@ export default function Home() {
 
   const fetchHomeData = async () => {
     try {
-      const [newsRes, aiRes, innovationRes, productRes, trendRes, quickNewsRes] = await Promise.all([
-        fetch('/api/posts/category/tin-tuc?limit=4'),
-        fetch('/api/posts/category/ai-chuyen-doi-so?limit=5'),
-        fetch('/api/posts/category/doi-moi-sang-tao?limit=4'),
-        fetch('/api/posts/category/san-pham-review?limit=4'),
-        fetch('/api/posts/category/xu-huong-tuong-lai?limit=4'),
-        fetch('/api/posts/category/xu-huong-tuong-lai?limit=2')
+      const [newsRes, aiRes, innovationRes, productRes, trendRes, quickNewsRes, nhanVatRes, multimediaRes, banDocRes] = await Promise.all([
+        fetch('/api/posts/category/tin-tuc'),
+        fetch('/api/posts/category/ai-chuyen-doi-so'),
+        fetch('/api/posts/category/doi-moi-sang-tao'),
+        fetch('/api/posts/category/san-pham-review'),
+        fetch('/api/posts/category/xu-huong-tuong-lai'),
+        fetch('/api/posts/category/xu-huong-tuong-lai'),
+        fetch('/api/posts/category/nhan-vat-goc-nhin'),
+        fetch('/api/posts/category/multimedia'),
+        fetch('/api/posts/category/ban-doc')
       ])
 
-      const [newsData, aiData, innovationData, productData, trendData, quickNewsData] = await Promise.all([
-        newsRes.json(),
-        aiRes.json(),
-        innovationRes.json(),
-        productRes.json(),
-        trendRes.json(),
-        quickNewsRes.json()
+      const parseResponse = async (res: Response, categoryName: string) => {
+        try {
+          if (!res.ok) {
+            console.warn(`API ${categoryName} returned status ${res.status}`)
+            return []
+          }
+          const data = await res.json()
+          if (Array.isArray(data)) return data
+          if (data?.posts && Array.isArray(data.posts)) return data.posts
+          return []
+        } catch (err) {
+          console.error(`Error parsing ${categoryName}:`, err)
+          return []
+        }
+      }
+
+      const [newsData, aiData, innovationData, productData, trendData, quickNewsData, nhanVatData, multimediaData, banDocData] = await Promise.all([
+        parseResponse(newsRes, 'tin-tuc'),
+        parseResponse(aiRes, 'ai-chuyen-doi-so'),
+        parseResponse(innovationRes, 'doi-moi-sang-tao'),
+        parseResponse(productRes, 'san-pham-review'),
+        parseResponse(trendRes, 'xu-huong-tuong-lai'),
+        parseResponse(quickNewsRes, 'xu-huong-tuong-lai'),
+        parseResponse(nhanVatRes, 'nhan-vat-goc-nhin'),
+        parseResponse(multimediaRes, 'multimedia'),
+        parseResponse(banDocRes, 'ban-doc')
       ])
 
       setNewsPosts(newsData)
@@ -86,6 +111,10 @@ export default function Home() {
       setProductPosts(productData)
       setTrendPosts(trendData)
       setQuickNews(quickNewsData)
+      setNhanVatPosts(nhanVatData)
+      setMultimediaPosts(multimediaData)
+      setBanDocPosts(banDocData)
+
     } catch (error) {
       setError('Có lỗi xảy ra khi tải dữ liệu')
     } finally {
@@ -315,6 +344,9 @@ export default function Home() {
               productPosts={productPosts}
               trendPosts={trendPosts}
               latestNews={newsPosts}
+              nhanVatPosts={nhanVatPosts}
+              multimediaPosts={multimediaPosts}
+              banDocPosts={banDocPosts}
             />
           </div>
         </div>
