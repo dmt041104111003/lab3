@@ -171,10 +171,10 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
               <div className={categoryId === 'ban-doc' ? "grid grid-cols-1 gap-4 items-stretch" : "space-y-3"}>
                 {categoryId === 'ban-doc' ? (
                   posts.map((post) => (
-                    <div key={post.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden h-full flex flex-col">
-                      <a href={`/ban-doc/${post.slug}`} className="h-full flex">
+                    <div key={post.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                      <a href={`/ban-doc/${post.slug}`} className="block md:flex h-full">
                         {post.images?.[0]?.image?.path ? (
-                          <div className="flex-shrink-0 w-72 h-48 overflow-hidden group">
+                          <div className="flex-shrink-0 w-full md:w-72 h-40 md:h-48 overflow-hidden group">
                             <img
                               src={post.images[0].image.path}
                               alt={post.images[0].image.alt || post.title}
@@ -182,7 +182,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                             />
                           </div>
                         ) : (
-                          <div className="flex-shrink-0 w-72 h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                          <div className="flex-shrink-0 w-full md:w-72 h-40 md:h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                             <div className="text-center">
                               <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -191,9 +191,9 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                             </div>
                           </div>
                         )}
-                        <div className="flex-1 p-5 flex flex-col justify-between">
+                        <div className="flex-1 p-4 md:p-5 flex flex-col justify-between">
                           <div>
-                            <div className="flex items-center text-sm text-gray-500 mb-3">
+                            <div className="flex items-center text-xs md:text-sm text-gray-500 mb-2 md:mb-3">
                               <span>{new Date(post.createdAt).toLocaleString('vi-VN', {
                                 year: 'numeric',
                                 month: '2-digit',
@@ -205,14 +205,14 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                               <span>{post.authorName || 'Tác giả'}</span>
                             </div>
                             <h3 
-                              className="text-lg font-bold text-gray-900 mb-3 leading-tight hover:text-red-600 transition-colors line-clamp-2"
+                              className="text-base md:text-lg font-bold text-gray-900 mb-2 md:mb-3 leading-tight hover:text-red-600 transition-colors line-clamp-2"
                               title={post.title}
                             >
                               {post.title}
                             </h3>
                             {post.excerpt && (
                               <p 
-                                className="text-base text-gray-600 leading-relaxed line-clamp-3"
+                                className="text-sm md:text-base text-gray-600 leading-relaxed line-clamp-2 md:line-clamp-3"
                                 title={post.excerpt}
                               >
                                 {post.excerpt}
