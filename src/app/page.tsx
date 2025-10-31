@@ -34,6 +34,7 @@ interface Post {
 
 export default function Home() {
   const [newsPosts, setNewsPosts] = useState<Post[]>([])
+  const [mostReadPosts, setMostReadPosts] = useState<Post[]>([])
   const [aiPosts, setAiPosts] = useState<Post[]>([])
   const [innovationPosts, setInnovationPosts] = useState<Post[]>([])
   const [productPosts, setProductPosts] = useState<Post[]>([])
@@ -65,7 +66,8 @@ export default function Home() {
 
   const fetchHomeData = async () => {
     try {
-      const [newsRes, aiRes, innovationRes, productRes, trendRes, quickNewsRes, nhanVatRes, multimediaRes, banDocRes] = await Promise.all([
+      const [mostReadRes, newsRes, aiRes, innovationRes, productRes, trendRes, quickNewsRes, nhanVatRes, multimediaRes, banDocRes] = await Promise.all([
+        fetch('/api/posts/most-read?limit=5'),
         fetch('/api/posts/category/tin-tuc'),
         fetch('/api/posts/category/ai-chuyen-doi-so'),
         fetch('/api/posts/category/doi-moi-sang-tao'),
@@ -93,7 +95,8 @@ export default function Home() {
         }
       }
 
-      const [newsData, aiData, innovationData, productData, trendData, quickNewsData, nhanVatData, multimediaData, banDocData] = await Promise.all([
+      const [mostReadData, newsData, aiData, innovationData, productData, trendData, quickNewsData, nhanVatData, multimediaData, banDocData] = await Promise.all([
+        parseResponse(mostReadRes, 'most-read'),
         parseResponse(newsRes, 'tin-tuc'),
         parseResponse(aiRes, 'ai-chuyen-doi-so'),
         parseResponse(innovationRes, 'doi-moi-sang-tao'),
@@ -105,6 +108,7 @@ export default function Home() {
         parseResponse(banDocRes, 'ban-doc')
       ])
 
+      setMostReadPosts(mostReadData)
       setNewsPosts(newsData)
       setAiPosts(aiData)
       setInnovationPosts(innovationData)
@@ -339,7 +343,7 @@ export default function Home() {
             <HomeSidebar 
               quickNews={quickNews} 
               techToday={aiPosts} 
-              mostRead={newsPosts}
+              mostRead={mostReadPosts}
               innovationPosts={innovationPosts}
               productPosts={productPosts}
               trendPosts={trendPosts}

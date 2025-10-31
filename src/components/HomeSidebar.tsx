@@ -80,12 +80,12 @@ export default function HomeSidebar({
   multimediaPosts = [],
   banDocPosts = []
 }: HomeSidebarProps) {
-  const mostReadItems = mostRead.length > 0 ? mostRead.map(post => ({
+  const mostReadItems = mostRead.length > 0 ? mostRead.slice(0, 5).map(post => ({
     title: post.title,
     href: `/tin-tuc/${post.subcategory || 'cong-nghe-viet-nam'}/${post.slug}`
   })) : []
 
-  const quickNewsItems = quickNews.length > 0 ? quickNews.map(post => ({
+  const quickNewsItems = quickNews.length > 0 ? quickNews.slice(0, 5).map(post => ({
     title: post.title,
     href: `/xu-huong-tuong-lai/${post.subcategory || 'blockchain'}/${post.slug}`
   })) : []
@@ -132,6 +132,8 @@ export default function HomeSidebar({
 
   return (
     <aside className="w-full lg:w-80 space-y-6">
+      <SidebarSection title="ĐỌC NHIỀU NHẤT" items={mostReadItems} />
+      <SidebarSection title="TIN NHANH" items={quickNewsItems} />
       <SidebarSection 
         title="NHÂN VẬT & GÓC NHÌN" 
         items={nhanVatItems}
