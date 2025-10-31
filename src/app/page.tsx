@@ -307,7 +307,15 @@ export default function Home() {
           </div>
 
           <div className="lg:col-span-1">
-            <HomeSidebar quickNews={quickNews} techToday={aiPosts} mostRead={newsPosts} />
+            <HomeSidebar 
+              quickNews={quickNews} 
+              techToday={aiPosts} 
+              mostRead={newsPosts}
+              innovationPosts={innovationPosts}
+              productPosts={productPosts}
+              trendPosts={trendPosts}
+              latestNews={newsPosts}
+            />
           </div>
         </div>
       </main>

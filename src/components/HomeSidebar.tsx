@@ -42,31 +42,82 @@ interface HomeSidebarProps {
   quickNews?: Post[]
   techToday?: Post[]
   mostRead?: Post[]
+  innovationPosts?: Post[]
+  productPosts?: Post[]
+  trendPosts?: Post[]
+  latestNews?: Post[]
 }
 
-export default function HomeSidebar({ quickNews = [], techToday = [], mostRead = [] }: HomeSidebarProps) {
-  const mostReadItems = mostRead.length > 0 ? mostRead.slice(0, 3).map(post => ({
+export default function HomeSidebar({ 
+  quickNews = [], 
+  techToday = [], 
+  mostRead = [],
+  innovationPosts = [],
+  productPosts = [],
+  trendPosts = [],
+  latestNews = []
+}: HomeSidebarProps) {
+  const mostReadItems = mostRead.length > 0 ? mostRead.slice(0, 4).map(post => ({
     title: post.title,
     href: `/tin-tuc/${post.subcategory || 'cong-nghe-viet-nam'}/${post.slug}`
   })) : [
     { title: "Bài viết sắp ra mắt", href: "#" },
     { title: "Bài viết sắp ra mắt", href: "#" },
+    { title: "Bài viết sắp ra mắt", href: "#" },
     { title: "Bài viết sắp ra mắt", href: "#" }
   ]
 
-  const quickNewsItems = quickNews.length > 0 ? quickNews.slice(0, 2).map(post => ({
+  const quickNewsItems = quickNews.length > 0 ? quickNews.slice(0, 3).map(post => ({
     title: post.title,
     href: `/xu-huong-tuong-lai/${post.subcategory || 'blockchain'}/${post.slug}`
   })) : [
     { title: "Tin nhanh sắp ra mắt", href: "#" },
+    { title: "Tin nhanh sắp ra mắt", href: "#" },
     { title: "Tin nhanh sắp ra mắt", href: "#" }
   ]
 
-  const techTodayItems = techToday.length > 0 ? techToday.slice(0, 1).map(post => ({
+  const techTodayItems = techToday.length > 0 ? techToday.slice(0, 2).map(post => ({
     title: post.title,
     href: `/ai-chuyen-doi-so/${post.subcategory || 'tri-tue-nhan-tao'}/${post.slug}`
   })) : [
+    { title: "Công nghệ sắp ra mắt", href: "#" },
     { title: "Công nghệ sắp ra mắt", href: "#" }
+  ]
+
+  const innovationItems = innovationPosts.length > 0 ? innovationPosts.slice(0, 3).map(post => ({
+    title: post.title,
+    href: `/doi-moi-sang-tao/${post.subcategory || 'startup-viet'}/${post.slug}`
+  })) : [
+    { title: "Đổi mới sáng tạo sắp ra mắt", href: "#" },
+    { title: "Đổi mới sáng tạo sắp ra mắt", href: "#" },
+    { title: "Đổi mới sáng tạo sắp ra mắt", href: "#" }
+  ]
+
+  const productItems = productPosts.length > 0 ? productPosts.slice(0, 3).map(post => ({
+    title: post.title,
+    href: `/san-pham-review/${post.subcategory || 'thiet-bi-moi'}/${post.slug}`
+  })) : [
+    { title: "Sản phẩm & Review sắp ra mắt", href: "#" },
+    { title: "Sản phẩm & Review sắp ra mắt", href: "#" },
+    { title: "Sản phẩm & Review sắp ra mắt", href: "#" }
+  ]
+
+  const trendItems = trendPosts.length > 0 ? trendPosts.slice(0, 3).map(post => ({
+    title: post.title,
+    href: `/xu-huong-tuong-lai/${post.subcategory || 'blockchain'}/${post.slug}`
+  })) : [
+    { title: "Xu hướng sắp ra mắt", href: "#" },
+    { title: "Xu hướng sắp ra mắt", href: "#" },
+    { title: "Xu hướng sắp ra mắt", href: "#" }
+  ]
+
+  const latestItems = latestNews.length > 0 ? latestNews.slice(0, 3).map(post => ({
+    title: post.title,
+    href: `/tin-tuc/${post.subcategory || 'cong-nghe-viet-nam'}/${post.slug}`
+  })) : [
+    { title: "Tin mới nhất sắp ra mắt", href: "#" },
+    { title: "Tin mới nhất sắp ra mắt", href: "#" },
+    { title: "Tin mới nhất sắp ra mắt", href: "#" }
   ]
 
   return (
@@ -74,6 +125,10 @@ export default function HomeSidebar({ quickNews = [], techToday = [], mostRead =
       <SidebarSection title="ĐỌC NHIỀU NHẤT" items={mostReadItems} />
       <SidebarSection title="TIN NHANH" items={quickNewsItems} />
       <SidebarSection title="CÔNG NGHỆ HÔM NAY" items={techTodayItems} />
+      <SidebarSection title="TIN MỚI NHẤT" items={latestItems} />
+      <SidebarSection title="ĐỔI MỚI SÁNG TẠO" items={innovationItems} />
+      <SidebarSection title="SẢN PHẨM & REVIEW" items={productItems} />
+      <SidebarSection title="XU HƯỚNG TƯƠNG LAI" items={trendItems} />
     </aside>
   )
 }
