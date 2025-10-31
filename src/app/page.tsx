@@ -73,7 +73,7 @@ export default function Home() {
         fetch('/api/posts/category/doi-moi-sang-tao'),
         fetch('/api/posts/category/san-pham-review'),
         fetch('/api/posts/category/xu-huong-tuong-lai'),
-        fetch('/api/posts/category/xu-huong-tuong-lai'),
+        fetch('/api/posts/category/tin-tuc?limit=5'),
         fetch('/api/posts/category/nhan-vat-goc-nhin'),
         fetch('/api/posts/category/multimedia'),
         fetch('/api/posts/category/ban-doc')
