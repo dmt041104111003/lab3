@@ -1,6 +1,8 @@
 'use client'
 
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
+import dynamic from 'next/dynamic'
+
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 interface ChartData {
   label: string
@@ -15,49 +17,96 @@ interface DonutChartProps {
 }
 
 export function DonutChart({ data, total, title }: DonutChartProps) {
-  const chartData = data.map(item => ({
-    name: item.label,
-    value: item.value
-  }))
+  const chartData = data.map(item => item.value)
+  const labels = data.map(item => item.label)
+  
+  const brandColors = ['#38b6ff', '#2563eb', '#165a87', '#93c5fd', '#1e40af']
+  const colors = data.map((_, index) => brandColors[index % brandColors.length])
 
-  const colors = data.map(item => item.color)
+  const options: any = {
+    chart: {
+      type: 'donut',
+      height: 350,
+      fontFamily: 'Roboto, sans-serif'
+    },
+    labels: labels,
+    colors: colors,
+    dataLabels: {
+      enabled: true,
+      formatter: function(val: number) {
+        return val.toFixed(1) + '%'
+      },
+      style: {
+        fontSize: '12px',
+        fontWeight: 600
+      },
+      dropShadow: {
+        enabled: false
+      }
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '65%',
+          labels: {
+            show: true,
+            name: {
+              show: false
+            },
+            value: {
+              show: true,
+              fontSize: '28px',
+              fontWeight: 700,
+              color: '#1f2937',
+              formatter: function(val: string) {
+                return total.toString()
+              }
+            },
+            total: {
+              show: true,
+              label: title,
+              fontSize: '13px',
+              fontWeight: 500,
+              color: '#6b7280',
+              formatter: function() {
+                return title
+              }
+            }
+          }
+        }
+      }
+    },
+    tooltip: {
+      y: {
+        formatter: function(value: number) {
+          return value.toLocaleString('vi-VN')
+        }
+      }
+    },
+    legend: {
+      show: false
+    },
+    responsive: [{
+      breakpoint: 480,
+      options: {
+        chart: {
+          height: 300
+        }
+      }
+    }]
+  }
 
   return (
     <div className="flex flex-col items-center w-full">
-      <div className="relative w-full h-64 mb-6">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={80}
-              paddingAngle={2}
-              dataKey="value"
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={colors[index]} />
-              ))}
-            </Pie>
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: '#fff', 
-                border: '1px solid #e5e7eb',
-                borderRadius: '8px',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                zIndex: 50
-              }}
-              wrapperStyle={{ zIndex: 50 }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <div className="text-3xl font-bold text-gray-900">{total}</div>
-          <div className="text-sm text-gray-600 font-medium">{title}</div>
-        </div>
+      <div className="w-full">
+        <Chart
+          options={options}
+          series={chartData}
+          type="donut"
+          height={350}
+        />
       </div>
-      <div className="w-full space-y-3 px-2">
+      <div className="w-full space-y-3 px-2 mt-4">
         {data.map((item, index) => {
           const percentage = total > 0 ? (item.value / total) * 100 : 0
           return (
@@ -65,7 +114,7 @@ export function DonutChart({ data, total, title }: DonutChartProps) {
               <div className="flex items-center flex-1">
                 <div 
                   className="w-4 h-4 rounded-full mr-3 shadow-sm" 
-                  style={{ backgroundColor: item.color }}
+                  style={{ backgroundColor: colors[index] }}
                 />
                 <span className="text-sm font-medium text-gray-700">{item.label}</span>
               </div>
@@ -90,42 +139,161 @@ interface BarChartProps {
 }
 
 export function BarChart({ data, title, maxValue }: BarChartProps) {
-  const chartData = data.map(item => ({
-    name: item.label,
-    value: item.value,
-    color: item.color
-  }))
+  const brandColors = ['#38b6ff', '#2563eb', '#165a87', '#93c5fd', '#1e40af']
+  const colors = data.map((_, index) => brandColors[index % brandColors.length])
+
+  const options: any = {
+    chart: {
+      type: 'bar',
+      height: 350,
+      toolbar: {
+        show: false
+      },
+      fontFamily: 'Roboto, sans-serif'
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '60%',
+        borderRadius: 8,
+        borderRadiusApplication: 'end',
+        dataLabels: {
+          position: 'top'
+        }
+      }
+    },
+    dataLabels: {
+      enabled: true,
+      offsetY: -20,
+      style: {
+        fontSize: '12px',
+        colors: ['#1f2937']
+      },
+      formatter: function(val: number) {
+        return val.toLocaleString('vi-VN')
+      }
+    },
+    xaxis: {
+      categories: data.map(item => item.label),
+      labels: {
+        style: {
+          fontSize: '12px',
+          colors: '#6b7280'
+        },
+        rotate: -45,
+        rotateAlways: false
+      },
+      axisBorder: {
+        show: true,
+        color: '#e5e7eb'
+      },
+      axisTicks: {
+        show: true,
+        color: '#e5e7eb'
+      }
+    },
+    yaxis: {
+      labels: {
+        style: {
+          fontSize: '12px',
+          colors: '#6b7280'
+        },
+        formatter: function(val: number) {
+          return val.toLocaleString('vi-VN')
+        }
+      },
+      axisBorder: {
+        show: true,
+        color: '#e5e7eb'
+      }
+    },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shade: 'light',
+        type: 'vertical',
+        shadeIntensity: 0.5,
+        gradientToColors: colors.map(color => {
+          if (color === '#38b6ff') return '#2563eb'
+          if (color === '#2563eb') return '#165a87'
+          if (color === '#165a87') return '#1e40af'
+          if (color === '#93c5fd') return '#38b6ff'
+          if (color === '#1e40af') return '#165a87'
+          return '#2563eb'
+        }),
+        inverseColors: false,
+        opacityFrom: 1,
+        opacityTo: 0.85,
+        stops: [0, 100]
+      }
+    },
+    colors: colors,
+    grid: {
+      borderColor: '#e5e7eb',
+      strokeDashArray: 4,
+      xaxis: {
+        lines: {
+          show: true
+        }
+      },
+      yaxis: {
+        lines: {
+          show: true
+        }
+      },
+      padding: {
+        top: 0,
+        right: 10,
+        bottom: 0,
+        left: 10
+      }
+    },
+    tooltip: {
+      shared: true,
+      intersect: false,
+      style: {
+        fontSize: '12px'
+      },
+      y: {
+        formatter: function(val: number) {
+          return val.toLocaleString('vi-VN')
+        }
+      }
+    },
+    responsive: [{
+      breakpoint: 768,
+      options: {
+        chart: {
+          height: 300
+        },
+        dataLabels: {
+          enabled: false
+        },
+        xaxis: {
+          labels: {
+            rotate: -45
+          }
+        }
+      }
+    }]
+  }
+
+  const series = [{
+    name: 'Giá trị',
+    data: data.map(item => item.value)
+  }]
 
   return (
     <div className="w-full">
       <h3 className="text-base font-semibold text-gray-800 mb-6 text-center">{title}</h3>
-      <div className="h-64">
-        <ResponsiveContainer width="100%" height="100%">
-          <RechartsBarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis 
-              dataKey="name" 
-              tick={{ fontSize: 12 }}
-              angle={-45}
-              textAnchor="end"
-              height={80}
-            />
-            <YAxis tick={{ fontSize: 12 }} />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: '#fff', 
-                border: '1px solid #e5e7eb',
-                borderRadius: '8px',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-              }}
-            />
-            <Bar dataKey="value" radius={[8, 8, 0, 0]}>
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Bar>
-          </RechartsBarChart>
-        </ResponsiveContainer>
+      <div className="h-[350px]">
+        <Chart
+          options={options}
+          series={series}
+          type="bar"
+          height={350}
+          width="100%"
+        />
       </div>
     </div>
   )

@@ -113,7 +113,7 @@ export default function AdminDashboard() {
         {/* Bài viết Chart */}
         <div className="bg-white shadow rounded-lg p-6">
           <DonutChart
-            title="Tổng bài viết"
+            title="Bài viết"
             total={stats.totalPosts}
             data={[
               {
@@ -133,7 +133,7 @@ export default function AdminDashboard() {
         {/* Người dùng Chart */}
         <div className="bg-white shadow rounded-lg p-6">
           <DonutChart
-            title="Tổng người dùng"
+            title="Người dùng"
             total={stats.totalUsers}
             data={[
               {
