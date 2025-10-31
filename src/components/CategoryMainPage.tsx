@@ -103,7 +103,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
         })
         .flat()
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      const finalPosts = categoryId === 'ban-doc' ? allPosts : allPosts.slice(0, 4)
+      const finalPosts = categoryId === 'ban-doc' ? allPosts : allPosts.slice(0, 6)
       setPosts(finalPosts)
     } catch (error) {
       setError('Có lỗi xảy ra khi tải bài viết')
@@ -277,47 +277,107 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                     </div>
 
                     {posts.length > 1 && (
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                        {posts.slice(1, 4).map((post) => (
-                          <div key={post.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
-                            <a href={`/${basePath}/${post.subcategory}/${post.slug}`} className="block">
-                              {post.images?.[0]?.image?.path ? (
-                                <div className="relative aspect-video overflow-hidden group">
-                                  <img 
-                                    src={post.images[0].image.path} 
-                                    alt={post.images[0].image.alt || post.title}
-                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                  />
-                                </div>
-                              ) : (
-                                <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                  <div className="text-center">
-                                    <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                    </svg>
-                                    <span className="text-gray-500 text-sm">Sắp ra mắt</span>
+                      <>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                          {posts.slice(1, 4).map((post) => (
+                            <div key={post.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                              <a href={`/${basePath}/${post.subcategory}/${post.slug}`} className="block">
+                                {post.images?.[0]?.image?.path ? (
+                                  <div className="relative aspect-video overflow-hidden group">
+                                    <img 
+                                      src={post.images[0].image.path} 
+                                      alt={post.images[0].image.alt || post.title}
+                                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                    />
                                   </div>
+                                ) : (
+                                  <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                    <div className="text-center">
+                                      <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                      </svg>
+                                      <span className="text-gray-500 text-sm">Sắp ra mắt</span>
+                                    </div>
+                                  </div>
+                                )}
+                                
+                                <div className="p-3">
+                                  <h3 
+                                    className="text-sm font-semibold text-gray-900 mb-1 leading-tight line-clamp-2 hover:text-red-600 transition-colors"
+                                    title={post.title}
+                                  >
+                                    {post.title}
+                                  </h3>
+                                  <p 
+                                    className="text-gray-600 text-xs leading-relaxed line-clamp-2"
+                                    title={post.excerpt || "Mô tả ngắn..."}
+                                  >
+                                    {post.excerpt || "Mô tả ngắn..."}
+                                  </p>
                                 </div>
-                              )}
-                              
-                              <div className="p-3">
-                                <h3 
-                                  className="text-sm font-semibold text-gray-900 mb-1 leading-tight line-clamp-2 hover:text-red-600 transition-colors"
-                                  title={post.title}
-                                >
-                                  {post.title}
-                                </h3>
-                                <p 
-                                  className="text-gray-600 text-xs leading-relaxed line-clamp-2"
-                                  title={post.excerpt || "Mô tả ngắn..."}
-                                >
-                                  {post.excerpt || "Mô tả ngắn..."}
-                                </p>
+                              </a>
+                            </div>
+                          ))}
+                        </div>
+
+                        {posts.length > 4 && (
+                          <div className="grid grid-cols-1 gap-4 mt-6">
+                            {posts.slice(4, 6).map((post) => (
+                              <div key={post.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                                <a href={`/${basePath}/${post.subcategory}/${post.slug}`} className="block md:flex h-full">
+                                  {post.images?.[0]?.image?.path ? (
+                                    <div className="flex-shrink-0 w-full md:w-64 h-36 md:h-40 overflow-hidden group">
+                                      <img
+                                        src={post.images[0].image.path}
+                                        alt={post.images[0].image.alt || post.title}
+                                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                      />
+                                    </div>
+                                  ) : (
+                                    <div className="flex-shrink-0 w-full md:w-64 h-36 md:h-40 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                      <div className="text-center">
+                                        <svg className="w-10 h-10 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                        </svg>
+                                        <span className="text-gray-500 text-xs">Sắp ra mắt</span>
+                                      </div>
+                                    </div>
+                                  )}
+                                  <div className="flex-1 p-3 md:p-4 flex flex-col justify-between">
+                                    <div>
+                                      <div className="flex items-center text-xs md:text-sm text-gray-500 mb-2">
+                                        <span>{new Date(post.createdAt).toLocaleString('vi-VN', {
+                                          year: 'numeric',
+                                          month: '2-digit',
+                                          day: '2-digit',
+                                          hour: '2-digit',
+                                          minute: '2-digit'
+                                        })}</span>
+                                        <span className="mx-2">•</span>
+                                        <span>{post.authorName || 'Tác giả'}</span>
+                                      </div>
+                                      <h3 
+                                        className="text-sm md:text-base font-bold text-gray-900 mb-2 leading-tight hover:text-red-600 transition-colors line-clamp-2"
+                                        title={post.title}
+                                      >
+                                        {post.title}
+                                      </h3>
+                                      {post.excerpt && (
+                                        <p 
+                                          className="text-xs md:text-sm text-gray-600 leading-relaxed line-clamp-2"
+                                          title={post.excerpt}
+                                        >
+                                          {post.excerpt}
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                </a>
                               </div>
-                            </a>
+                            ))}
                           </div>
-                        ))}
-                      </div>
+                        )}
+                      </>
                     )}
                   </>
                 )}
