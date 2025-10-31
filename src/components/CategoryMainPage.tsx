@@ -72,11 +72,18 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
         return
       }
 
-      const promises = subcategories.map(sub => 
-        fetch(`/api/posts/subcategory/${sub.id}?limit=50`).then(res => res.json())
+      const allSubcategoryPosts = await Promise.all(
+        subcategories.map(async (sub) => {
+          const firstResponse = await fetch(`/api/posts/subcategory/${sub.id}?limit=1`)
+          const firstData = await firstResponse.json()
+          const totalCount = firstData?.pagination?.totalCount || 0
+          if (totalCount > 0) {
+            const response = await fetch(`/api/posts/subcategory/${sub.id}?limit=${totalCount}`)
+            return response.json()
+          }
+          return firstData
+        })
       )
-
-      const allSubcategoryPosts = await Promise.all(promises)
 
       const counts: Record<string, number> = {}
       const postsBySub: Record<string, Post[]> = {}
