@@ -73,7 +73,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
       }
 
       const promises = subcategories.map(sub => 
-        fetch(`/api/posts/subcategory/${sub.id}?limit=3`).then(res => res.json())
+        fetch(`/api/posts/subcategory/${sub.id}?limit=50`).then(res => res.json())
       )
 
       const allSubcategoryPosts = await Promise.all(promises)
@@ -86,7 +86,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
           counts[sub.id] = response.pagination.totalCount
         }
         const list: Post[] = (response?.posts || response || []) as Post[]
-        postsBySub[sub.id] = (list || []).slice(0, 2)
+        postsBySub[sub.id] = list || []
       })
       setSubcategoryCounts(counts)
       setSubcategoryPosts(postsBySub)

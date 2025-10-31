@@ -109,7 +109,7 @@ export default function Sidebar({ quickNews = [], techToday = [], mostRead = [],
 
                 {Array.isArray(subcategoryPosts[subcategory.id]) && subcategoryPosts[subcategory.id].length > 0 && (
                   <div className="px-4 pb-3 space-y-3">
-                    {subcategoryPosts[subcategory.id].slice(0, 2).map((post: any) => (
+                    {subcategoryPosts[subcategory.id].map((post: any) => (
                       <a
                         key={post.id}
                         href={`/${post.category || basePath}/${post.subcategory}/${post.slug}`}
