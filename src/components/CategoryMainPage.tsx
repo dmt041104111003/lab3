@@ -103,7 +103,7 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
         })
         .flat()
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      const finalPosts = categoryId === 'ban-doc' ? allPosts : allPosts.slice(0, 3)
+      const finalPosts = categoryId === 'ban-doc' ? allPosts : allPosts.slice(0, 4)
       setPosts(finalPosts)
     } catch (error) {
       setError('Có lỗi xảy ra khi tải bài viết')
@@ -225,61 +225,66 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                   ))
                 ) : (
                   <>
-                    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                      <a href={`/${basePath}/${posts[0].subcategory}/${posts[0].slug}`} className="block">
-                        {posts[0].images?.[0]?.image?.path ? (
-                          <div className="relative aspect-video overflow-hidden group">
-                            <img
-                              src={posts[0].images[0].image.path}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-b-4 border-red-600 mb-6 rounded-lg overflow-hidden">
+                      {/* Ảnh full bên trái */}
+                      <div className="relative aspect-video">
+                        <a href={`/${basePath}/${posts[0].subcategory}/${posts[0].slug}`} className="block w-full h-full">
+                          {posts[0].images?.[0]?.image?.path ? (
+                            <img 
+                              src={posts[0].images[0].image.path} 
                               alt={posts[0].images[0].image.alt || posts[0].title}
-                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                              className="w-full h-full object-cover hover:opacity-95 transition-opacity"
                             />
-                          </div>
-                        ) : (
-                          <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                            <div className="text-center">
-                              <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                              </svg>
-                              <span className="text-gray-500 text-lg">Sắp ra mắt</span>
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center" style={{ aspectRatio: '16/9' }}>
+                              <div className="text-center">
+                                <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                                <span className="text-gray-500 text-lg">Sắp ra mắt</span>
+                              </div>
                             </div>
-                          </div>
-                        )}
-                        <div className="p-3">
-                          <div className="flex items-center text-xs text-gray-500 mb-2">
-                            <span className="capitalize">{posts[0].subcategory}</span>
-                            <span className="mx-2">•</span>
-                            <span>{new Date(posts[0].createdAt).toLocaleString('vi-VN', {
-                              year: 'numeric',
-                              month: '2-digit',
-                              day: '2-digit',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}</span>
-                            <span className="mx-2">•</span>
-                            <span>{posts[0].authorName || 'Tác giả'}</span>
-                          </div>
-                          <h1 className="text-lg font-bold text-gray-900 mb-2 hover:text-red-600 transition-colors">
-                            {posts[0].title}
-                          </h1>
-                          {posts[0].excerpt && (
-                            <p className="text-sm text-gray-600 leading-relaxed">
-                              {posts[0].excerpt}
-                            </p>
                           )}
-                        </div>
-                      </a>
+                        </a>
+                      </div>
+                      
+                      {/* Nội dung bên phải */}
+                      <div className="bg-white p-4 md:p-6 flex flex-col justify-center">
+                        <a href={`/${basePath}/${posts[0].subcategory}/${posts[0].slug}`} className="block">
+                          <h1 
+                            className="text-lg md:text-xl font-bold text-gray-900 mb-3 leading-tight hover:text-red-600 transition-colors line-clamp-2"
+                            title={posts[0].title}
+                          >
+                            {posts[0].title.length > 80 ? 
+                              posts[0].title.substring(0, 80) + '...' : 
+                              posts[0].title
+                            }
+                          </h1>
+                          <p 
+                            className="text-gray-600 text-sm leading-relaxed mb-2 line-clamp-2"
+                            title={posts[0].excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
+                          >
+                            {posts[0].excerpt ? 
+                              (posts[0].excerpt.length > 150 ? 
+                                posts[0].excerpt.substring(0, 150) + '...' : 
+                                posts[0].excerpt
+                              ) : 
+                              "Mô tả ngắn về bài viết chính trong chuyên mục này..."
+                            }
+                          </p>
+                        </a>
+                      </div>
                     </div>
 
                     {posts.length > 1 && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {posts.slice(1, 3).map((post) => (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                        {posts.slice(1, 4).map((post) => (
                           <div key={post.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
                             <a href={`/${basePath}/${post.subcategory}/${post.slug}`} className="block">
                               {post.images?.[0]?.image?.path ? (
                                 <div className="relative aspect-video overflow-hidden group">
-                                  <img
-                                    src={post.images[0].image.path}
+                                  <img 
+                                    src={post.images[0].image.path} 
                                     alt={post.images[0].image.alt || post.title}
                                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                   />
@@ -294,29 +299,19 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                                   </div>
                                 </div>
                               )}
+                              
                               <div className="p-3">
-                                <div className="flex items-center text-xs text-gray-500 mb-2">
-                                  <span className="capitalize">{post.subcategory}</span>
-                                  <span className="mx-2">•</span>
-                                  <span>{new Date(post.createdAt).toLocaleString('vi-VN', {
-                                    year: 'numeric',
-                                    month: '2-digit',
-                                    day: '2-digit',
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                  })}</span>
-                                </div>
                                 <h3 
-                                  className="text-sm font-bold text-gray-900 mb-1 leading-tight hover:text-red-600 transition-colors"
+                                  className="text-sm font-semibold text-gray-900 mb-1 leading-tight line-clamp-2 hover:text-red-600 transition-colors"
                                   title={post.title}
                                 >
                                   {post.title}
                                 </h3>
                                 <p 
                                   className="text-gray-600 text-xs leading-relaxed line-clamp-2"
-                                  title={post.excerpt || "Mô tả ngắn về bài viết..."}
+                                  title={post.excerpt || "Mô tả ngắn..."}
                                 >
-                                  {post.excerpt || "Mô tả ngắn về bài viết..."}
+                                  {post.excerpt || "Mô tả ngắn..."}
                                 </p>
                               </div>
                             </a>
