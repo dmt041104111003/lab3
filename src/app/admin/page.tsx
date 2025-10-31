@@ -7,6 +7,7 @@ import AdminPageHeader from '@/components/admin/AdminPageHeader'
 import AdminLoadingState from '@/components/admin/AdminLoadingState'
 import AdminTable from '@/components/admin/AdminTable'
 import { DonutChart, BarChart } from '@/components/admin/AdminChart'
+import StockChart from '@/components/admin/StockChart'
 
 interface Post {
   id: string
@@ -150,7 +151,10 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-   
+      {/* Stock Chart Analytics */}
+      <div className="mb-8">
+        <StockChart days={14} />
+      </div>
 
       <div className="bg-white shadow rounded-lg mb-8">
         <div className="px-6 py-4 border-b border-gray-200">
