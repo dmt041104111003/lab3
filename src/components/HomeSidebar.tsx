@@ -13,14 +13,31 @@ interface SidebarSectionProps {
     title: string
     href: string
   }>
+  subcategoryLinks?: Array<{
+    title: string
+    href: string
+  }>
 }
 
-function SidebarSection({ title, items }: SidebarSectionProps) {
+function SidebarSection({ title, items, subcategoryLinks }: SidebarSectionProps) {
   return (
     <div className="mb-8">
       <h3 className="text-sm font-bold text-gray-800 mb-3 uppercase tracking-wide">
         {title}
       </h3>
+      {subcategoryLinks && subcategoryLinks.length > 0 && (
+        <div className="space-y-2 mb-4">
+          {subcategoryLinks.map((link, index) => (
+            <Link
+              key={index}
+              href={link.href}
+              className="block text-gray-700 text-xs hover:text-red-600 transition-colors"
+            >
+              {link.title}
+            </Link>
+          ))}
+        </div>
+      )}
       <div className="space-y-3">
         {items.map((item, index) => (
           <Link
@@ -98,32 +115,31 @@ export default function HomeSidebar({
     href: `/tin-tuc/${post.subcategory || 'cong-nghe-viet-nam'}/${post.slug}`
   })) : []
 
-  const nhanVatItems = nhanVatPosts.length > 0 ? nhanVatPosts.map(post => ({
+  const nhanVatItems = nhanVatPosts.length > 0 ? nhanVatPosts.slice(0, 5).map(post => ({
     title: post.title,
     href: `/nhan-vat-goc-nhin/${post.subcategory || 'chan-dung-nha-sang-tao'}/${post.slug}`
   })) : []
 
-  const multimediaItems = multimediaPosts.length > 0 ? multimediaPosts.map(post => ({
+  const multimediaItems = multimediaPosts.length > 0 ? multimediaPosts.slice(0, 5).map(post => ({
     title: post.title,
     href: `/multimedia/${post.subcategory || 'video'}/${post.slug}`
   })) : []
 
-  const banDocItems = banDocPosts.length > 0 ? banDocPosts.map(post => ({
+  const banDocItems = banDocPosts.length > 0 ? banDocPosts.slice(0, 5).map(post => ({
     title: post.title,
     href: `/ban-doc/${post.slug}`
   })) : []
 
   return (
     <aside className="w-full lg:w-80 space-y-6">
-      <SidebarSection title="ĐỌC NHIỀU NHẤT" items={mostReadItems} />
-      <SidebarSection title="TIN NHANH" items={quickNewsItems} />
-      <SidebarSection title="CÔNG NGHỆ HÔM NAY" items={techTodayItems} />
-      <SidebarSection title="TIN MỚI NHẤT" items={latestItems} />
-      <SidebarSection title="ĐỔI MỚI SÁNG TẠO" items={innovationItems} />
-      <SidebarSection title="SẢN PHẨM & REVIEW" items={productItems} />
-      <SidebarSection title="XU HƯỚNG TƯƠNG LAI" items={trendItems} />
-      <SidebarSection title="NHÂN VẬT & GÓC NHÌN" items={nhanVatItems} />
-      <SidebarSection title="MULTIMEDIA" items={multimediaItems} />
+      <SidebarSection 
+        title="NHÂN VẬT & GÓC NHÌN" 
+        items={nhanVatItems}
+      />
+      <SidebarSection 
+        title="MULTIMEDIA" 
+        items={multimediaItems}
+      />
       <SidebarSection title="BẠN ĐỌC" items={banDocItems} />
     </aside>
   )
