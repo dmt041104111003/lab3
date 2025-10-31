@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react'
 import AdminLayout from '@/components/AdminLayout'
 import AdminPageHeader from '@/components/admin/AdminPageHeader'
-import AdminStatsCard from '@/components/admin/AdminStatsCard'
+// import AdminStatsCard from '@/components/admin/AdminStatsCard'
 import AdminLoadingState from '@/components/admin/AdminLoadingState'
 import AdminTable from '@/components/admin/AdminTable'
+import { DonutChart, BarChart } from '@/components/admin/AdminChart'
 
 interface Post {
   id: string
@@ -107,22 +108,49 @@ export default function AdminDashboard() {
         description="Tổng quan hệ thống quản trị"
       />
 
-      <div className="bg-white shadow rounded-lg p-4 sm:p-6 mb-8">
-        <div className="grid grid-cols-2 gap-4 sm:gap-12">
-          <div className="text-center">
-            <div className="text-2xl sm:text-3xl font-bold text-gray-800 mb-1">
-              {stats.totalPosts}
-            </div>
-            <div className="text-xs sm:text-sm text-gray-600">Tổng bài viết</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl sm:text-3xl font-bold text-gray-800 mb-1">
-              {stats.totalUsers}
-            </div>
-            <div className="text-xs sm:text-sm text-gray-600">Tổng người dùng</div>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* Bài viết Chart */}
+        <div className="bg-white shadow rounded-lg p-6">
+          <DonutChart
+            title="Tổng bài viết"
+            total={stats.totalPosts}
+            data={[
+              {
+                label: 'Đã xuất bản',
+                value: stats.publishedPosts,
+                color: '#10b981'
+              },
+              {
+                label: 'Bản nháp',
+                value: stats.draftPosts,
+                color: '#f59e0b'
+              }
+            ]}
+          />
+        </div>
+
+        {/* Người dùng Chart */}
+        <div className="bg-white shadow rounded-lg p-6">
+          <DonutChart
+            title="Tổng người dùng"
+            total={stats.totalUsers}
+            data={[
+              {
+                label: 'Quản trị',
+                value: stats.adminUsers,
+                color: '#8b5cf6'
+              },
+              {
+                label: 'Người dùng',
+                value: stats.regularUsers,
+                color: '#3b82f6'
+              }
+            ]}
+          />
         </div>
       </div>
+
+   
 
       <div className="bg-white shadow rounded-lg mb-8">
         <div className="px-6 py-4 border-b border-gray-200">
