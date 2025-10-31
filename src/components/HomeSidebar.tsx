@@ -45,7 +45,7 @@ function SidebarSection({ title, items, subcategoryLinks }: SidebarSectionProps)
             href={item.href}
             className="block bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200"
           >
-            <div className="text-gray-600 text-xs">
+            <div className="text-gray-600 text-xs line-clamp-2" title={item.title}>
               {item.title}
             </div>
           </Link>
