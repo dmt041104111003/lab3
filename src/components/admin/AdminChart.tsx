@@ -45,8 +45,10 @@ export function DonutChart({ data, total, title }: DonutChartProps) {
                 backgroundColor: '#fff', 
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                zIndex: 50
               }}
+              wrapperStyle={{ zIndex: 50 }}
             />
           </PieChart>
         </ResponsiveContainer>
