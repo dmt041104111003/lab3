@@ -20,15 +20,16 @@ export default function StockChart({ days = 30 }: StockChartProps) {
   const [data, setData] = useState<AnalyticsData[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedMetric, setSelectedMetric] = useState<'views' | 'comments'>('views')
+  const [viewType, setViewType] = useState<'day' | 'month' | 'year'>('month')
 
   useEffect(() => {
     fetchData()
-  }, [days])
+  }, [viewType])
 
   const fetchData = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/posts/analytics?days=${days}`)
+      const response = await fetch(`/api/posts/analytics?viewType=${viewType}`)
       const result = await response.json()
       setData(result)
     } catch (error) {
@@ -48,17 +49,21 @@ export default function StockChart({ days = 30 }: StockChartProps) {
     )
   }
 
-  // Reduce data density for better visibility
-  const step = Math.max(1, Math.floor(data.length / 15)) // Show max 15 points
-  const filteredData = data.filter((_, index) => index % step === 0 || index === data.length - 1)
-  
-  const dates = filteredData.map(d => {
-    const date = new Date(d.date)
-    return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' })
+  const dates = data.map(d => {
+    if (viewType === 'year') {
+      return d.date 
+    } else if (viewType === 'month') {
+      const [year, month] = d.date.split('-')
+      return `${month}/${year}`
+    } else {
+      const date = new Date(d.date)
+      return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' })
+    }
   })
-  const viewsData = filteredData.map(d => d.views)
-  const commentsData = filteredData.map(d => d.comments)
-  const postsData = filteredData.map(d => d.posts)
+  
+  const viewsData = data.map(d => d.views)
+  const commentsData = data.map(d => d.comments)
+  const postsData = data.map(d => d.posts)
 
   const chartOptions: any = {
     chart: {
@@ -104,13 +109,13 @@ export default function StockChart({ days = 30 }: StockChartProps) {
       labels: {
         style: {
           colors: '#6b7280',
-          fontSize: '11px'
+          fontSize: viewType === 'year' ? '13px' : viewType === 'month' ? '12px' : '11px'
         },
-        rotate: -45,
+        rotate: viewType === 'day' ? -45 : 0,
         rotateAlways: false,
         showDuplicates: false,
-        hideOverlappingLabels: true,
-        minHeight: 60
+        hideOverlappingLabels: viewType === 'day',
+        minHeight: viewType === 'day' ? 60 : 40
       },
       axisBorder: {
         show: true,
@@ -143,7 +148,16 @@ export default function StockChart({ days = 30 }: StockChartProps) {
       shared: true,
       intersect: false,
       x: {
-        format: 'dd/MM/yyyy'
+        formatter: (value: any, opts: any) => {
+          if (viewType === 'year') {
+            return `Năm ${value}`
+          } else if (viewType === 'month') {
+            const [month, year] = value.split('/')
+            return `Tháng ${month}/${year}`
+          } else {
+            return value
+          }
+        }
       },
       style: {
         fontSize: '12px'
@@ -236,34 +250,70 @@ export default function StockChart({ days = 30 }: StockChartProps) {
   return (
     <div className="bg-white shadow rounded-lg">
       <div className="px-6 py-4 border-b border-gray-200">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex flex-col gap-4">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Phân tích bài đăng</h2>
             <p className="text-sm text-gray-500 mt-1">
               Theo dõi lượt xem, bình luận và bài viết mới
             </p>
           </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setSelectedMetric('views')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                selectedMetric === 'views'
-                  ? 'bg-green-100 text-green-800 border-2 border-green-300'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Lượt xem
-            </button>
-            <button
-              onClick={() => setSelectedMetric('comments')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                selectedMetric === 'comments'
-                  ? 'bg-orange-100 text-orange-800 border-2 border-orange-300'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Bình luận
-            </button>
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* View Type Tabs */}
+            <div className="flex gap-2 border border-gray-200 rounded-lg p-1 bg-gray-50">
+              <button
+                onClick={() => setViewType('day')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  viewType === 'day'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Ngày
+              </button>
+              <button
+                onClick={() => setViewType('month')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  viewType === 'month'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Tháng
+              </button>
+              <button
+                onClick={() => setViewType('year')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  viewType === 'year'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Năm
+              </button>
+            </div>
+            {/* Metric Tabs */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => setSelectedMetric('views')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  selectedMetric === 'views'
+                    ? 'bg-green-100 text-green-800 border-2 border-green-300'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Lượt xem
+              </button>
+              <button
+                onClick={() => setSelectedMetric('comments')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  selectedMetric === 'comments'
+                    ? 'bg-orange-100 text-orange-800 border-2 border-orange-300'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Bình luận
+              </button>
+            </div>
           </div>
         </div>
       </div>
