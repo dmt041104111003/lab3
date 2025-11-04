@@ -110,7 +110,6 @@ export default function AdminDashboard() {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {/* Bài viết Chart */}
         <div className="bg-white shadow rounded-lg p-6">
           <DonutChart
             title="Bài viết"
@@ -130,7 +129,6 @@ export default function AdminDashboard() {
           />
         </div>
 
-        {/* Người dùng Chart */}
         <div className="bg-white shadow rounded-lg p-6">
           <DonutChart
             title="Người dùng"
@@ -151,7 +149,6 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Stock Chart Analytics */}
       <div className="mb-8">
         <StockChart days={14} />
       </div>
@@ -178,7 +175,6 @@ export default function AdminDashboard() {
           data={stats.recentPosts}
           renderRow={(post) => (
             <>
-              {/* Desktop Table Row */}
               <tr key={post.id} className="hidden md:table-row">
                 <td className="px-6 py-4">
                   <div className="text-sm font-medium text-gray-900 truncate max-w-xs" title={post.title}>
@@ -202,7 +198,6 @@ export default function AdminDashboard() {
                 </td>
               </tr>
               
-              {/* Mobile Card */}
               <div key={`mobile-${post.id}`} className="md:hidden">
                 <div className="space-y-3">
                   <div className="flex justify-between items-start">
@@ -252,7 +247,6 @@ export default function AdminDashboard() {
           data={stats.recentUsers}
           renderRow={(user) => (
             <>
-              {/* Desktop Table Row */}
               <tr key={user.id} className="hidden md:table-row">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">{user.name}</div>
@@ -274,7 +268,6 @@ export default function AdminDashboard() {
                 </td>
               </tr>
               
-              {/* Mobile Card */}
               <div key={`mobile-${user.id}`} className="md:hidden">
                 <div className="space-y-2">
                   <div className="flex justify-between items-start">

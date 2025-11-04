@@ -1,6 +1,7 @@
 import { Inter, Merriweather } from 'next/font/google'
 import './globals.css'
 import { GoogleOAuthProvider } from '@react-oauth/google'
+import SessionSync from '@/components/SessionSync'
 
 const inter = Inter({ subsets: ['latin'] })
 const merriweather = Merriweather({ 
@@ -41,6 +42,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} ${merriweather.variable}`}>
         <GoogleOAuthProvider clientId={process.env.GOOGLE_ID!}>
+          <SessionSync />
           {children}
         </GoogleOAuthProvider>
       </body>

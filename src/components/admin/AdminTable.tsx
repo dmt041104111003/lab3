@@ -46,7 +46,6 @@ export default function AdminTable({
         </table>
       </div>
 
-      {/* Mobile Cards */}
       <div className="md:hidden">
         {data.length === 0 ? (
           <div className="text-center py-12">
