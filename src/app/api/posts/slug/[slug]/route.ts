@@ -15,7 +15,17 @@ export async function GET(
         slug: slug,
         published: true
       },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        excerpt: true,
+        slug: true,
+        published: true,
+        createdAt: true,
+        category: true,
+        subcategory: true,
+        authorName: true,
         author: {
           select: {
             id: true,

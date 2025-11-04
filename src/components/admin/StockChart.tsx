@@ -149,13 +149,46 @@ export default function StockChart({ days = 30 }: StockChartProps) {
       intersect: false,
       x: {
         formatter: (value: any, opts: any) => {
+          let index = opts?.dataPointIndex
+          
+          if (index === undefined || index === null || index < 0) {
+            if (typeof value === 'string') {
+              index = dates.findIndex(d => d === value)
+            } else if (typeof value === 'number' && value >= 0 && value < data.length) {
+              index = value
+            } else {
+              index = 0
+            }
+          }
+          
+          if (index < 0 || index >= data.length) {
+            return String(value || '')
+          }
+          
+          const dataPoint = data[index]
+          if (!dataPoint?.date) {
+            return String(value || '')
+          }
+          
           if (viewType === 'year') {
-            return `Năm ${value}`
+            return `Năm ${dataPoint.date}`
           } else if (viewType === 'month') {
-            const [month, year] = value.split('/')
-            return `Tháng ${month}/${year}`
+            const parts = dataPoint.date.split('-')
+            if (parts.length >= 2) {
+              const [year, month] = parts
+              return `Tháng ${month}/${year}`
+            }
+            return `Tháng ${dataPoint.date}`
           } else {
-            return value
+            try {
+              const date = new Date(dataPoint.date)
+              if (!isNaN(date.getTime())) {
+                return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
+              }
+              return dataPoint.date
+            } catch {
+              return dataPoint.date
+            }
           }
         }
       },

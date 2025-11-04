@@ -17,7 +17,17 @@ export async function GET(
           subcategory: params.subcategory,
           published: true
         },
-        include: {
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          excerpt: true,
+          slug: true,
+          published: true,
+          createdAt: true,
+          category: true,
+          subcategory: true,
+          authorName: true,
           author: {
             select: {
               name: true,

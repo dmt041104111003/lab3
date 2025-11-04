@@ -13,7 +13,12 @@ export async function GET(request: NextRequest) {
 
     const posts = await prisma.post.findMany({
       where: whereCondition,
-      include: {
+      select: {
+        id: true,
+        title: true,
+        excerpt: true,
+        slug: true,
+        createdAt: true,
         author: {
           select: {
             id: true,

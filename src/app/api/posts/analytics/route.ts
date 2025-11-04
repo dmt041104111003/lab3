@@ -6,14 +6,35 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const viewType = searchParams.get('viewType') || 'day' 
     
-    let startDate = new Date()
+    const getDateKey = (utcDate: Date, type: string): string => {
+      const vnDate = new Date(utcDate.getTime() + 7 * 60 * 60 * 1000)
+      
+      if (type === 'year') {
+        return vnDate.getUTCFullYear().toString()
+      } else if (type === 'month') {
+        return `${vnDate.getUTCFullYear()}-${String(vnDate.getUTCMonth() + 1).padStart(2, '0')}`
+      } else {
+        const year = vnDate.getUTCFullYear()
+        const month = String(vnDate.getUTCMonth() + 1).padStart(2, '0')
+        const day = String(vnDate.getUTCDate()).padStart(2, '0')
+        return `${year}-${month}-${day}`
+      }
+    }
+    
+    const now = new Date()
+    const nowVN = new Date(now.getTime() + 7 * 60 * 60 * 1000)
+    let startDate: Date
     
     if (viewType === 'month') {
-      startDate.setMonth(startDate.getMonth() - 12) 
+      startDate = new Date(Date.UTC(nowVN.getUTCFullYear(), nowVN.getUTCMonth() - 11, 1))
+      startDate.setTime(startDate.getTime() - 7 * 60 * 60 * 1000) // Convert về UTC
     } else if (viewType === 'year') {
-      startDate.setFullYear(startDate.getFullYear() - 5) 
+      startDate = new Date(Date.UTC(nowVN.getUTCFullYear() - 4, 0, 1))
+      startDate.setTime(startDate.getTime() - 7 * 60 * 60 * 1000) 
     } else {
-      startDate.setDate(startDate.getDate() - 30)
+      const vnStartDate = new Date(Date.UTC(nowVN.getUTCFullYear(), nowVN.getUTCMonth(), nowVN.getUTCDate() - 29))
+      vnStartDate.setUTCHours(0, 0, 0, 0)
+      startDate = new Date(vnStartDate.getTime() - 7 * 60 * 60 * 1000) 
     }
     
     const views = await prisma.postView.findMany({
@@ -53,43 +74,38 @@ export async function GET(request: NextRequest) {
     })
     
     const dataMap = new Map<string, { views: number, comments: number, posts: number }>()
-    
-    const now = new Date()
     const periods: string[] = []
     
+    // Tạo periods theo múi giờ Việt Nam
     if (viewType === 'year') {
       for (let i = 0; i < 5; i++) {
-        const year = new Date(now.getFullYear() - 4 + i, 0, 1)
-        const yearStr = year.getFullYear().toString()
+        const year = nowVN.getUTCFullYear() - 4 + i
+        const yearStr = year.toString()
         periods.push(yearStr)
         dataMap.set(yearStr, { views: 0, comments: 0, posts: 0 })
       }
     } else if (viewType === 'month') {
       for (let i = 0; i < 12; i++) {
-        const month = new Date(now.getFullYear(), now.getMonth() - 11 + i, 1)
-        const monthStr = `${month.getFullYear()}-${String(month.getMonth() + 1).padStart(2, '0')}`
+        const monthDate = new Date(Date.UTC(nowVN.getUTCFullYear(), nowVN.getUTCMonth() - 11 + i, 1))
+        const monthStr = getDateKey(monthDate, 'month')
         periods.push(monthStr)
         dataMap.set(monthStr, { views: 0, comments: 0, posts: 0 })
       }
     } else {
+      const vnStartDate = new Date(Date.UTC(nowVN.getUTCFullYear(), nowVN.getUTCMonth(), nowVN.getUTCDate() - 29))
+      vnStartDate.setUTCHours(0, 0, 0, 0)
+      
       for (let i = 0; i < 30; i++) {
-        const date = new Date(startDate)
-        date.setDate(date.getDate() + i)
-        const dateStr = date.toISOString().split('T')[0]
+        const date = new Date(vnStartDate)
+        date.setUTCDate(vnStartDate.getUTCDate() + i)
+        const dateStr = getDateKey(date, 'day')
         periods.push(dateStr)
         dataMap.set(dateStr, { views: 0, comments: 0, posts: 0 })
       }
     }
     
     views.forEach(view => {
-      let key: string
-      if (viewType === 'year') {
-        key = view.viewedAt.getFullYear().toString()
-      } else if (viewType === 'month') {
-        key = `${view.viewedAt.getFullYear()}-${String(view.viewedAt.getMonth() + 1).padStart(2, '0')}`
-      } else {
-        key = view.viewedAt.toISOString().split('T')[0]
-      }
+      const key = getDateKey(new Date(view.viewedAt), viewType)
       const existing = dataMap.get(key)
       if (existing) {
         existing.views++
@@ -97,14 +113,7 @@ export async function GET(request: NextRequest) {
     })
     
     comments.forEach(comment => {
-      let key: string
-      if (viewType === 'year') {
-        key = comment.createdAt.getFullYear().toString()
-      } else if (viewType === 'month') {
-        key = `${comment.createdAt.getFullYear()}-${String(comment.createdAt.getMonth() + 1).padStart(2, '0')}`
-      } else {
-        key = comment.createdAt.toISOString().split('T')[0]
-      }
+      const key = getDateKey(new Date(comment.createdAt), viewType)
       const existing = dataMap.get(key)
       if (existing) {
         existing.comments++
@@ -112,15 +121,15 @@ export async function GET(request: NextRequest) {
     })
     
     posts.forEach(post => {
-      let key: string
-      if (viewType === 'year') {
-        key = post.createdAt.getFullYear().toString()
-      } else if (viewType === 'month') {
-        key = `${post.createdAt.getFullYear()}-${String(post.createdAt.getMonth() + 1).padStart(2, '0')}`
-      } else {
-        key = post.createdAt.toISOString().split('T')[0]
+      const postDate = new Date(post.createdAt)
+      
+      if (isNaN(postDate.getTime())) {
+        return
       }
+      
+      const key = getDateKey(postDate, viewType)
       const existing = dataMap.get(key)
+      
       if (existing) {
         existing.posts++
       }

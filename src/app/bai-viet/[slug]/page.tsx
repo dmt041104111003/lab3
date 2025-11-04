@@ -23,7 +23,6 @@ interface Post {
   slug: string
   published: boolean
   createdAt: string
-  updatedAt: string
   category: string
   subcategory: string
   authorName?: string
@@ -255,13 +254,6 @@ export default function PostDetail() {
             </div>
           </div>
 
-          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-            <div className="flex items-center justify-end text-sm text-gray-500">
-              <div>
-                <span>Cập nhật lần cuối: {formatDate(post.updatedAt)}</span>
-              </div>
-            </div>
-          </div>
         </article>
 
         <div className="mt-6 flex justify-end">
