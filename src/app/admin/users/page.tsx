@@ -289,7 +289,7 @@ export default function AdminUsers() {
                   </a>
                   <button 
                     onClick={() => handleDeleteClick(user)}
-                    className="text-red-600 hover:text-red-900"
+                    className="text-brand-dark hover:text-brand-deep"
                   >
                     Xóa
                   </button>
@@ -318,7 +318,7 @@ export default function AdminUsers() {
                       </a>
                       <button 
                         onClick={() => handleDeleteClick(user)}
-                        className="text-red-600 hover:text-red-900 text-xs"
+                        className="text-brand-dark hover:text-brand-deep text-xs"
                       >
                         Xóa
                       </button>
@@ -341,8 +341,8 @@ export default function AdminUsers() {
                       <span className="text-xs text-gray-500">Vai trò:</span>
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                         user.role === 'ADMIN' 
-                          ? 'bg-purple-100 text-purple-800' 
-                          : 'bg-green-100 text-green-800'
+                          ? 'bg-brand-dark text-white' 
+                          : 'bg-brand-light text-brand-deep'
                       }`}>
                         {user.role === 'ADMIN' ? 'Quản trị viên' : 'Người dùng'}
                       </span>
@@ -351,11 +351,11 @@ export default function AdminUsers() {
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-gray-500">Trạng thái:</span>
                       {user.isBanned ? (
-                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-brand-muted text-brand-dark">
                           {user.bannedUntil ? 'Bị cấm tạm thời' : 'Bị cấm vĩnh viễn'}
                         </span>
                       ) : (
-                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-brand-light text-brand-deep">
                           Hoạt động
                         </span>
                       )}

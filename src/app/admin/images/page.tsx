@@ -346,7 +346,7 @@ export default function ImagesPage() {
         />
 
         {/* Desktop Table */}
-        <div className="hidden md:block bg-white shadow rounded-lg overflow-hidden">
+        <div className="hidden md:block bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -408,7 +408,7 @@ export default function ImagesPage() {
                       </button>
                       <button
                         onClick={() => setDeletingImage(image)}
-                        className="text-red-600 hover:text-red-900"
+                        className="text-brand-dark hover:text-brand-deep"
                       >
                         Xóa
                       </button>
@@ -423,7 +423,7 @@ export default function ImagesPage() {
         {/* Mobile Cards */}
         <div className="md:hidden space-y-4">
           {paginatedImages.map((image) => (
-            <div key={image.id} className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
+            <div key={image.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
               <div className="p-4">
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0">
@@ -473,7 +473,7 @@ export default function ImagesPage() {
                   </button>
                   <button
                     onClick={() => setDeletingImage(image)}
-                    className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200"
+                    className="text-xs bg-brand-muted text-brand-dark px-3 py-1 rounded hover:bg-brand-accent hover:text-white transition-colors"
                   >
                     Xóa
                   </button>

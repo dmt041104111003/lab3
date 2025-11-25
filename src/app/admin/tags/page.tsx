@@ -27,7 +27,7 @@ export default function TagsPage() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [showCreateForm, setShowCreateForm] = useState(false)
-  const [newTag, setNewTag] = useState({ name: '', color: '#3B82F6' })
+  const [newTag, setNewTag] = useState({ name: '', color: '#B06C3B' })
   const [editingTag, setEditingTag] = useState<Tag | null>(null)
   const [deletingTag, setDeletingTag] = useState<Tag | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
@@ -63,7 +63,7 @@ export default function TagsPage() {
       })
       
       if (response.ok) {
-        setNewTag({ name: '', color: '#3B82F6' })
+        setNewTag({ name: '', color: '#B06C3B' })
         setShowCreateForm(false)
         fetchTags()
       }
@@ -321,13 +321,13 @@ export default function TagsPage() {
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <button
                   onClick={() => setEditingTag(tag)}
-                  className="text-indigo-600 hover:text-indigo-900 mr-3"
+                  className="text-tech-blue hover:text-tech-dark-blue mr-3"
                 >
                   Sửa
                 </button>
                 <button
                   onClick={() => setDeletingTag(tag)}
-                  className="text-red-600 hover:text-red-900"
+                  className="text-brand-dark hover:text-brand-deep"
                 >
                   Xóa
                 </button>

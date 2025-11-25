@@ -176,7 +176,7 @@ export default function AdminPosts() {
         description="Tạo, chỉnh sửa và quản lý nội dung bài viết"
       />
 
-      <div className="bg-white shadow rounded-lg">
+      <div className="bg-white shadow-sm rounded-lg border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-medium text-gray-900">Danh sách bài viết</h2>
         </div>
@@ -371,7 +371,7 @@ export default function AdminPosts() {
                   </a>
                   <button
                     onClick={() => handleDeleteClick(post)}
-                    className="text-red-600 hover:text-red-900"
+                    className="text-brand-dark hover:text-brand-deep"
                   >
                     Xóa
                   </button>
@@ -394,8 +394,8 @@ export default function AdminPosts() {
                     </div>
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full flex-shrink-0 ${
                       post.published 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-yellow-100 text-yellow-800'
+                        ? 'bg-brand-light text-brand-deep' 
+                        : 'bg-brand-muted text-brand-dark'
                     }`}>
                       {post.published ? 'Đã xuất bản' : 'Bản nháp'}
                     </span>
@@ -448,7 +448,7 @@ export default function AdminPosts() {
                       </a>
                       <button
                         onClick={() => handleDeleteClick(post)}
-                        className="text-red-600 hover:text-red-900 text-xs"
+                        className="text-brand-dark hover:text-brand-deep text-xs"
                       >
                         Xóa
                       </button>
