@@ -195,7 +195,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             onClick={() => editor.chain().focus().toggleBold().run()}
             disabled={!editor.can().chain().focus().toggleBold().run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('bold') ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('bold') ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Bold"
           >
@@ -206,7 +206,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             onClick={() => editor.chain().focus().toggleItalic().run()}
             disabled={!editor.can().chain().focus().toggleItalic().run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('italic') ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('italic') ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Italic"
           >
@@ -216,7 +216,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleUnderline().run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('underline') ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('underline') ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Underline"
           >
@@ -226,7 +226,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleStrike().run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('strike') ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('strike') ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Strikethrough"
           >
@@ -236,7 +236,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleHighlight().run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('highlight') ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('highlight') ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Highlight"
           >
@@ -254,7 +254,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleSubscript().run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('subscript') ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('subscript') ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Subscript"
           >
@@ -264,7 +264,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleSuperscript().run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('superscript') ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('superscript') ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Superscript"
           >
@@ -287,7 +287,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('heading', { level: 1 }) ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('heading', { level: 1 }) ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Heading 1"
           >
@@ -297,7 +297,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('heading', { level: 2 }) ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('heading', { level: 2 }) ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Heading 2"
           >
@@ -307,7 +307,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('heading', { level: 3 }) ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('heading', { level: 3 }) ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Heading 3"
           >
@@ -317,7 +317,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('heading', { level: 4 }) ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('heading', { level: 4 }) ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Heading 4"
           >
@@ -327,7 +327,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('heading', { level: 5 }) ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('heading', { level: 5 }) ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Heading 5"
           >
@@ -337,7 +337,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('heading', { level: 6 }) ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('heading', { level: 6 }) ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Heading 6"
           >
@@ -352,7 +352,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('bulletList') ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('bulletList') ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Bullet List"
           >
@@ -362,7 +362,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('orderedList') ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('orderedList') ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Ordered List"
           >
@@ -377,7 +377,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('blockquote') ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('blockquote') ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Blockquote"
           >
@@ -387,7 +387,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive('codeBlock') ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive('codeBlock') ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Code Block"
           >
@@ -410,7 +410,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => setTextAlign('left')}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive({ textAlign: 'left' }) ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive({ textAlign: 'left' }) ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Align Left"
           >
@@ -420,7 +420,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => setTextAlign('center')}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive({ textAlign: 'center' }) ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive({ textAlign: 'center' }) ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Align Center"
           >
@@ -430,7 +430,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => setTextAlign('right')}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive({ textAlign: 'right' }) ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive({ textAlign: 'right' }) ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Align Right"
           >
@@ -440,7 +440,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             type="button"
             onClick={() => setTextAlign('justify')}
             className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive({ textAlign: 'justify' }) ? 'bg-gray-200  text-blue-600' : 'text-gray-600 '
+              editor.isActive({ textAlign: 'justify' }) ? 'bg-gray-200 text-tech-blue' : 'text-gray-600 '
             }`}
             title="Justify"
           >
@@ -525,7 +525,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
               value={linkUrl}
               onChange={(e) => setLinkUrl(e.target.value)}
               placeholder="https://example.com"
-              className="w-full px-3 py-2 border border-gray-300  rounded-md bg-white  text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300  rounded-md bg-white  text-gray-900 focus:outline-none focus:ring-2 focus:ring-tech-blue focus:border-tech-blue"
             />
           </div>
           <div className="flex justify-end gap-3">
@@ -542,7 +542,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             <button
               type="button"
               onClick={handleAddLink}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-tech-blue text-white rounded-md hover:bg-tech-dark-blue transition-colors"
             >
               Add Link
             </button>
@@ -568,7 +568,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
               placeholder="https://example.com/image.jpg"
-              className="w-full px-3 py-2 border border-gray-300  rounded-md bg-white  text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300  rounded-md bg-white  text-gray-900 focus:outline-none focus:ring-2 focus:ring-tech-blue focus:border-tech-blue"
             />
           </div>
           <div className="flex justify-end gap-3">
@@ -585,7 +585,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             <button
               type="button"
               onClick={handleAddImage}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-tech-blue text-white rounded-md hover:bg-tech-dark-blue transition-colors"
             >
               Add Image
             </button>
@@ -611,7 +611,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
               value={youtubeUrl}
               onChange={(e) => setYoutubeUrl(e.target.value)}
               placeholder="https://www.youtube.com/watch?v=VIDEO_ID"
-              className="w-full px-3 py-2 border border-gray-300  rounded-md bg-white  text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300  rounded-md bg-white  text-gray-900 focus:outline-none focus:ring-2 focus:ring-tech-blue focus:border-tech-blue"
             />
             <p className="text-xs text-gray-500 mt-1">
               Supports: youtube.com/watch?v=, youtu.be/, youtube.com/embed/
@@ -679,7 +679,7 @@ export function TipTapEditor({ content, onChange, placeholder }: TipTapEditorPro
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: 'text-blue-500 underline cursor-pointer mx-auto',
+          class: 'text-tech-blue underline cursor-pointer mx-auto',
         },
       }),
       Image.configure({

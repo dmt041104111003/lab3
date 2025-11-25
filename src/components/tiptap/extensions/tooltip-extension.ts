@@ -15,7 +15,7 @@ export const Tooltip = Mark.create({
   addOptions() {
     return {
       HTMLAttributes: {
-        class: 'tooltip-trigger cursor-pointer bg-blue-100/80 text-blue-900 px-2 py-1 rounded-md border-2 border-blue-300/60 hover:bg-blue-200/90 transition-all duration-200 font-medium',
+        class: 'tooltip-trigger cursor-pointer bg-brand-light/90 text-brand-deep px-2 py-1 rounded-md border-2 border-brand-muted hover:bg-brand-light transition-all duration-200 font-medium',
       },
     };
   },

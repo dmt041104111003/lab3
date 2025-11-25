@@ -32,12 +32,12 @@ export function TooltipPopup({
     >
       <div className="space-y-4">
         {selectedText && (
-          <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-            <p className="text-sm text-blue-600 font-medium mb-2">Selected Text:</p>
+          <div className="p-3 bg-brand-light rounded-lg border border-brand-muted">
+            <p className="text-sm text-tech-blue font-medium mb-2">Selected Text:</p>
             <TruncatedText 
               text={selectedText} 
               maxLength={100}
-              className="text-sm text-blue-800 break-words"
+              className="text-sm text-brand-deep break-words"
             />
           </div>
         )}
@@ -50,7 +50,7 @@ export function TooltipPopup({
             value={tooltipText}
             onChange={(e) => onTooltipTextChange(e.target.value)}
             placeholder="Enter tooltip content for the selected text..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-tech-blue focus:border-tech-blue resize-none"
             rows={4}
           />
         </div>
@@ -60,7 +60,7 @@ export function TooltipPopup({
             type="button"
             onClick={onAddTooltip}
             disabled={!tooltipText.trim()}
-            className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors"
+            className="flex-1 px-4 py-2 bg-tech-blue text-white rounded-md hover:bg-tech-dark-blue disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors"
           >
             Add Tooltip
           </button>

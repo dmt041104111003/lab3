@@ -61,7 +61,7 @@ export default function TestFingerprintPage() {
         <button
           onClick={testFingerprint}
           disabled={isLoading}
-          className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
+          className="bg-tech-blue text-white px-4 py-2 rounded disabled:opacity-50"
         >
           {isLoading ? 'Testing...' : 'Test Fingerprint'}
         </button>

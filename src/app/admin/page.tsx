@@ -258,7 +258,7 @@ export default function AdminDashboard() {
                   <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                     user.role === 'ADMIN' 
                       ? 'bg-purple-100 text-purple-800' 
-                      : 'bg-blue-100 text-blue-800'
+                      : 'bg-brand-light text-brand-deep'
                   }`}>
                     {user.role === 'ADMIN' ? 'Quản trị' : 'Người dùng'}
                   </span>
@@ -275,7 +275,7 @@ export default function AdminDashboard() {
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                       user.role === 'ADMIN' 
                         ? 'bg-purple-100 text-purple-800' 
-                        : 'bg-blue-100 text-blue-800'
+                        : 'bg-brand-light text-brand-deep'
                     }`}>
                       {user.role === 'ADMIN' ? 'Quản trị' : 'Người dùng'}
                     </span>

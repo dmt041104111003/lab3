@@ -133,7 +133,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                 </div>
                 <div className="flex-1 ml-4">
                   {mainArticle.category && (
-                    <div className="text-xs text-blue-600 font-medium mb-1">{mainArticle.category}</div>
+                    <div className="text-xs text-tech-blue font-medium mb-1">{mainArticle.category}</div>
                   )}
                   <h2 
                     className="text-sm font-bold text-gray-800 mb-1 line-clamp-2 hover:text-red-600 transition-colors"
@@ -184,7 +184,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                   </div>
                   <div className="flex-1 ml-4">
                     {article.category && (
-                      <div className="text-xs text-blue-600 font-medium mb-1">{article.category}</div>
+                      <div className="text-xs text-tech-blue font-medium mb-1">{article.category}</div>
                     )}
                     <h4 
                       className="text-gray-800 text-xs font-bold mb-1 line-clamp-2 hover:text-red-600 transition-colors"

@@ -7,7 +7,7 @@ interface AdminStatsCardProps {
 
 export default function AdminStatsCard({ title, value, color, className = '' }: AdminStatsCardProps) {
   const colorClasses = {
-    blue: 'text-blue-600',
+    blue: 'text-tech-blue',
     green: 'text-green-600', 
     yellow: 'text-yellow-600',
     purple: 'text-purple-600',

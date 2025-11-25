@@ -11,15 +11,16 @@ const merriweather = Merriweather({
 })
 
 export const metadata = {
-  title: 'TechNova - Nền tảng tin tức công nghệ hàng đầu Việt Nam',
+  title: 'LAB3 - Nền tảng tin tức công nghệ hàng đầu Việt Nam',
   description: 'Cập nhật tin tức công nghệ mới nhất, đánh giá sản phẩm, xu hướng công nghệ và chuyển đổi số tại Việt Nam.',
   keywords: 'công nghệ, tin tức công nghệ, AI, chuyển đổi số, startup, đổi mới sáng tạo, blockchain, metaverse',
   robots: 'index, follow',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://lab3.vn'),
   openGraph: {
-    title: 'TechNova - Nền tảng tin tức công nghệ hàng đầu Việt Nam',
+    title: 'LAB3 - Nền tảng tin tức công nghệ hàng đầu Việt Nam',
     description: 'Cập nhật tin tức công nghệ mới nhất, đánh giá sản phẩm, xu hướng công nghệ và chuyển đổi số tại Việt Nam.',
-    url: 'https://technova.id.vn',
-    siteName: 'TechNova',
+    url: 'https://lab3.vn',
+    siteName: 'LAB3',
     locale: 'vi_VN',
     type: 'website',
   },
@@ -34,7 +35,7 @@ export default function RootLayout({
     <html lang="vi">
       <head>
         <link rel="icon" href="/favicon.ico" />
-        <link rel="icon" href="/footer.png" type="image/png" sizes="32x32" />
+        <link rel="icon" href="/lab3.jpg" type="image/jpeg" sizes="32x32" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#3b82f6" />

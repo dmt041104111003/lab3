@@ -179,7 +179,7 @@ export default function PostDetail() {
               <span>{formatDate(post.createdAt)}</span>
               <span>•</span>
               {post.category && (
-                <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
+                <span className="bg-brand-light text-brand-deep px-2 py-1 rounded-full text-xs">
                   {getCategoryDisplayName(post.category)}
                 </span>
               )}

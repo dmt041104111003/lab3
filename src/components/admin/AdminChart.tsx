@@ -20,7 +20,7 @@ export function DonutChart({ data, total, title }: DonutChartProps) {
   const chartData = data.map(item => item.value)
   const labels = data.map(item => item.label)
   
-  const brandColors = ['#38b6ff', '#2563eb', '#165a87', '#93c5fd', '#1e40af']
+  const brandColors = ['#B06C3B', '#8C522B', '#C38C63', '#E8D4C2', '#6B3C20']
   const colors = data.map((_, index) => brandColors[index % brandColors.length])
 
   const options: any = {
@@ -139,7 +139,7 @@ interface BarChartProps {
 }
 
 export function BarChart({ data, title, maxValue }: BarChartProps) {
-  const brandColors = ['#38b6ff', '#2563eb', '#165a87', '#93c5fd', '#1e40af']
+  const brandColors = ['#B06C3B', '#8C522B', '#C38C63', '#E8D4C2', '#6B3C20']
   const colors = data.map((_, index) => brandColors[index % brandColors.length])
 
   const options: any = {
@@ -214,12 +214,12 @@ export function BarChart({ data, title, maxValue }: BarChartProps) {
         type: 'vertical',
         shadeIntensity: 0.5,
         gradientToColors: colors.map(color => {
-          if (color === '#38b6ff') return '#2563eb'
-          if (color === '#2563eb') return '#165a87'
-          if (color === '#165a87') return '#1e40af'
-          if (color === '#93c5fd') return '#38b6ff'
-          if (color === '#1e40af') return '#165a87'
-          return '#2563eb'
+          if (color === '#B06C3B') return '#8C522B'
+          if (color === '#8C522B') return '#6B3C20'
+          if (color === '#C38C63') return '#B06C3B'
+          if (color === '#E8D4C2') return '#C38C63'
+          if (color === '#6B3C20') return '#4A2815'
+          return '#8C522B'
         }),
         inverseColors: false,
         opacityFrom: 1,

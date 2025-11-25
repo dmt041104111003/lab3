@@ -23,7 +23,7 @@ export function TruncatedText({ text, maxLength = 100, className = "" }: Truncat
       <span>{displayText}</span>
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="ml-1 text-blue-500 hover:text-blue-700 text-sm font-medium underline"
+        className="ml-1 text-tech-blue hover:text-brand-dark text-sm font-medium underline"
       >
         {isExpanded ? 'Hide' : 'Show more'}
       </button>

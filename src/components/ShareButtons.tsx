@@ -38,7 +38,7 @@ export default function ShareButtons({ url, title, description, className = '' }
     <div className={`flex items-center gap-2 ${className}`}>
       <button
         onClick={handleFacebookShare}
-        className="p-2 bg-blue-600/10 text-blue-600 rounded-lg hover:bg-blue-600/20 transition-colors"
+        className="p-2 bg-brand-accent/10 text-tech-blue rounded-lg hover:bg-brand-accent/20 transition-colors"
         title="Chia sẻ lên Facebook"
       >
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -58,7 +58,7 @@ export default function ShareButtons({ url, title, description, className = '' }
 
       <button
         onClick={handleLinkedInShare}
-        className="p-2 bg-blue-700/10 text-blue-700 rounded-lg hover:bg-blue-700/20 transition-colors"
+        className="p-2 bg-brand-dark/10 text-brand-dark rounded-lg hover:bg-brand-dark/20 transition-colors"
         title="Chia sẻ lên LinkedIn"
       >
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">

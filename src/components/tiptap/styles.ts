@@ -26,7 +26,7 @@ export const tiptapStyles = `
   
   .dark .ProseMirror table {
     background-color: #1e3a8a !important;
-    border: 2px solid #1e40af !important;
+    border: 2px solid #7D4A29 !important;
     color: #ffffff !important;
   }
   
@@ -66,7 +66,7 @@ export const tiptapStyles = `
   }
   
   .dark .ProseMirror table th {
-    background-color: #1e40af !important;
+    background-color: #7D4A29 !important;
     color: #ffffff !important;
   }
   
@@ -317,12 +317,12 @@ export const tiptapStyles = `
   }
   
   .dark .ProseMirror a:hover {
-    color: #93c5fd !important;
+    color: #E8D4C2 !important;
   }
   
   /* Light Mode Links */
   .ProseMirror a {
-    color: #2563eb !important;
+    color: #B06C3B !important;
   }
   
   .ProseMirror a:hover {
@@ -554,7 +554,7 @@ export const tiptapPreviewStyles = `
   
   .dark .ProseMirror table {
     background-color: #1e3a8a !important;
-    border: 2px solid #1e40af !important;
+    border: 2px solid #7D4A29 !important;
     color: #ffffff !important;
   }
   
@@ -594,7 +594,7 @@ export const tiptapPreviewStyles = `
   }
   
   .dark .ProseMirror table th {
-    background-color: #1e40af !important;
+    background-color: #7D4A29 !important;
     color: #ffffff !important;
   }
   
@@ -859,7 +859,7 @@ export const tiptapPreviewStyles = `
   }
   
   .dark .ProseMirror th {
-    background-color: #1e40af !important;
+    background-color: #7D4A29 !important;
     color: #ffffff !important;
   }
   
@@ -887,12 +887,12 @@ export const tiptapPreviewStyles = `
   }
   
   .dark .ProseMirror a:hover {
-    color: #93c5fd !important;
+    color: #E8D4C2 !important;
   }
   
   /* Light Mode Links */
   .ProseMirror a {
-    color: #2563eb !important;
+    color: #B06C3B !important;
   }
   
   .ProseMirror a:hover {

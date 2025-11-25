@@ -30,7 +30,7 @@ export default function SocialMeta({
   const fullUrl = url || (typeof window !== 'undefined' ? window.location.href : '')
   
   const getFullImageUrl = (imageUrl?: string) => {
-    if (!imageUrl) return '/footer.png'
+  if (!imageUrl) return '/lab3.jpg'
     
     if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
       return imageUrl
@@ -41,11 +41,11 @@ export default function SocialMeta({
   }
   
   const fullImage = getFullImageUrl(image)
-  const fullDescription = description || 'Đọc bài viết trên TechNova - Nền tảng tin tức công nghệ hàng đầu Việt Nam'
+  const fullDescription = description || 'Đọc bài viết trên LAB3 - Nền tảng tin tức công nghệ hàng đầu Việt Nam'
 
   return (
     <Head>
-      <title>{title} - TechNova</title>
+      <title>{title} - LAB3</title>
       <meta name="description" content={fullDescription} />
       <meta name="keywords" content={tags.join(', ')} />
       
@@ -57,7 +57,7 @@ export default function SocialMeta({
       <meta property="og:image:height" content="630" />
       <meta property="og:image:alt" content={title} />
       <meta property="og:url" content={fullUrl} />
-      <meta property="og:site_name" content="TechNova" />
+      <meta property="og:site_name" content="LAB3" />
       <meta property="og:locale" content="vi_VN" />
       
       {type === 'article' && (
@@ -80,7 +80,7 @@ export default function SocialMeta({
       <meta name="twitter:creator" content="@technova" />
       
       <meta name="robots" content="index, follow" />
-      <meta name="author" content={author || "TechNova"} />
+      <meta name="author" content={author || "LAB3"} />
       <link rel="canonical" href={fullUrl} />
     </Head>
   )

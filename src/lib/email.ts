@@ -15,7 +15,7 @@ export const sendPasswordResetEmail = async (email: string, resetToken: string) 
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: 'Đặt lại mật khẩu - TechNova',
+    subject: 'Đặt lại mật khẩu - LAB3',
     attachments: [
       {
         filename: 'footer.png',
@@ -26,8 +26,8 @@ export const sendPasswordResetEmail = async (email: string, resetToken: string) 
     html: `
       <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
         <!-- Header với logo -->
-        <div style="text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);">
-          <img src="cid:logo" alt="TechNova" style="height: 60px; width: auto; margin-bottom: 15px;">
+        <div style="text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #B06C3B 0%, #7D4A29 100%);">
+          <img src="cid:logo" alt="LAB3" style="height: 60px; width: auto; margin-bottom: 15px;">
        
         </div>
         
@@ -43,7 +43,7 @@ export const sendPasswordResetEmail = async (email: string, resetToken: string) 
           <!-- Reset button -->
           <div style="text-align: center; margin: 40px 0;">
             <a href="${resetUrl}" 
-               style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.3); transition: all 0.3s ease;">
+              style="background: linear-gradient(135deg, #B06C3B 0%, #7D4A29 100%); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; box-shadow: 0 4px 14px 0 rgba(176, 108, 59, 0.3); transition: all 0.3s ease;">
               Đặt lại mật khẩu
             </a>
           </div>
@@ -53,7 +53,7 @@ export const sendPasswordResetEmail = async (email: string, resetToken: string) 
             <p style="color: #64748b; font-size: 14px; margin: 0 0 10px 0; font-weight: 500;">
               Nếu nút không hoạt động, copy link này vào trình duyệt:
             </p>
-            <p style="color: #2563eb; font-size: 13px; word-break: break-all; background-color: #ffffff; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0; margin: 0; font-family: 'Courier New', monospace;">
+            <p style="color: #B06C3B; font-size: 13px; word-break: break-all; background-color: #ffffff; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0; margin: 0; font-family: 'Courier New', monospace;">
               ${resetUrl}
             </p>
           </div>
@@ -75,7 +75,7 @@ export const sendPasswordResetEmail = async (email: string, resetToken: string) 
         <!-- Footer -->
         <div style="text-align: center; padding: 25px 20px; background-color: #f8fafc; border-top: 1px solid #e2e8f0;">
           <p style="color: #64748b; font-size: 12px; margin: 0 0 8px 0;">
-            © 2024 TechNova. Tất cả quyền được bảo lưu.
+            © 2024 LAB3. Tất cả quyền được bảo lưu.
           </p>
           <p style="color: #94a3b8; font-size: 11px; margin: 0;">
             Email này được gửi tự động, vui lòng không trả lời.

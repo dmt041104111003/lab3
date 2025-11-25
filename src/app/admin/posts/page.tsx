@@ -183,10 +183,9 @@ export default function AdminPosts() {
             filterBy={filterBy}
             onFilterChange={setFilterBy}
             filterOptions={[
-              { value: 'ai-chuyen-doi-so', label: 'AI – Chuyển đổi số' },
-              { value: 'doi-moi-sang-tao', label: 'Đổi mới sáng tạo' },
-              { value: 'san-pham-review', label: 'Sản phẩm & Review' },
-              { value: 'xu-huong-tuong-lai', label: 'Xu hướng tương lai' }
+              { value: 'tin-tuc', label: 'Tin tức' },
+              { value: 'proposal', label: 'Proposal' },
+              { value: 'team', label: 'Team' }
             ]}
             onReset={handleReset}
             className="mb-6"
@@ -247,7 +246,7 @@ export default function AdminPosts() {
                   {post.authorName || post.author.name}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-brand-light text-brand-deep">
                     {post._count.views}
                   </span>
                 </td>
@@ -321,7 +320,7 @@ export default function AdminPosts() {
                     
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-gray-500">Lượt xem:</span>
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-brand-light text-brand-deep">
                         {post._count.views}
                       </span>
                     </div>

@@ -193,25 +193,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
     if (subcategory) {
       const categoryMap: { [key: string]: string } = {
         'cong-nghe-viet-nam': 'Công nghệ Việt Nam',
-        'cong-nghe-the-gioi': 'Công nghệ thế giới',
-        'tri-tue-nhan-tao': 'Trí tuệ nhân tạo',
-        'du-lieu-lon-iot': 'Dữ liệu lớn & IoT',
-        'chuyen-doi-so-doanh-nghiep-giao-duc': 'Chuyển đổi số',
-        'startup-viet': 'Startup Việt',
-        'y-tuong-hay': 'Ý tưởng hay',
-        'doanh-nghiep-sang-tao': 'Doanh nghiệp sáng tạo',
-        'thiet-bi-moi': 'Thiết bị mới',
-        'ung-dung-phan-mem': 'Ứng dụng & phần mềm',
-        'danh-gia-san-pham': 'Đánh giá sản phẩm',
-        'blockchain': 'Blockchain',
-        'cong-nghe-xanh': 'Công nghệ xanh',
-        'metaverse': 'Metaverse',
-        'chan-dung-nha-sang-tao': 'Chân dung nhà sáng tạo',
-        'phong-van-chuyen-gia': 'Phỏng vấn chuyên gia',
-        'binh-luan-cong-nghe': 'Bình luận công nghệ',
-        'video': 'Video',
-        'anh': 'Ảnh',
-        'infographic': 'Infographic'
+        'cong-nghe-the-gioi': 'Công nghệ thế giới'
       }
       return categoryMap[subcategory] || subcategory
     }
@@ -219,13 +201,8 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
     if (category) {
       const categoryMap: { [key: string]: string } = {
         'tin-tuc': 'Tin tức',
-        'ai-chuyen-doi-so': 'AI - Chuyển đổi số',
-        'doi-moi-sang-tao': 'Đổi mới sáng tạo',
-        'san-pham-review': 'Sản phẩm & Review',
-        'xu-huong-tuong-lai': 'Xu hướng tương lai',
-        'nhan-vat-goc-nhin': 'Nhân vật & Góc nhìn',
-        'multimedia': 'Multimedia',
-        'ban-doc': 'Bạn đọc'
+        'proposal': 'Proposal',
+        'team': 'Team'
       }
       return categoryMap[category] || category
     }
@@ -234,11 +211,6 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
   }
 
   const getPostUrl = (notification: Notification) => {
-    // Special case for "ban-doc" category
-    if (notification.category === 'ban-doc') {
-      return `/ban-doc/${notification.slug}`
-    }
-    
     // Regular format: /{category}/{subcategory}/{slug}
     if (notification.category && notification.subcategory) {
       return `/${notification.category}/${notification.subcategory}/${notification.slug}`
@@ -252,10 +224,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
     const { post } = reply
     let baseUrl = ''
     
-    // Special case for "ban-doc" category
-    if (post.category === 'ban-doc') {
-      baseUrl = `/ban-doc/${post.slug}`
-    } else if (post.category && post.subcategory) {
+    if (post.category && post.subcategory) {
       // Regular format: /{category}/{subcategory}/{slug}
       baseUrl = `/${post.category}/${post.subcategory}/${post.slug}`
     } else {
@@ -293,7 +262,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
             onClick={() => handleTabChange('thongbao')}
             className={`flex-1 flex flex-col items-center py-3 px-4 text-sm transition-colors ${
               activeTab === 'thongbao'
-                ? 'text-gray-900 border-b-2 border-blue-500'
+                ? 'text-gray-900 border-b-2 border-tech-blue'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
@@ -307,7 +276,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
             onClick={() => handleTabChange('ykien')}
             className={`flex-1 flex flex-col items-center py-3 px-4 text-sm transition-colors ${
               activeTab === 'ykien'
-                ? 'text-gray-900 border-b-2 border-blue-500'
+                ? 'text-gray-900 border-b-2 border-tech-blue'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
@@ -320,7 +289,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
             onClick={() => handleTabChange('daxem')}
             className={`flex-1 flex flex-col items-center py-3 px-4 text-sm transition-colors ${
               activeTab === 'daxem'
-                ? 'text-gray-900 border-b-2 border-blue-500'
+                ? 'text-gray-900 border-b-2 border-tech-blue'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
@@ -341,7 +310,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
                   onClick={handleSubscribeToggle}
                   className={`w-full px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
                     isSubscribed
-                      ? 'bg-blue-500 text-white hover:bg-blue-600'
+                      ? 'bg-tech-blue text-white hover:bg-tech-dark-blue'
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
                 >
@@ -354,7 +323,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
 
               {isLoading ? (
                 <div className="flex justify-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-tech-blue"></div>
                 </div>
               ) : notifications.length > 0 ? (
                 <div className="divide-y divide-gray-100">
@@ -374,7 +343,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
                         </span>
                       </div>
                       <h4 
-                        className="text-sm font-medium text-gray-900 line-clamp-2 cursor-pointer hover:text-blue-600 transition-colors"
+                        className="text-sm font-medium text-gray-900 line-clamp-2 cursor-pointer hover:text-tech-blue transition-colors"
                         title={notification.title}
                       >
                         {notification.title}
@@ -399,7 +368,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
             <div>
               {isLoading ? (
                 <div className="flex justify-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-tech-blue"></div>
                 </div>
               ) : replies.length > 0 ? (
                 <div className="divide-y divide-gray-100">
@@ -411,7 +380,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
                       onClick={onClose}
                     >
                       <div className="flex justify-between items-start mb-2">
-                        <span className="text-xs font-medium text-blue-600">
+                        <span className="text-xs font-medium text-tech-blue">
                           {reply.authorName} đã trả lời
                         </span>
                         <span className="text-xs text-gray-500">
@@ -452,7 +421,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
             <div>
               {isLoading ? (
                 <div className="flex justify-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-tech-blue"></div>
                 </div>
               ) : notifications.length > 0 ? (
                 <div className="divide-y divide-gray-100">
@@ -472,7 +441,7 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
                         </span>
                       </div>
                       <h4 
-                        className="text-sm font-medium text-gray-900 line-clamp-2 cursor-pointer hover:text-blue-600 transition-colors"
+                        className="text-sm font-medium text-gray-900 line-clamp-2 cursor-pointer hover:text-tech-blue transition-colors"
                         title={notification.title}
                       >
                         {notification.title}

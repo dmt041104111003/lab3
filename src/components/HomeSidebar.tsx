@@ -57,28 +57,12 @@ function SidebarSection({ title, items, subcategoryLinks }: SidebarSectionProps)
 
 interface HomeSidebarProps {
   quickNews?: Post[]
-  techToday?: Post[]
   mostRead?: Post[]
-  innovationPosts?: Post[]
-  productPosts?: Post[]
-  trendPosts?: Post[]
-  latestNews?: Post[]
-  nhanVatPosts?: Post[]
-  multimediaPosts?: Post[]
-  banDocPosts?: Post[]
 }
 
 export default function HomeSidebar({ 
   quickNews = [], 
-  techToday = [], 
-  mostRead = [],
-  innovationPosts = [],
-  productPosts = [],
-  trendPosts = [],
-  latestNews = [],
-  nhanVatPosts = [],
-  multimediaPosts = [],
-  banDocPosts = []
+  mostRead = []
 }: HomeSidebarProps) {
   const mostReadItems = mostRead.length > 0 ? mostRead.slice(0, 5).map(post => ({
     title: post.title,
@@ -87,62 +71,13 @@ export default function HomeSidebar({
 
   const quickNewsItems = quickNews.length > 0 ? quickNews.slice(0, 5).map(post => ({
     title: post.title,
-    href: `/xu-huong-tuong-lai/${post.subcategory || 'blockchain'}/${post.slug}`
-  })) : []
-
-  const techTodayItems = techToday.length > 0 ? techToday.map(post => ({
-    title: post.title,
-    href: `/ai-chuyen-doi-so/${post.subcategory || 'tri-tue-nhan-tao'}/${post.slug}`
-  })) : []
-
-  const innovationItems = innovationPosts.length > 0 ? innovationPosts.map(post => ({
-    title: post.title,
-    href: `/doi-moi-sang-tao/${post.subcategory || 'startup-viet'}/${post.slug}`
-  })) : []
-
-  const productItems = productPosts.length > 0 ? productPosts.map(post => ({
-    title: post.title,
-    href: `/san-pham-review/${post.subcategory || 'thiet-bi-moi'}/${post.slug}`
-  })) : []
-
-  const trendItems = trendPosts.length > 0 ? trendPosts.map(post => ({
-    title: post.title,
-    href: `/xu-huong-tuong-lai/${post.subcategory || 'blockchain'}/${post.slug}`
-  })) : []
-
-  const latestItems = latestNews.length > 0 ? latestNews.map(post => ({
-    title: post.title,
     href: `/tin-tuc/${post.subcategory || 'cong-nghe-viet-nam'}/${post.slug}`
-  })) : []
-
-  const nhanVatItems = nhanVatPosts.length > 0 ? nhanVatPosts.slice(0, 5).map(post => ({
-    title: post.title,
-    href: `/nhan-vat-goc-nhin/${post.subcategory || 'chan-dung-nha-sang-tao'}/${post.slug}`
-  })) : []
-
-  const multimediaItems = multimediaPosts.length > 0 ? multimediaPosts.slice(0, 5).map(post => ({
-    title: post.title,
-    href: `/multimedia/${post.subcategory || 'video'}/${post.slug}`
-  })) : []
-
-  const banDocItems = banDocPosts.length > 0 ? banDocPosts.slice(0, 5).map(post => ({
-    title: post.title,
-    href: `/ban-doc/${post.slug}`
   })) : []
 
   return (
     <aside className="w-full lg:w-80 space-y-6">
       <SidebarSection title="ĐỌC NHIỀU NHẤT" items={mostReadItems} />
       <SidebarSection title="TIN NHANH" items={quickNewsItems} />
-      <SidebarSection 
-        title="NHÂN VẬT & GÓC NHÌN" 
-        items={nhanVatItems}
-      />
-      <SidebarSection 
-        title="MULTIMEDIA" 
-        items={multimediaItems}
-      />
-      <SidebarSection title="BẠN ĐỌC" items={banDocItems} />
     </aside>
   )
 }

@@ -54,7 +54,7 @@ export function TipTapPreview({ content, className = "" }: TipTapPreviewProps) {
           <span class="font-medium">Copy</span>
         </span>
       `;
-      btn.className = 'code-copy-btn absolute top-2 right-2 px-2 py-1 text-xs bg-transparent text-gray-500 rounded shadow hover:bg-blue-500/20 hover:text-blue-600 transition-all duration-150 z-10 flex items-center gap-1';
+      btn.className = 'code-copy-btn absolute top-2 right-2 px-2 py-1 text-xs bg-transparent text-gray-500 rounded shadow hover:bg-brand-accent/20 hover:text-tech-blue transition-all duration-150 z-10 flex items-center gap-1';
       btn.style.position = 'absolute';
       btn.style.top = '8px';
       btn.style.right = '8px';
@@ -154,7 +154,7 @@ export function TipTapPreview({ content, className = "" }: TipTapPreviewProps) {
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: 'text-blue-500 underline cursor-pointer mx-auto',
+          class: 'text-tech-blue underline cursor-pointer mx-auto',
         },
       }),
       Image.configure({
@@ -245,7 +245,7 @@ export function TipTapPreview({ content, className = "" }: TipTapPreviewProps) {
         }
         .prose a:hover, .prose a:focus {
           text-decoration: none;
-          color: #2563eb;
+          color: #B06C3B;
         }
       `}</style>
     </div>

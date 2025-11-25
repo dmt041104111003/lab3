@@ -125,11 +125,11 @@ export default function CommentSection() {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' })
           
           // Add highlight effect
-          element.classList.add('bg-blue-50')
+          element.classList.add('bg-brand-light')
           
           // Remove highlight after 3 seconds
           setTimeout(() => {
-            element.classList.remove('bg-blue-50')
+            element.classList.remove('bg-brand-light')
           }, 3000)
         }, 500) // Wait for comments to render
       }
@@ -703,7 +703,7 @@ export default function CommentSection() {
               <div className="text-center mb-4">
                 <div className="flex justify-center">
                   <img 
-                    src="/footer.png" 
+                    src="/lab3.jpg" 
                     alt="Logo" 
                     className="h-8 w-auto"
                   />
@@ -786,14 +786,14 @@ export default function CommentSection() {
             </div>
             
             <div className="px-6 py-4 text-xs text-gray-600 text-center leading-relaxed">
-              Tiếp tục là đồng ý với <a href="#" className="text-blue-600 hover:underline">điều khoản sử dụng</a> và <a href="#" className="text-blue-600 hover:underline">chính sách bảo mật</a> của TechNova.
+              Tiếp tục là đồng ý với <a href="#" className="text-tech-blue hover:underline">điều khoản sử dụng</a> và <a href="#" className="text-tech-blue hover:underline">chính sách bảo mật</a> của LAB3.
             </div>
             
             <div className="px-6 pb-4 text-center">
               <span className="text-sm text-gray-500">Chưa có tài khoản? </span>
               <a 
                 href="/auth/signup" 
-                className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                className="text-sm text-tech-blue hover:text-brand-dark hover:underline font-medium"
               >
                 Đăng ký ngay
               </a>

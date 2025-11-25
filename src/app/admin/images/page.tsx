@@ -25,6 +25,9 @@ interface Image {
   updatedAt: string
 }
 
+const FALLBACK_IMAGE =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" rx="12" ry="12" fill="%23F4EADF"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="18" fill="%237D4A29">LAB3</text></svg>'
+
 export default function ImagesPage() {
   const [images, setImages] = useState<Image[]>([])
   const [loading, setLoading] = useState(true)
@@ -296,7 +299,8 @@ export default function ImagesPage() {
                   className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 object-contain rounded-lg shadow-lg bg-gray-50"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement
-                    target.src = '/placeholder-image.png'
+                    target.onerror = null
+                    target.src = FALLBACK_IMAGE
                   }}
                 />
               </div>
@@ -372,7 +376,8 @@ export default function ImagesPage() {
                           className="h-16 w-16 object-cover rounded-lg"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement
-                            target.src = '/placeholder-image.png'
+                            target.onerror = null
+                            target.src = FALLBACK_IMAGE
                           }}
                         />
                       </div>

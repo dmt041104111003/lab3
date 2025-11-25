@@ -39,62 +39,13 @@ export default function Header() {
       ]
     },
     {
-      title: 'AI - CHUYỂN ĐỔI SỐ',
-      baseHref: '/ai-chuyen-doi-so',
-      subcategories: [
-        { name: 'Trí tuệ nhân tạo', href: '/ai-chuyen-doi-so/tri-tue-nhan-tao' },
-        { name: 'Dữ liệu lớn & IoT', href: '/ai-chuyen-doi-so/du-lieu-lon-iot' },
-        { name: 'Chuyển đổi số doanh nghiệp', href: '/ai-chuyen-doi-so/chuyen-doi-so-doanh-nghiep-giao-duc' }
-      ]
+      title: 'PROPOSAL',
+      baseHref: '/proposal',
+      subcategories: []
     },
     {
-      title: 'ĐỔI MỚI SÁNG TẠO',
-      baseHref: '/doi-moi-sang-tao',
-      subcategories: [
-        { name: 'Startup Việt', href: '/doi-moi-sang-tao/startup-viet' },
-        { name: 'Ý tưởng hay', href: '/doi-moi-sang-tao/y-tuong-hay' },
-        { name: 'Doanh nghiệp sáng tạo', href: '/doi-moi-sang-tao/doanh-nghiep-sang-tao' }
-      ]
-    },
-    {
-      title: 'SẢN PHẨM & REVIEW',
-      baseHref: '/san-pham-review',
-      subcategories: [
-        { name: 'Thiết bị mới', href: '/san-pham-review/thiet-bi-moi' },
-        { name: 'Ứng dụng & phần mềm', href: '/san-pham-review/ung-dung-phan-mem' },
-        { name: 'Đánh giá sản phẩm', href: '/san-pham-review/danh-gia-san-pham' }
-      ]
-    },
-    {
-      title: 'XU HƯỚNG TƯƠNG LAI',
-      baseHref: '/xu-huong-tuong-lai',
-      subcategories: [
-        { name: 'Blockchain', href: '/xu-huong-tuong-lai/blockchain' },
-        { name: 'Công nghệ xanh', href: '/xu-huong-tuong-lai/cong-nghe-xanh' },
-        { name: 'Metaverse', href: '/xu-huong-tuong-lai/metaverse' }
-      ]
-    },
-    {
-      title: 'NHÂN VẬT & GÓC NHÌN',
-      baseHref: '/nhan-vat-goc-nhin',
-      subcategories: [
-        { name: 'Chân dung nhà sáng tạo', href: '/nhan-vat-goc-nhin/chan-dung-nha-sang-tao' },
-        { name: 'Phỏng vấn chuyên gia', href: '/nhan-vat-goc-nhin/phong-van-chuyen-gia' },
-        { name: 'Bình luận công nghệ', href: '/nhan-vat-goc-nhin/binh-luan-cong-nghe' }
-      ]
-    },
-    {
-      title: 'MULTIMEDIA',
-      baseHref: '/multimedia',
-      subcategories: [
-        { name: 'Video', href: '/multimedia/video' },
-        { name: 'Ảnh', href: '/multimedia/anh' },
-        { name: 'Infographic', href: '/multimedia/infographic' }
-      ]
-    },
-    {
-      title: 'BẠN ĐỌC',
-      baseHref: '/ban-doc',
+      title: 'TEAM',
+      baseHref: '/team',
       subcategories: []
     }
   ]
@@ -239,9 +190,9 @@ export default function Header() {
 
   if (!mounted) {
     return (
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-[#F5F4F0] shadow-sm border-b border-[#D9D3C8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+          <div className="flex justify-between items-center h-28">
             <div className="flex items-center space-x-4">
               <div className="w-32 h-8 bg-gray-200 rounded animate-pulse"></div>
             </div>
@@ -312,15 +263,15 @@ export default function Header() {
 
   const getMobileNavLinkClasses = (path: string) => {
     const baseClasses = "block px-3 py-2 text-sm rounded-md transition-colors"
-    const activeClasses = "text-tech-blue bg-tech-blue/10 font-semibold"
-    const inactiveClasses = "text-gray-700 hover:text-tech-blue hover:bg-gray-100"
+    const activeClasses = "text-tech-blue bg-brand-light font-semibold"
+    const inactiveClasses = "text-gray-700 hover:text-tech-blue hover:bg-brand-light/80"
     return `${baseClasses} ${isActive(path) ? activeClasses : inactiveClasses}`
   }
 
   const getMegaMenuLinkClasses = (path: string) => {
     const baseClasses = "block text-sm px-2 py-1 rounded transition-colors"
-    const activeClasses = "text-tech-blue bg-blue-50 font-medium"
-    const inactiveClasses = "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+    const activeClasses = "text-tech-blue bg-brand-light font-medium"
+    const inactiveClasses = "text-gray-700 hover:text-tech-blue hover:bg-brand-light"
     return `${baseClasses} ${isActive(path) ? activeClasses : inactiveClasses}`
   }
 
@@ -400,7 +351,7 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200 relative">
+    <header className="bg-[#F5F4F0] shadow-sm border-b border-[#D9D3C8] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20 flex-nowrap">
           <button
@@ -416,17 +367,15 @@ export default function Header() {
             </div>
           </button>
           <div className="flex items-center space-x-4 flex-shrink-0">
-            <Link href="/" className="flex flex-col items-center">
+            <Link href="/" className="flex items-center">
               <Image
-                src="/footer.png"
-                alt="TechNova Logo"
-                width={180}
-                height={200}
-                className="mb-1"
+                src="/lab3.jpg"
+                alt="LAB3 Logo"
+                width={120}
+                height={60}
+                className="object-contain"
               />
-              {/* <div className="tech-slogan text-black">
-                CÔNG NGHỆ & ĐỜI SỐNG
-              </div> */}
+          
             </Link>
           </div>
 
@@ -439,25 +388,14 @@ export default function Header() {
             <Link href="/tin-tuc" className={`${getNavLinkClasses('/tin-tuc')} flex-shrink-0`}>
               Tin tức
             </Link>
-            <Link href="/ai-chuyen-doi-so" className={`${getNavLinkClasses('/ai-chuyen-doi-so')} flex-shrink-0`}>
-              AI – Chuyển đổi số
+            <Link href="/proposal" className={`${getNavLinkClasses('/proposal')} flex-shrink-0`}>
+              Proposal
             </Link>
-            <Link href="/doi-moi-sang-tao" className={`${getNavLinkClasses('/doi-moi-sang-tao')} flex-shrink-0`}>
-              Đổi mới sáng tạo
+            <Link href="/team" className={`${getNavLinkClasses('/team')} flex-shrink-0`}>
+              Team
             </Link>
-            <Link href="/san-pham-review" className={`${getNavLinkClasses('/san-pham-review')} flex-shrink-0`}>
-              Sản phẩm & Review
-            </Link>
-            <Link href="/xu-huong-tuong-lai" className={`${getNavLinkClasses('/xu-huong-tuong-lai')} flex-shrink-0`}>
-              Xu hướng tương lai
-            </Link>
-            {/* <Link href="/nhan-vat-goc-nhin" className={getNavLinkClasses('/nhan-vat-goc-nhin')}>
-              Nhân vật & Góc nhìn
-            </Link>
-            <Link href="/multimedia" className={getNavLinkClasses('/multimedia')}>
-              Multimedia
-            </Link> */}
             
+                        
             <button
               onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)}
               className="flex items-center text-gray-700 hover:text-tech-blue transition-colors font-medium p-2 rounded-md"
@@ -535,7 +473,7 @@ export default function Header() {
                   </button>
 
                   {isProfileMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                    <div className="absolute right-0 mt-2 w-64 bg-white border border-[#E0DCCD] rounded-lg shadow-lg z-50">
                       <div className="px-4 py-3 border-b border-gray-100">
                         {!isEditingName ? (
                           <>
@@ -662,7 +600,7 @@ export default function Header() {
         </div>
 
         {isMegaMenuOpen && (
-          <div className="absolute top-full left-0 w-full bg-gray-100 border-t border-gray-200 shadow-lg z-50" data-mega-menu>
+          <div className="absolute top-full left-0 w-full bg-[#F5F4F0] border-t border-[#D9D3C8] shadow-lg z-50" data-mega-menu>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
                 {megaMenuCategories.map((category, index) => (
@@ -699,7 +637,7 @@ export default function Header() {
                         <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                       </svg>
                       <div className="text-left">
-                        <div className="text-xs">TẢI APP TECHNOVA</div>
+                        <div className="text-xs">TẢI APP LAB3</div>
                         <div className="text-xs opacity-75">APP STORE</div>
                       </div>
                     </button>
@@ -709,7 +647,7 @@ export default function Header() {
                         <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
                       </svg>
                       <div className="text-left">
-                        <div className="text-xs">TẢI APP TECHNOVA</div>
+                        <div className="text-xs">TẢI APP LAB3</div>
                         <div className="text-xs opacity-75">ANDROID</div>
                       </div>
                     </button>
@@ -724,7 +662,7 @@ export default function Header() {
           <div className="hidden md:block fixed inset-0 bg-black bg-opacity-50 z-50" onClick={() => setIsSearchOpen(false)}>
             <div className="flex items-start justify-center pt-20 px-4" onClick={(e) => e.stopPropagation()}>
               <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform transition-all duration-300 ease-out">
-                <div className="flex items-center p-6 border-b border-gray-200">
+                <div className="flex items-center p-6 border-b border-[#E0DCCD]">
                   <div className="flex-1 relative">
                     <input
                       type="text"
@@ -782,7 +720,7 @@ export default function Header() {
                               )}
                               <div className="flex-1 min-w-0">
                                 <h4 
-                                  className="text-base font-semibold text-gray-900 line-clamp-2 mb-2 cursor-pointer hover:text-blue-600 transition-colors"
+                                  className="text-base font-semibold text-gray-900 line-clamp-2 mb-2 cursor-pointer hover:text-tech-blue transition-colors"
                                   title={result.title}
                                 >
                                   {highlightSearchTerm(result.title, searchQuery)}
@@ -837,8 +775,8 @@ export default function Header() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                       </div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">Tìm kiếm bài viết</h3>
-                      <p className="text-gray-500">Nhập từ khóa để tìm kiếm bài viết, tác giả...</p>
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">Tìm kiếm học liệu</h3>
+                      <p className="text-gray-500">Nhập từ khóa để tìm khóa học, tài liệu, giảng viên...</p>
                     </div>
                   ) : null}
                 </div>
@@ -849,7 +787,7 @@ export default function Header() {
 
         {isSearchOpen && (
           <div className="md:hidden" data-mobile-search>
-            <div className="px-4 py-3 bg-white border-t border-gray-200">
+            <div className="px-4 py-3 bg-white border-t border-[#D9D3C8]">
               <form onSubmit={handleSearchSubmit} className="relative">
                 <div className="relative">
                   <input
@@ -896,7 +834,7 @@ export default function Header() {
                         )}
                         <div className="flex-1 min-w-0">
                           <h4 
-                            className="text-sm font-medium text-gray-900 line-clamp-2 cursor-pointer hover:text-blue-600 transition-colors"
+                      className="text-sm font-medium text-gray-900 line-clamp-2 cursor-pointer hover:text-tech-blue transition-colors"
                             title={result.title}
                           >
                             {highlightSearchTerm(result.title, searchQuery)}
@@ -928,7 +866,7 @@ export default function Header() {
         )}
 
         {isNotificationOpen && (
-          <div className="md:hidden bg-white border-t border-gray-200">
+          <div className="md:hidden bg-white border-t border-[#D9D3C8]">
             <NotificationPopup 
               isOpen={isNotificationOpen} 
               onClose={() => {
@@ -945,7 +883,7 @@ export default function Header() {
 
         {isMobileMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-[#D9D3C8]">
               {megaMenuCategories.map((category, index) => (
                 <div key={index} className="space-y-1">
                   <Link href={category.baseHref} className={getMobileMenuTitleClasses(category.baseHref)}>

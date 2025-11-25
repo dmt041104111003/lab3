@@ -116,7 +116,7 @@ export default function ArticleCard({ title, href, isMain = false, className = "
             
             <div className="flex-1 ml-3">
               {category && (
-                <div className="text-xs text-blue-600 font-medium mb-1">{category}</div>
+                <div className="text-xs text-tech-blue font-medium mb-1">{category}</div>
               )}
               <h4 className="text-gray-800 text-xs font-bold mb-1 line-clamp-2 hover:text-red-600 transition-colors">{title}</h4>
               {excerpt && (

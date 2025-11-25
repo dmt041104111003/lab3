@@ -46,9 +46,6 @@ interface Subcategory {
 }
 
 interface SidebarProps {
-  quickNews?: Post[]
-  techToday?: Post[]
-  mostRead?: Post[]
   subcategories?: Subcategory[]
   basePath?: string
   title?: string
@@ -56,35 +53,7 @@ interface SidebarProps {
   subcategoryPosts?: Record<string, any[]>
 }
 
-export default function Sidebar({ quickNews = [], techToday = [], mostRead = [], subcategories = [], basePath = '', title = '', subcategoryCounts = {}, subcategoryPosts = {} }: SidebarProps) {
-  const mostReadItems = mostRead.length > 0 ? mostRead.slice(0, 3).map(post => ({
-    title: post.title,
-    href: `/bai-viet/${post.slug}`
-  })) : [
-    { title: "Bài viết sắp ra mắt", href: "#" },
-    { title: "Bài viết sắp ra mắt", href: "#" },
-    { title: "Bài viết sắp ra mắt", href: "#" }
-  ]
-
-  const quickNewsItems = quickNews.length > 0 ? quickNews.slice(0, 2).map(post => ({
-    title: post.title,
-    href: `/xu-huong-tuong-lai/${post.subcategory || 'blockchain'}/${post.slug}`
-  })) : [
-    { title: "Tin nhanh sắp ra mắt", href: "#" },
-    { title: "Tin nhanh sắp ra mắt", href: "#" }
-  ]
-
-  const techTodayItems = techToday.length > 0 ? techToday.slice(0, 1).map(post => ({
-    title: post.title,
-    href: `/ai-chuyen-doi-so/${post.subcategory || 'tri-tue-nhan-tao'}/${post.slug}`
-  })) : [
-    { title: "Công nghệ sắp ra mắt", href: "#" }
-  ]
-
-  const subcategoryItems = subcategories.length > 0 ? subcategories.map(sub => ({
-    title: sub.name,
-    href: `/${basePath}/${sub.slug}`
-  })) : []
+export default function Sidebar({ subcategories = [], basePath = '', title = '', subcategoryCounts = {}, subcategoryPosts = {} }: SidebarProps) {
 
   return (
     <aside className="w-full lg:w-80 space-y-6">
