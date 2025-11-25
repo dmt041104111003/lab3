@@ -110,7 +110,7 @@ export default function AdminDashboard() {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white shadow rounded-lg p-6">
+        <div className="bg-white shadow-sm rounded-lg p-6 border border-gray-200">
           <DonutChart
             title="Bài viết"
             total={stats.totalPosts}
@@ -118,18 +118,18 @@ export default function AdminDashboard() {
               {
                 label: 'Đã xuất bản',
                 value: stats.publishedPosts,
-                color: '#10b981'
+                color: '#B06C3B'
               },
               {
                 label: 'Bản nháp',
                 value: stats.draftPosts,
-                color: '#f59e0b'
+                color: '#E8D4C2'
               }
             ]}
           />
         </div>
 
-        <div className="bg-white shadow rounded-lg p-6">
+        <div className="bg-white shadow-sm rounded-lg p-6 border border-gray-200">
           <DonutChart
             title="Người dùng"
             total={stats.totalUsers}
@@ -137,12 +137,12 @@ export default function AdminDashboard() {
               {
                 label: 'Quản trị',
                 value: stats.adminUsers,
-                color: '#8b5cf6'
+                color: '#7D4A29'
               },
               {
                 label: 'Người dùng',
                 value: stats.regularUsers,
-                color: '#3b82f6'
+                color: '#B06C3B'
               }
             ]}
           />
@@ -153,13 +153,13 @@ export default function AdminDashboard() {
         <StockChart days={14} />
       </div>
 
-      <div className="bg-white shadow rounded-lg mb-8">
+      <div className="bg-white shadow-sm rounded-lg mb-8 border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-medium text-gray-900">Bài viết gần đây</h2>
             <a
               href="/admin/posts"
-              className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+              className="text-tech-blue hover:text-tech-dark-blue text-sm font-medium transition-colors"
             >
               Xem tất cả
             </a>
@@ -187,8 +187,8 @@ export default function AdminDashboard() {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                     post.published 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-yellow-100 text-yellow-800'
+                      ? 'bg-brand-light text-brand-deep' 
+                      : 'bg-brand-muted text-brand-dark'
                   }`}>
                     {post.published ? 'Đã xuất bản' : 'Bản nháp'}
                   </span>
@@ -206,8 +206,8 @@ export default function AdminDashboard() {
                     </h3>
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full flex-shrink-0 ${
                       post.published 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-yellow-100 text-yellow-800'
+                        ? 'bg-brand-light text-brand-deep' 
+                        : 'bg-brand-muted text-brand-dark'
                     }`}>
                       {post.published ? 'Đã xuất bản' : 'Bản nháp'}
                     </span>
@@ -225,13 +225,13 @@ export default function AdminDashboard() {
         />
       </div>
 
-      <div className="bg-white shadow rounded-lg">
+      <div className="bg-white shadow-sm rounded-lg border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-medium text-gray-900">Người dùng gần đây</h2>
             <a
               href="/admin/users"
-              className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+              className="text-tech-blue hover:text-tech-dark-blue text-sm font-medium transition-colors"
             >
               Xem tất cả
             </a>
@@ -257,7 +257,7 @@ export default function AdminDashboard() {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                     user.role === 'ADMIN' 
-                      ? 'bg-purple-100 text-purple-800' 
+                      ? 'bg-brand-dark text-white' 
                       : 'bg-brand-light text-brand-deep'
                   }`}>
                     {user.role === 'ADMIN' ? 'Quản trị' : 'Người dùng'}
@@ -274,7 +274,7 @@ export default function AdminDashboard() {
                     <h3 className="text-sm font-medium text-gray-900">{user.name}</h3>
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                       user.role === 'ADMIN' 
-                        ? 'bg-purple-100 text-purple-800' 
+                        ? 'bg-brand-dark text-white' 
                         : 'bg-brand-light text-brand-deep'
                     }`}>
                       {user.role === 'ADMIN' ? 'Quản trị' : 'Người dùng'}

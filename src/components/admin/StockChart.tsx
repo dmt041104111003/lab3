@@ -41,7 +41,7 @@ export default function StockChart({ days = 30 }: StockChartProps) {
 
   if (loading) {
     return (
-      <div className="bg-white shadow rounded-lg p-6">
+      <div className="bg-white shadow-sm rounded-lg p-6 border border-gray-200">
         <div className="h-96 flex items-center justify-center">
           <div className="text-gray-500">Đang tải dữ liệu...</div>
         </div>
@@ -222,8 +222,8 @@ export default function StockChart({ days = 30 }: StockChartProps) {
       }
     },
     colors: selectedMetric === 'views' 
-      ? ['#10b981', '#3b82f6'] 
-      : ['#f59e0b', '#ef4444'],
+      ? ['#B06C3B', '#8C522B'] 
+      : ['#C38C63', '#B06C3B'],
     legend: {
       show: true,
       position: 'bottom',
@@ -281,7 +281,7 @@ export default function StockChart({ days = 30 }: StockChartProps) {
   ]
 
   return (
-    <div className="bg-white shadow rounded-lg">
+    <div className="bg-white shadow-sm rounded-lg border border-gray-200">
       <div className="px-6 py-4 border-b border-gray-200">
         <div className="flex flex-col gap-4">
           <div>
@@ -330,7 +330,7 @@ export default function StockChart({ days = 30 }: StockChartProps) {
                 onClick={() => setSelectedMetric('views')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   selectedMetric === 'views'
-                    ? 'bg-green-100 text-green-800 border-2 border-green-300'
+                    ? 'bg-brand-light text-brand-deep border-2 border-brand-accent'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -340,7 +340,7 @@ export default function StockChart({ days = 30 }: StockChartProps) {
                 onClick={() => setSelectedMetric('comments')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   selectedMetric === 'comments'
-                    ? 'bg-orange-100 text-orange-800 border-2 border-orange-300'
+                    ? 'bg-brand-muted text-brand-dark border-2 border-brand-accent'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >

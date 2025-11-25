@@ -173,7 +173,7 @@ export default function AdminUsers() {
       />
 
       {error && (
-        <div className="mb-6 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded">
+        <div className="mb-6 bg-brand-muted border border-brand-accent text-brand-dark px-4 py-3 rounded">
           {error}
         </div>
       )}
@@ -184,7 +184,7 @@ export default function AdminUsers() {
         onClose={() => setToast('')}
       />
 
-      <div className="bg-white shadow rounded-lg">
+      <div className="bg-white shadow-sm rounded-lg border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-medium text-gray-900">
             Danh sách người dùng ({sortedUsers.length})
@@ -257,19 +257,19 @@ export default function AdminUsers() {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                     user.role === 'ADMIN' 
-                      ? 'bg-purple-100 text-purple-800' 
-                      : 'bg-green-100 text-green-800'
+                      ? 'bg-brand-dark text-white' 
+                      : 'bg-brand-light text-brand-deep'
                   }`}>
                     {user.role === 'ADMIN' ? 'Quản trị viên' : 'Người dùng'}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {user.isBanned ? (
-                    <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                    <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-brand-muted text-brand-dark">
                       {user.bannedUntil ? 'Bị cấm tạm thời' : 'Bị cấm vĩnh viễn'}
                     </span>
                   ) : (
-                    <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                    <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-brand-light text-brand-deep">
                       Hoạt động
                     </span>
                   )}

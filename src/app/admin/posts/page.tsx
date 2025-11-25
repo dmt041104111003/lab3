@@ -26,6 +26,12 @@ interface Post {
     name: string
     email: string
   }
+  tags?: Array<{
+    tag: {
+      id: string
+      name: string
+    }
+  }>
   _count: {
     views: number
   }
@@ -137,6 +143,23 @@ export default function AdminPosts() {
     setCurrentPage(1)
   }
 
+  const containsFundingKeyword = (value?: string) => {
+    if (!value) return false
+    const keywords = ['được cấp vốn', 'funded', 'grant', 'tài trợ', 'cấp vốn']
+    const lower = value.toLowerCase()
+    return keywords.some((keyword) => lower.includes(keyword))
+  }
+
+  const isFundedProject = (post: Post) => {
+    if (post.tags && post.tags.some((tagItem) => containsFundingKeyword(tagItem.tag?.name))) {
+      return true
+    }
+    return containsFundingKeyword(post.title) || containsFundingKeyword(post.excerpt)
+  }
+
+  const proposalPosts = posts.filter((post) => post.category === 'proposal')
+  const fundedProjects = proposalPosts.filter(isFundedProject)
+  const submittedProjects = proposalPosts.filter((post) => !isFundedProject(post))
 
   if (loading) {
     return (
@@ -192,6 +215,92 @@ export default function AdminPosts() {
           />
         </div>
 
+        {(filterBy === '' || filterBy === 'proposal') && proposalPosts.length > 0 && (
+          <div className="px-4 sm:px-6 mb-6 space-y-6">
+            {fundedProjects.length > 0 && (
+              <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6">
+                <div className="mb-4">
+                  <p className="text-xs uppercase tracking-[0.3em] text-gray-400 mb-1">LAB3 FUND</p>
+                  <h3 className="text-lg font-bold text-gray-900">Dự án được cấp vốn</h3>
+                  <p className="text-sm text-gray-600 mt-1">Những đề xuất đã nhận hỗ trợ tài chính từ LAB3 hoặc đối tác.</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {fundedProjects.map((post) => (
+                    <div key={post.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div className="flex justify-between items-start mb-2">
+                        <a
+                          href={`/admin/posts/edit/${post.slug}`}
+                          className="text-sm font-semibold text-gray-900 hover:text-tech-blue transition-colors line-clamp-2 flex-1 mr-2"
+                          title={post.title}
+                        >
+                          {post.title}
+                        </a>
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full flex-shrink-0 ${
+                          post.published 
+                            ? 'bg-brand-light text-brand-deep' 
+                            : 'bg-brand-muted text-brand-dark'
+                        }`}>
+                          {post.published ? 'Đã xuất bản' : 'Bản nháp'}
+                        </span>
+                      </div>
+                      {post.excerpt && (
+                        <p className="text-xs text-gray-600 line-clamp-2 mb-2" title={post.excerpt}>
+                          {post.excerpt}
+                        </p>
+                      )}
+                      <div className="flex justify-between items-center text-xs text-gray-500">
+                        <span>{post.authorName || post.author.name}</span>
+                        <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {submittedProjects.length > 0 && (
+              <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6">
+                <div className="mb-4">
+                  <p className="text-xs uppercase tracking-[0.3em] text-gray-400 mb-1">LAB3 COMMUNITY</p>
+                  <h3 className="text-lg font-bold text-gray-900">Dự án đã đăng</h3>
+                  <p className="text-sm text-gray-600 mt-1">Các đề xuất đang kêu gọi góp ý, tìm kiếm đối tác hoặc chuẩn bị nộp quỹ.</p>
+                </div>
+                <div className="space-y-3">
+                  {submittedProjects.map((post) => (
+                    <div key={post.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div className="flex justify-between items-start mb-2">
+                        <a
+                          href={`/admin/posts/edit/${post.slug}`}
+                          className="text-sm font-semibold text-gray-900 hover:text-tech-blue transition-colors line-clamp-2 flex-1 mr-2"
+                          title={post.title}
+                        >
+                          {post.title}
+                        </a>
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full flex-shrink-0 ${
+                          post.published 
+                            ? 'bg-brand-light text-brand-deep' 
+                            : 'bg-brand-muted text-brand-dark'
+                        }`}>
+                          {post.published ? 'Đã xuất bản' : 'Bản nháp'}
+                        </span>
+                      </div>
+                      {post.excerpt && (
+                        <p className="text-xs text-gray-600 line-clamp-2 mb-2" title={post.excerpt}>
+                          {post.excerpt}
+                        </p>
+                      )}
+                      <div className="flex justify-between items-center text-xs text-gray-500">
+                        <span>{post.authorName || post.author.name}</span>
+                        <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         <AdminTable
           columns={[
             { key: 'title', label: 'Tiêu đề' },
@@ -220,8 +329,8 @@ export default function AdminPosts() {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                     post.published 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-yellow-100 text-yellow-800'
+                      ? 'bg-brand-light text-brand-deep' 
+                      : 'bg-brand-muted text-brand-dark'
                   }`}>
                     {post.published ? 'Đã xuất bản' : 'Bản nháp'}
                   </span>

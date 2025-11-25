@@ -56,7 +56,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-brand-sand">
         <AdminLoadingState message="Đang kiểm tra quyền truy cập..." />
       </div>
     )
@@ -109,7 +109,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-brand-sand">
       <header className="hidden lg:block bg-white shadow-sm border-b border-gray-200">
         <div className="flex h-16">
           <div className="w-64 flex items-center justify-center">

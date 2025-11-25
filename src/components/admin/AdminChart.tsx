@@ -110,7 +110,7 @@ export function DonutChart({ data, total, title }: DonutChartProps) {
         {data.map((item, index) => {
           const percentage = total > 0 ? (item.value / total) * 100 : 0
           return (
-            <div key={index} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 transition-colors">
+            <div key={index} className="flex items-center justify-between p-2 rounded-lg hover:bg-brand-light transition-colors">
               <div className="flex items-center flex-1">
                 <div 
                   className="w-4 h-4 rounded-full mr-3 shadow-sm" 
@@ -120,7 +120,7 @@ export function DonutChart({ data, total, title }: DonutChartProps) {
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-base font-bold text-gray-900">{item.value}</span>
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                <span className="text-xs text-brand-dark bg-brand-muted px-2 py-1 rounded">
                   {percentage.toFixed(1)}%
                 </span>
               </div>
