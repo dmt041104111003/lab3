@@ -41,12 +41,18 @@ export default function Header() {
     {
       title: 'PROPOSAL',
       baseHref: '/proposal',
-      subcategories: []
+      subcategories: [
+        { name: 'Dự án được cấp vốn', href: '/proposal/funded' },
+        { name: 'Dự án đã đăng', href: '/proposal/submitted' }
+      ]
     },
     {
       title: 'TEAM',
       baseHref: '/team',
-      subcategories: []
+      subcategories: [
+        { name: 'Thành viên', href: '/team/member' },
+        { name: 'Thành tích', href: '/team/achievements' }
+      ]
     }
   ]
 

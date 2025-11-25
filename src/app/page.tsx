@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import ContentSection from '@/components/ContentSection'
-import HomeSidebar from '@/components/HomeSidebar'
+import HeroWeb3 from '@/components/HeroWeb3'
+import ArticleSearchBand from '@/components/ArticleSearchBand'
 import AdminRedirect from '@/components/AdminRedirect'
 import LoadingState from '@/components/LoadingState'
 
@@ -34,8 +35,6 @@ interface Post {
 
 export default function Home() {
   const [newsPosts, setNewsPosts] = useState<Post[]>([])
-  const [mostReadPosts, setMostReadPosts] = useState<Post[]>([])
-  const [quickNews, setQuickNews] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -60,38 +59,14 @@ export default function Home() {
 
   const fetchHomeData = async () => {
     try {
-      const [mostReadRes, newsRes, quickNewsRes] = await Promise.all([
-        fetch('/api/posts/most-read?limit=5'),
-        fetch('/api/posts/category/tin-tuc'),
-        fetch('/api/posts/category/tin-tuc?limit=5')
-      ])
-
-      const parseResponse = async (res: Response, categoryName: string) => {
-        try {
-          if (!res.ok) {
-            console.warn(`API ${categoryName} returned status ${res.status}`)
-            return []
-          }
-          const data = await res.json()
-          if (Array.isArray(data)) return data
-          if (data?.posts && Array.isArray(data.posts)) return data.posts
-          return []
-        } catch (err) {
-          console.error(`Error parsing ${categoryName}:`, err)
-          return []
-        }
+      const response = await fetch('/api/posts/category/tin-tuc')
+      if (!response.ok) {
+        setError('Có lỗi xảy ra khi tải dữ liệu')
+        return
       }
-
-      const [mostReadData, newsData, quickNewsData] = await Promise.all([
-        parseResponse(mostReadRes, 'most-read'),
-        parseResponse(newsRes, 'tin-tuc'),
-        parseResponse(quickNewsRes, 'tin-nhanh')
-      ])
-
-      setMostReadPosts(mostReadData)
-      setNewsPosts(newsData)
-      setQuickNews(quickNewsData)
-
+      const data = await response.json()
+      const list = Array.isArray(data) ? data : Array.isArray(data?.posts) ? data.posts : []
+      setNewsPosts(list)
     } catch (error) {
       setError('Có lỗi xảy ra khi tải dữ liệu')
     } finally {
@@ -163,24 +138,15 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#F5F4F0]">
-        <AdminRedirect />
-        <Header />
-        
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-3 space-y-8">
-            <ContentSection {...newsSection} />
-          </div>
+      <AdminRedirect />
+      <Header />
+      <HeroWeb3 />
 
-          <div className="lg:col-span-1">
-            <HomeSidebar 
-              quickNews={quickNews} 
-              mostRead={mostReadPosts}
-            />
-          </div>
-        </div>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <ContentSection {...newsSection} />
       </main>
 
+      <ArticleSearchBand />
       <Footer />
     </div>
   )
