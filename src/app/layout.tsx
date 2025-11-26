@@ -39,7 +39,7 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#3b82f6" />
-        <link rel="canonical" href="https://technova.id.vn" />
+        <link rel="canonical" href="https://lab3.io.vn" />
       </head>
       <body className={`${inter.className} ${merriweather.variable}`}>
         <GoogleOAuthProvider clientId={process.env.GOOGLE_ID!}>

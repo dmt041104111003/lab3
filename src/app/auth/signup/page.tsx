@@ -159,7 +159,7 @@ export default function SignUp() {
           Đăng ký
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Tham gia cộng đồng TechNova
+          Tham gia cộng đồng LAB3
         </p>
       </div>
 

@@ -135,7 +135,7 @@ export default function SignIn() {
           Đăng nhập
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Chào mừng bạn quay trở lại TechNova
+          Chào mừng bạn quay trở lại LAB3
         </p>
       </div>
 
