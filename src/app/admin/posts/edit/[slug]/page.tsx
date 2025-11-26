@@ -482,17 +482,17 @@ export default function EditPost() {
                     Phân loại dự án Proposal
                   </h3>
                   <div className="text-sm text-brand-dark space-y-2">
-                    <p className="font-medium">Để bài viết hiển thị đúng tiểu mục, vui lòng:</p>
+                    <p className="font-medium">Vui lòng chọn tiểu mục phù hợp:</p>
                     <ul className="list-disc list-inside space-y-1 ml-2">
                       <li>
-                        <strong>Dự án được cấp vốn:</strong> Thêm tag chứa từ khóa như &quot;funded&quot;, &quot;grant&quot;, &quot;tài trợ&quot;, &quot;cấp vốn&quot; hoặc &quot;được cấp vốn&quot; vào tiêu đề/mô tả
+                        <strong>Dự án được cấp vốn:</strong> Các đề xuất đã nhận hỗ trợ tài chính từ LAB3 hoặc đối tác
                       </li>
                       <li>
-                        <strong>Dự án đã đăng:</strong> Không có tag/keyword về tài trợ - sẽ hiển thị ở mục &quot;Dự án đã đăng&quot;
+                        <strong>Dự án đã đăng:</strong> Các đề xuất đang kêu gọi góp ý, tìm kiếm đối tác hoặc chuẩn bị nộp quỹ
                       </li>
                     </ul>
                     <p className="mt-2 text-xs text-gray-600">
-                      Hệ thống sẽ tự động phân loại dựa trên tags, tiêu đề và mô tả.
+                      Tiểu mục sẽ được hiển thị trong danh sách bài viết và trên trang web.
                     </p>
                   </div>
                 </div>
@@ -521,45 +521,6 @@ export default function EditPost() {
                   }))}
                   placeholder="Chọn thẻ (tùy chọn)"
                 />
-                {formData.category === 'proposal' && (
-                  <div className="mt-2 text-xs text-gray-600">
-                    <p className="font-medium mb-1">Gợi ý tags cho dự án được cấp vốn:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {tags
-                        .filter(tag => {
-                          const name = tag.name.toLowerCase()
-                          return name.includes('funded') || name.includes('grant') || 
-                                 name.includes('tài trợ') || name.includes('cấp vốn') ||
-                                 name.includes('được cấp vốn')
-                        })
-                        .map(tag => (
-                          <span
-                            key={tag.id}
-                            className="inline-flex items-center px-2 py-1 rounded text-xs font-medium cursor-pointer hover:opacity-80"
-                            style={{ backgroundColor: tag.color || '#E8D4C2', color: '#4A2815' }}
-                            onClick={() => {
-                              setFormData({
-                                ...formData,
-                                selectedTags: [tag.id]
-                              })
-                            }}
-                          >
-                            {tag.name}
-                          </span>
-                        ))}
-                    </div>
-                    {tags.filter(tag => {
-                      const name = tag.name.toLowerCase()
-                      return name.includes('funded') || name.includes('grant') || 
-                             name.includes('tài trợ') || name.includes('cấp vốn') ||
-                             name.includes('được cấp vốn')
-                    }).length === 0 && (
-                      <p className="text-gray-500 italic">
-                        Chưa có tag phù hợp. Vui lòng tạo tag chứa từ khóa &quot;funded&quot;, &quot;grant&quot;, &quot;tài trợ&quot; hoặc &quot;cấp vốn&quot;.
-                      </p>
-                    )}
-                  </div>
-                )}
               </>
             )}
           </AdminFormField>

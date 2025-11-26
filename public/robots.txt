@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://technova.id.vn/sitemap.xml
+Sitemap: https://lab3.technova.id.vn/sitemap.xml
 
 # Disallow admin pages
 Disallow: /admin/
@@ -11,13 +11,8 @@ Disallow: /auth/
 
 # Allow important pages
 Allow: /tin-tuc/
-Allow: /doi-moi-sang-tao/
-Allow: /ai-chuyen-doi-so/
-Allow: /xu-huong-tuong-lai/
-Allow: /san-pham-review/
-Allow: /nhan-vat-goc-nhin/
-Allow: /multimedia/
-Allow: /ban-doc/
+Allow: /proposal/
+Allow: /team/
 
 # Crawl delay
 Crawl-delay: 1

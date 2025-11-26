@@ -26,7 +26,10 @@ export const CATEGORIES: Category[] = [
     id: 'proposal',
     name: 'Proposal',
     slug: 'proposal',
-    subcategories: []
+    subcategories: [
+      { id: 'funded', name: 'Dự án được cấp vốn', slug: 'funded', parentId: 'proposal' },
+      { id: 'submitted', name: 'Dự án đã đăng', slug: 'submitted', parentId: 'proposal' }
+    ]
   }
 ]
 

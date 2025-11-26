@@ -143,23 +143,9 @@ export default function AdminPosts() {
     setCurrentPage(1)
   }
 
-  const containsFundingKeyword = (value?: string) => {
-    if (!value) return false
-    const keywords = ['được cấp vốn', 'funded', 'grant', 'tài trợ', 'cấp vốn']
-    const lower = value.toLowerCase()
-    return keywords.some((keyword) => lower.includes(keyword))
-  }
-
-  const isFundedProject = (post: Post) => {
-    if (post.tags && post.tags.some((tagItem) => containsFundingKeyword(tagItem.tag?.name))) {
-      return true
-    }
-    return containsFundingKeyword(post.title) || containsFundingKeyword(post.excerpt)
-  }
-
   const proposalPosts = posts.filter((post) => post.category === 'proposal')
-  const fundedProjects = proposalPosts.filter(isFundedProject)
-  const submittedProjects = proposalPosts.filter((post) => !isFundedProject(post))
+  const fundedProjects = proposalPosts.filter((post) => post.subcategory === 'funded')
+  const submittedProjects = proposalPosts.filter((post) => post.subcategory === 'submitted')
 
   if (loading) {
     return (
