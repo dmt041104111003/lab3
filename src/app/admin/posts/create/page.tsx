@@ -16,6 +16,7 @@ import AdminErrorAlert from '@/components/admin/AdminErrorAlert'
 import AdminImageUpload from '@/components/admin/AdminImageUpload'
 import { CATEGORIES, type Category, type Subcategory } from '@/lib/categories'
 import { generateSlug } from '@/lib/slug'
+import { getSession, setSession } from '@/lib/session'
 
 interface Tag {
   id: string
@@ -85,15 +86,15 @@ export default function CreatePost() {
     try {
       const response = await fetch('/api/check-admin')
       const data = await response.json()
+
       if (data.isAdmin) {
-        const userSession = document.cookie
-          .split('; ')
-          .find(row => row.startsWith('user_session='))
-          ?.split('=')[1]
-        
-        if (userSession) {
-          const user = JSON.parse(decodeURIComponent(userSession))
-          setCurrentUser({ id: user.id })
+        const sessionUser = getSession()
+
+        if (sessionUser?.id) {
+          setCurrentUser({ id: sessionUser.id })
+        } else if (data.user?.id) {
+          setCurrentUser({ id: data.user.id })
+          setSession(data.user)
         } else {
           setCurrentUser(null)
         }

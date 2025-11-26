@@ -9,19 +9,27 @@ export async function GET(request: NextRequest) {
       if (user.role === 'ADMIN') {
         return NextResponse.json({ 
           isAdmin: true,
-          redirect: '/admin'
+          redirect: '/admin',
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role
+          }
         })
       }
     }
     
     return NextResponse.json({ 
       isAdmin: false,
-      redirect: null
+      redirect: null,
+      user: null
     })
   } catch (error) {
     return NextResponse.json({ 
       isAdmin: false,
-      redirect: null
+      redirect: null,
+      user: null
     })
   }
 }
