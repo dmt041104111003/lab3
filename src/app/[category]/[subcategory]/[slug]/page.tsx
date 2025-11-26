@@ -87,10 +87,10 @@ export default function PostDetailPage() {
 
   useEffect(() => {
     if (post) {
-      const newTitle = `${post.title} - TechNova`
+      const newTitle = `${post.title} - LAB3`
       document.title = newTitle
     } else if (!loading) {
-      document.title = 'Đang tải bài viết... - TechNova'
+      document.title = 'Đang tải bài viết... - LAB3'
     }
   }, [post, loading])
 

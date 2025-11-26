@@ -5,7 +5,7 @@ import CategoryMainPage from '@/components/CategoryMainPage'
 
 export default function TinTucPage() {
   useEffect(() => {
-    document.title = 'Tin tức công nghệ - TechNova'
+    document.title = 'Tin tức công nghệ - LAB3'
     
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
@@ -19,11 +19,11 @@ export default function TinTucPage() {
 
     const ogTitle = document.querySelector('meta[property="og:title"]')
     if (ogTitle) {
-      ogTitle.setAttribute('content', 'Tin tức công nghệ - TechNova')
+      ogTitle.setAttribute('content', 'Tin tức công nghệ - LAB3')
     } else {
       const meta = document.createElement('meta')
       meta.setAttribute('property', 'og:title')
-      meta.content = 'Tin tức công nghệ - TechNova'
+      meta.content = 'Tin tức công nghệ - LAB3'
       document.head.appendChild(meta)
     }
   }, [])

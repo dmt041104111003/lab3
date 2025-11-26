@@ -76,8 +76,8 @@ export default function SocialMeta({
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={fullDescription} />
       <meta name="twitter:image" content={fullImage} />
-      <meta name="twitter:site" content="@technova" />
-      <meta name="twitter:creator" content="@technova" />
+      <meta name="twitter:site" content="@lab3" />
+      <meta name="twitter:creator" content="@lab3" />
       
       <meta name="robots" content="index, follow" />
       <meta name="author" content={author || "LAB3"} />

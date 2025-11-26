@@ -5,7 +5,7 @@ import CategoryPage from '@/components/CategoryPage'
 
 export default function CongNgheVietNamPage() {
   useEffect(() => {
-    document.title = 'Công nghệ Việt Nam - Tin tức - TechNova'
+    document.title = 'Công nghệ Việt Nam - Tin tức - LAB3'
     
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
