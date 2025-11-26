@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://lab3.technova.id.vn/sitemap.xml
+Sitemap: https://lab3.io.vn/sitemap.xml
 
 # Disallow admin pages
 Disallow: /admin/

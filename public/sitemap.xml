@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://lab3.technova.id.vn/</loc>
-    <lastmod>2024-10-27T00:00:00.000Z</lastmod>
+    <loc>https://lab3.io.vn/</loc>
+    <lastmod>2025-11-26T00:00:00.000Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://lab3.technova.id.vn/tin-tuc</loc>
-    <lastmod>2024-10-27T00:00:00.000Z</lastmod>
+    <loc>https://lab3.io.vn/tin-tuc</loc>
+    <lastmod>2025-11-26T00:00:00.000Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://lab3.technova.id.vn/tin-tuc/cong-nghe-viet-nam</loc>
-    <lastmod>2024-10-27T00:00:00.000Z</lastmod>
+    <loc>https://lab3.io.vn/tin-tuc/cong-nghe-viet-nam</loc>
+    <lastmod>2025-11-26T00:00:00.000Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lab3.technova.id.vn/tin-tuc/cong-nghe-the-gioi</loc>
-    <lastmod>2024-10-27T00:00:00.000Z</lastmod>
+    <loc>https://lab3.io.vn/tin-tuc/cong-nghe-the-gioi</loc>
+    <lastmod>2025-11-26T00:00:00.000Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lab3.technova.id.vn/proposal</loc>
-    <lastmod>2024-10-27T00:00:00.000Z</lastmod>
+    <loc>https://lab3.io.vn/proposal</loc>
+    <lastmod>2025-11-26T00:00:00.000Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://lab3.technova.id.vn/proposal/funded</loc>
-    <lastmod>2024-10-27T00:00:00.000Z</lastmod>
+    <loc>https://lab3.io.vn/proposal/funded</loc>
+    <lastmod>2025-11-26T00:00:00.000Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lab3.technova.id.vn/proposal/submitted</loc>
-    <lastmod>2024-10-27T00:00:00.000Z</lastmod>
+    <loc>https://lab3.io.vn/proposal/submitted</loc>
+    <lastmod>2025-11-26T00:00:00.000Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lab3.technova.id.vn/team</loc>
-    <lastmod>2024-10-27T00:00:00.000Z</lastmod>
+    <loc>https://lab3.io.vn/team</loc>
+    <lastmod>2025-11-26T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lab3.technova.id.vn/team/member</loc>
-    <lastmod>2024-10-27T00:00:00.000Z</lastmod>
+    <loc>https://lab3.io.vn/team/member</loc>
+    <lastmod>2025-11-26T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://lab3.technova.id.vn/team/achievements</loc>
-    <lastmod>2024-10-27T00:00:00.000Z</lastmod>
+    <loc>https://lab3.io.vn/team/achievements</loc>
+    <lastmod>2025-11-26T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
