@@ -16,7 +16,6 @@ import AdminErrorAlert from '@/components/admin/AdminErrorAlert'
 import AdminImageUpload from '@/components/admin/AdminImageUpload'
 import { CATEGORIES, type Category, type Subcategory } from '@/lib/categories'
 import { generateSlug } from '@/lib/slug'
-import { getSession, setSession } from '@/lib/session'
 
 interface Tag {
   id: string
@@ -54,12 +53,9 @@ export default function CreatePost() {
   const [tags, setTags] = useState<Tag[]>([])
   const [images, setImages] = useState<Image[]>([])
   const [loadingData, setLoadingData] = useState(true)
-  const [currentUser, setCurrentUser] = useState<{id: string} | null>(null)
-  const [userLoaded, setUserLoaded] = useState(false)
 
   useEffect(() => {
     fetchData()
-    fetchCurrentUser()
   }, [])
 
   const fetchData = async () => {
@@ -79,32 +75,6 @@ export default function CreatePost() {
     } catch (error) {
     } finally {
       setLoadingData(false)
-    }
-  }
-
-  const fetchCurrentUser = async () => {
-    try {
-      const response = await fetch('/api/check-admin')
-      const data = await response.json()
-
-      if (data.isAdmin) {
-        const sessionUser = getSession()
-
-        if (sessionUser?.id) {
-          setCurrentUser({ id: sessionUser.id })
-        } else if (data.user?.id) {
-          setCurrentUser({ id: data.user.id })
-          setSession(data.user)
-        } else {
-          setCurrentUser(null)
-        }
-      } else {
-        setCurrentUser(null)
-      }
-    } catch (error) {
-      setCurrentUser(null)
-    } finally {
-      setUserLoaded(true)
     }
   }
 
@@ -139,12 +109,6 @@ export default function CreatePost() {
       return
     }
 
-    if (!currentUser?.id) {
-      setError('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại để tạo bài viết')
-      setIsLoading(false)
-      return
-    }
-
     const titleValidationError = await validateTitle(formData.title)
     if (titleValidationError) {
       setTitleError(titleValidationError)
@@ -169,8 +133,7 @@ export default function CreatePost() {
           imageUrl: formData.imageUrl,
           category: formData.category,
           subcategory: formData.subcategory,
-          authorName: formData.authorName,
-          authorId: currentUser.id
+          authorName: formData.authorName
         }),
       })
 
@@ -272,12 +235,6 @@ export default function CreatePost() {
       <AdminCard title="Thông tin bài viết">
         <form onSubmit={handleSubmit}>
           <AdminErrorAlert message={error} />
-
-          {userLoaded && !currentUser?.id && (
-            <div className="mb-4 rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
-              Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại trước khi tạo bài viết mới.
-            </div>
-          )}
 
           <AdminFormField label="Tiêu đề bài viết" required>
             <AdminInput
@@ -571,7 +528,7 @@ export default function CreatePost() {
             <AdminButton
               type="submit"
               loading={isLoading}
-              disabled={isLoading || !currentUser?.id}
+              disabled={isLoading}
             >
               Tạo bài viết
             </AdminButton>
