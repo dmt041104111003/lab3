@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
+import { parseSessionCookie } from '@/lib/server-session'
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,20 +15,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Mật khẩu mới phải có ít nhất 6 ký tự' }, { status: 400 })
     }
 
-    const sessionCookie = request.cookies.get('user_session')
-    if (!sessionCookie) {
+    const session = parseSessionCookie(request.cookies.get('user_session')?.value)
+    if (!session?.id) {
       return NextResponse.json({ error: 'Chưa đăng nhập' }, { status: 401 })
-    }
-
-    let session
-    try {
-      session = JSON.parse(sessionCookie.value)
-    } catch {
-      return NextResponse.json({ error: 'Session không hợp lệ' }, { status: 401 })
-    }
-
-    if (!session.id) {
-      return NextResponse.json({ error: 'Session không hợp lệ' }, { status: 401 })
     }
 
     const user = await prisma.user.findUnique({

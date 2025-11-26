@@ -6,10 +6,12 @@ export async function POST(request: NextRequest) {
     
     const response = NextResponse.json({ success: true })
     
-    response.cookies.set('user_session', JSON.stringify(user), {
+    response.cookies.set('user_session', encodeURIComponent(JSON.stringify(user)), {
       path: '/',
       maxAge: 86400,
-      sameSite: 'strict'
+      sameSite: 'strict',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production'
     })
     
     return response

@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { parseSessionCookie } from '@/lib/server-session'
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const sessionCookie = request.cookies.get('user_session')
-    if (!sessionCookie) {
+    const session = parseSessionCookie(request.cookies.get('user_session')?.value)
+    if (!session?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-    
-    const session = JSON.parse(sessionCookie.value)
 
     const commentId = params.id
 

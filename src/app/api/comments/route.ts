@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { parseSessionCookie } from '@/lib/server-session'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -79,12 +80,10 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const sessionCookie = request.cookies.get('user_session')
-    if (!sessionCookie) {
+    const session = parseSessionCookie(request.cookies.get('user_session')?.value)
+    if (!session?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-    
-    const session = JSON.parse(sessionCookie.value)
 
     const user = await prisma.user.findUnique({
       where: { id: session.id },

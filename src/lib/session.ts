@@ -43,7 +43,8 @@ export const setServerSession = (user: User) => {
   if (typeof window === 'undefined') return
   
   localStorage.setItem('user_session', JSON.stringify(user))
-  document.cookie = `user_session=${JSON.stringify(user)}; path=/; max-age=86400; secure; samesite=strict`
+  const encoded = encodeURIComponent(JSON.stringify(user))
+  document.cookie = `user_session=${encoded}; path=/; max-age=86400; secure; samesite=strict`
 }
 
 export const clearServerSession = () => {

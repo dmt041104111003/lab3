@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { generateSlug, generateUniqueSlug } from '@/lib/slug'
+import { parseSessionCookie } from '@/lib/server-session'
 
 export async function GET(request: NextRequest) {
   try {
@@ -70,17 +71,8 @@ export async function POST(request: NextRequest) {
       newImageFile
     } = await request.json()
 
-    const sessionCookie = request.cookies.get('user_session')?.value
-    let sessionAuthorId: string | null = null
-
-    if (sessionCookie) {
-      try {
-        const sessionUser = JSON.parse(sessionCookie)
-        sessionAuthorId = sessionUser?.id || null
-      } catch {
-        sessionAuthorId = null
-      }
-    }
+    const sessionUser = parseSessionCookie(request.cookies.get('user_session')?.value)
+    const sessionAuthorId = sessionUser?.id || null
 
     const resolvedAuthorId = sessionAuthorId || authorId
 

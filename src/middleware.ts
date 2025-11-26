@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { parseSessionCookie } from '@/lib/server-session'
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
@@ -13,17 +14,12 @@ export function middleware(request: NextRequest) {
       return NextResponse.next()
     }
     
-    const userSession = request.cookies.get('user_session')?.value
-    if (userSession) {
-      try {
-        const user = JSON.parse(userSession)
-        if (user.role === 'ADMIN') {
-          return NextResponse.redirect(new URL('/admin', request.url))
-        } else {
-          return NextResponse.redirect(new URL('/', request.url))
-        }
-      } catch (error) {
+    const user = parseSessionCookie(request.cookies.get('user_session')?.value)
+    if (user?.role) {
+      if (user.role === 'ADMIN') {
+        return NextResponse.redirect(new URL('/admin', request.url))
       }
+      return NextResponse.redirect(new URL('/', request.url))
     }
   }
 

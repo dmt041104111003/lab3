@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { parseSessionCookie } from '@/lib/server-session'
 
 export async function GET(request: NextRequest) {
   try {
-    const userSession = request.cookies.get('user_session')?.value
-    if (userSession) {
-      const user = JSON.parse(userSession)
+    const user = parseSessionCookie(request.cookies.get('user_session')?.value)
+    if (user) {
       
       if (user.role === 'ADMIN') {
         return NextResponse.json({ 
