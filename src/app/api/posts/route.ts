@@ -105,44 +105,58 @@ export async function POST(request: NextRequest) {
     const uniqueSlug = await generateUniqueSlug(baseSlug, existingSlugs)
 
     let imageId = null
-    if (imageType === 'upload' && newImageFile) {
-      const { v2: cloudinary } = require('cloudinary')
-      cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET,
-      })
+    if (imageType === 'upload') {
+      if (newImageFile) {
+        const { v2: cloudinary } = require('cloudinary')
+        cloudinary.config({
+          cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+          api_key: process.env.CLOUDINARY_API_KEY,
+          api_secret: process.env.CLOUDINARY_API_SECRET,
+        })
 
-      try {
-        const base64Data = newImageFile.replace(/^data:image\/[a-z]+;base64,/, '')
-        const buffer = Buffer.from(base64Data, 'base64')
+        try {
+          const base64Data = newImageFile.replace(/^data:image\/[a-z]+;base64,/, '')
+          const buffer = Buffer.from(base64Data, 'base64')
 
-        const uploadResult = await new Promise((resolve, reject) => {
-          cloudinary.uploader.upload_stream(
-            {
-              resource_type: 'auto',
-              folder: 'technova',
-              public_id: `image_${Date.now()}`,
-            },
-            (error: any, result: any) => {
-              if (error) reject(error)
-              else resolve(result)
+          const uploadResult = await new Promise((resolve, reject) => {
+            cloudinary.uploader.upload_stream(
+              {
+                resource_type: 'auto',
+                folder: 'technova',
+                public_id: `image_${Date.now()}`,
+              },
+              (error: any, result: any) => {
+                if (error) reject(error)
+                else resolve(result)
+              }
+            ).end(buffer)
+          }) as any
+
+          const image = await prisma.image.create({
+            data: {
+              filename: uploadResult.public_id,
+              originalName: 'uploaded-image',
+              path: uploadResult.secure_url,
+              size: buffer.length,
+              mimeType: 'image/jpeg',
+              alt: title
             }
-          ).end(buffer)
-        }) as any
-
+          })
+          imageId = image.id
+        } catch (uploadError) {
+        }
+      } else if (imageUrl) {
         const image = await prisma.image.create({
           data: {
-            filename: uploadResult.public_id,
-            originalName: 'uploaded-image',
-            path: uploadResult.secure_url,
-            size: buffer.length,
+            filename: `uploaded_${Date.now()}`,
+            originalName: 'Uploaded Image',
+            path: imageUrl,
+            size: 0,
             mimeType: 'image/jpeg',
             alt: title
           }
         })
         imageId = image.id
-      } catch (uploadError) {
       }
     } else if (imageType === 'existing' && selectedImage) {
       imageId = selectedImage
@@ -249,44 +263,58 @@ export async function PUT(request: NextRequest) {
     const uniqueSlug = await generateUniqueSlug(baseSlug, existingSlugs)
 
     let imageId = null
-    if (imageType === 'upload' && newImageFile) {
-      const { v2: cloudinary } = require('cloudinary')
-      cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET,
-      })
+    if (imageType === 'upload') {
+      if (newImageFile) {
+        const { v2: cloudinary } = require('cloudinary')
+        cloudinary.config({
+          cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+          api_key: process.env.CLOUDINARY_API_KEY,
+          api_secret: process.env.CLOUDINARY_API_SECRET,
+        })
 
-      try {
-        const base64Data = newImageFile.replace(/^data:image\/[a-z]+;base64,/, '')
-        const buffer = Buffer.from(base64Data, 'base64')
+        try {
+          const base64Data = newImageFile.replace(/^data:image\/[a-z]+;base64,/, '')
+          const buffer = Buffer.from(base64Data, 'base64')
 
-        const uploadResult = await new Promise((resolve, reject) => {
-          cloudinary.uploader.upload_stream(
-            {
-              resource_type: 'auto',
-              folder: 'technova',
-              public_id: `image_${Date.now()}`,
-            },
-            (error: any, result: any) => {
-              if (error) reject(error)
-              else resolve(result)
+          const uploadResult = await new Promise((resolve, reject) => {
+            cloudinary.uploader.upload_stream(
+              {
+                resource_type: 'auto',
+                folder: 'technova',
+                public_id: `image_${Date.now()}`,
+              },
+              (error: any, result: any) => {
+                if (error) reject(error)
+                else resolve(result)
+              }
+            ).end(buffer)
+          }) as any
+
+          const image = await prisma.image.create({
+            data: {
+              filename: uploadResult.public_id,
+              originalName: 'uploaded-image',
+              path: uploadResult.secure_url,
+              size: buffer.length,
+              mimeType: 'image/jpeg',
+              alt: title
             }
-          ).end(buffer)
-        }) as any
-
+          })
+          imageId = image.id
+        } catch (uploadError) {
+        }
+      } else if (imageUrl) {
         const image = await prisma.image.create({
           data: {
-            filename: uploadResult.public_id,
-            originalName: 'uploaded-image',
-            path: uploadResult.secure_url,
-            size: buffer.length,
+            filename: `uploaded_${Date.now()}`,
+            originalName: 'Uploaded Image',
+            path: imageUrl,
+            size: 0,
             mimeType: 'image/jpeg',
             alt: title
           }
         })
         imageId = image.id
-      } catch (uploadError) {
       }
     } else if (imageType === 'existing' && selectedImage) {
       imageId = selectedImage

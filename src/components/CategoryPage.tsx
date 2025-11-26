@@ -33,6 +33,7 @@ interface Post {
       alt?: string
     }
   }>
+  imageUrl?: string
 }
 
 interface CategoryPageProps {
@@ -150,8 +151,8 @@ export default function CategoryPage({ title, subcategory, showAllPosts = true, 
                         <div className="flex-shrink-0 w-32 aspect-video">
                           {post.images?.[0]?.image?.path ? (
                             <img 
-                              src={post.images[0].image.path} 
-                              alt={post.images[0].image.alt || post.title}
+                              src={post.images?.[0]?.image?.path}
+                              alt={post.images?.[0]?.image?.alt || post.title}
                               className="w-full h-full object-cover"
                               style={{ aspectRatio: '16/9' }}
                             />

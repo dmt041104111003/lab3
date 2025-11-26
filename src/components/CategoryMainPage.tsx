@@ -77,7 +77,9 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
         })
         .flat()
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      const finalPosts = allPosts.slice(0, 6)
+      const finalPosts = allPosts
+        .slice(0, 6)
+        .filter((post): post is Post => Boolean(post && post.title && post.slug))
       setPosts(finalPosts)
     } catch (error) {
       setError('Có lỗi xảy ra khi tải bài viết')
@@ -90,14 +92,16 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
     fetchPosts()
   }, [categoryId, fetchPosts])
 
+  const heroPost = posts[0]
+
   const sectionData = {
     title: title.toUpperCase(),
-    mainArticle: posts.length > 0 ? {
-      title: posts[0].title,
-      href: `/${basePath}/${posts[0].subcategory}/${posts[0].slug}`,
-      imageUrl: posts[0].images?.[0]?.image?.path,
-      imageAlt: posts[0].images?.[0]?.image?.alt || posts[0].title,
-      excerpt: posts[0].excerpt
+    mainArticle: heroPost ? {
+      title: heroPost.title,
+      href: `/${basePath}/${heroPost.subcategory}/${heroPost.slug}`,
+      imageUrl: heroPost.images?.[0]?.image?.path,
+      imageAlt: heroPost.images?.[0]?.image?.alt || heroPost.title,
+      excerpt: heroPost.excerpt
     } : {
       title: "Chưa có bài viết nào",
       href: "#"
@@ -138,16 +142,16 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 gap-8">
           <div>
-            {posts.length > 0 && (
+            {heroPost && (
               <div className="space-y-3">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-b-4 border-red-600 mb-6 rounded-lg overflow-hidden">
                       {/* Ảnh full bên trái */}
                       <div className="relative aspect-video">
-                        <a href={`/${basePath}/${posts[0].subcategory}/${posts[0].slug}`} className="block w-full h-full">
-                          {posts[0].images?.[0]?.image?.path ? (
+                        <a href={`/${basePath}/${heroPost.subcategory}/${heroPost.slug}`} className="block w-full h-full">
+                          {heroPost.images?.[0]?.image?.path ? (
                             <img 
-                              src={posts[0].images[0].image.path} 
-                              alt={posts[0].images[0].image.alt || posts[0].title}
+                              src={heroPost.images?.[0]?.image?.path || ''}
+                              alt={heroPost.images?.[0]?.image?.alt || heroPost.title}
                               className="w-full h-full object-cover hover:opacity-95 transition-opacity"
                             />
                           ) : (
@@ -165,24 +169,24 @@ export default function CategoryMainPage({ categoryId, title, basePath }: Catego
                       
                       {/* Nội dung bên phải */}
                       <div className="bg-white p-4 md:p-6 flex flex-col justify-center">
-                        <a href={`/${basePath}/${posts[0].subcategory}/${posts[0].slug}`} className="block">
+                        <a href={`/${basePath}/${heroPost.subcategory}/${heroPost.slug}`} className="block">
                           <h1 
                             className="text-lg md:text-xl font-bold text-gray-900 mb-3 leading-tight hover:text-red-600 transition-colors line-clamp-2"
-                            title={posts[0].title}
+                            title={heroPost.title}
                           >
-                            {posts[0].title.length > 80 ? 
-                              posts[0].title.substring(0, 80) + '...' : 
-                              posts[0].title
+                            {heroPost.title.length > 80 ? 
+                              heroPost.title.substring(0, 80) + '...' : 
+                              heroPost.title
                             }
                           </h1>
                           <p 
                             className="text-gray-600 text-sm leading-relaxed mb-2 line-clamp-2"
-                            title={posts[0].excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
+                            title={heroPost.excerpt || "Mô tả ngắn về bài viết chính trong chuyên mục này..."}
                           >
-                            {posts[0].excerpt ? 
-                              (posts[0].excerpt.length > 150 ? 
-                                posts[0].excerpt.substring(0, 150) + '...' : 
-                                posts[0].excerpt
+                            {heroPost.excerpt ? 
+                              (heroPost.excerpt.length > 150 ? 
+                                heroPost.excerpt.substring(0, 150) + '...' : 
+                                heroPost.excerpt
                               ) : 
                               "Mô tả ngắn về bài viết chính trong chuyên mục này..."
                             }

@@ -79,7 +79,7 @@ export default function Home() {
     mainArticle: newsPosts.length > 0 ? {
       title: newsPosts[0].title,
       href: `/tin-tuc/${newsPosts[0].subcategory || 'cong-nghe-viet-nam'}/${newsPosts[0].slug}`,
-      imageUrl: newsPosts[0].images?.[0]?.image?.path || newsPosts[0].imageUrl,
+      imageUrl: newsPosts[0].images?.[0]?.image?.path,
       imageAlt: newsPosts[0].images?.[0]?.image?.alt || newsPosts[0].title,
       excerpt: newsPosts[0].excerpt
     } : {
@@ -92,7 +92,7 @@ export default function Home() {
         return {
           title: post.title,
           href: `/tin-tuc/${post.subcategory || 'cong-nghe-viet-nam'}/${post.slug}`,
-          imageUrl: post.images?.[0]?.image?.path || post.imageUrl,
+          imageUrl: post.images?.[0]?.image?.path,
           imageAlt: post.images?.[0]?.image?.alt || post.title,
           excerpt: post.excerpt
         }
