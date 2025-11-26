@@ -70,6 +70,39 @@ export async function POST(request: NextRequest) {
       newImageFile
     } = await request.json()
 
+    const sessionCookie = request.cookies.get('user_session')?.value
+    let sessionAuthorId: string | null = null
+
+    if (sessionCookie) {
+      try {
+        const sessionUser = JSON.parse(sessionCookie)
+        sessionAuthorId = sessionUser?.id || null
+      } catch {
+        sessionAuthorId = null
+      }
+    }
+
+    const resolvedAuthorId = sessionAuthorId || authorId
+
+    if (!resolvedAuthorId) {
+      return NextResponse.json(
+        { message: 'Phiên đăng nhập không hợp lệ, vui lòng đăng nhập lại' },
+        { status: 401 }
+      )
+    }
+
+    const authorExists = await prisma.user.findUnique({
+      where: { id: resolvedAuthorId },
+      select: { id: true }
+    })
+
+    if (!authorExists) {
+      return NextResponse.json(
+        { message: 'Không tìm thấy tài khoản tác giả, vui lòng đăng nhập lại' },
+        { status: 400 }
+      )
+    }
+
 
     const baseSlug = generateSlug(title)
     
@@ -142,7 +175,7 @@ export async function POST(request: NextRequest) {
         excerpt,
         slug: uniqueSlug,
         published,
-        authorId,
+        authorId: resolvedAuthorId,
         category,
         subcategory,
         authorName,

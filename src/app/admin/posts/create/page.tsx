@@ -54,6 +54,7 @@ export default function CreatePost() {
   const [images, setImages] = useState<Image[]>([])
   const [loadingData, setLoadingData] = useState(true)
   const [currentUser, setCurrentUser] = useState<{id: string} | null>(null)
+  const [userLoaded, setUserLoaded] = useState(false)
 
   useEffect(() => {
     fetchData()
@@ -93,9 +94,16 @@ export default function CreatePost() {
         if (userSession) {
           const user = JSON.parse(decodeURIComponent(userSession))
           setCurrentUser({ id: user.id })
+        } else {
+          setCurrentUser(null)
         }
+      } else {
+        setCurrentUser(null)
       }
     } catch (error) {
+      setCurrentUser(null)
+    } finally {
+      setUserLoaded(true)
     }
   }
 
@@ -130,6 +138,12 @@ export default function CreatePost() {
       return
     }
 
+    if (!currentUser?.id) {
+      setError('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại để tạo bài viết')
+      setIsLoading(false)
+      return
+    }
+
     const titleValidationError = await validateTitle(formData.title)
     if (titleValidationError) {
       setTitleError(titleValidationError)
@@ -155,7 +169,7 @@ export default function CreatePost() {
           category: formData.category,
           subcategory: formData.subcategory,
           authorName: formData.authorName,
-          authorId: currentUser?.id || 'cmh10oekw0001x8rjt3cati7w'
+          authorId: currentUser.id
         }),
       })
 
@@ -257,6 +271,12 @@ export default function CreatePost() {
       <AdminCard title="Thông tin bài viết">
         <form onSubmit={handleSubmit}>
           <AdminErrorAlert message={error} />
+
+          {userLoaded && !currentUser?.id && (
+            <div className="mb-4 rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
+              Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại trước khi tạo bài viết mới.
+            </div>
+          )}
 
           <AdminFormField label="Tiêu đề bài viết" required>
             <AdminInput
@@ -550,7 +570,7 @@ export default function CreatePost() {
             <AdminButton
               type="submit"
               loading={isLoading}
-              disabled={isLoading}
+              disabled={isLoading || !currentUser?.id}
             >
               Tạo bài viết
             </AdminButton>
