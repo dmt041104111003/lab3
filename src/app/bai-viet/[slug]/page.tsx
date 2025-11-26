@@ -264,13 +264,17 @@ export default function PostDetail() {
           />
         </div>
 
-        <div className="mt-8">
-          <CommentSection />
-        </div>
+        {!(post.category === 'proposal' && ['funded', 'submitted'].includes(post.subcategory)) && (
+          <>
+            <div className="mt-8">
+              <CommentSection />
+            </div>
 
-        <div className="mt-8">
-          <RelatedPosts currentPostSlug={post.slug} />
-        </div>
+            <div className="mt-8">
+              <RelatedPosts currentPostSlug={post.slug} />
+            </div>
+          </>
+        )}
 
       </main>
       
