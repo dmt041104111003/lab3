@@ -8,6 +8,12 @@ import { getSession, setSession, clearSession, isAdmin, type User } from '@/lib/
 import NotificationPopup from './NotificationPopup'
 import TagBadge from './TagBadge'
 
+const SEARCH_ALLOWED_CATEGORIES = new Set(['tin-tuc', 'proposal'])
+const isSearchCategoryAllowed = (category?: string) => {
+  if (!category) return false
+  return SEARCH_ALLOWED_CATEGORIES.has(category)
+}
+
 export default function Header() {
   const pathname = usePathname()
   const [user, setUser] = useState<User | null>(null)
@@ -311,7 +317,10 @@ export default function Header() {
     try {
       const response = await fetch(`/api/search?q=${encodeURIComponent(query)}&limit=8`)
       const data = await response.json()
-      setSearchResults(data.results || [])
+      const filteredResults = (data.results || []).filter((result: any) =>
+        isSearchCategoryAllowed(result?.category)
+      )
+      setSearchResults(filteredResults)
       setIsSearchOpen(true)
     } catch (error) {
       setSearchResults([])

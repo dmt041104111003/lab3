@@ -40,6 +40,13 @@ interface NotificationPopupProps {
   onNotificationToggle?: (isEnabled: boolean) => void
 }
 
+const ALLOWED_CATEGORIES = new Set(['tin-tuc', 'proposal'])
+
+const isAllowedCategory = (category?: string) => {
+  if (!category) return false
+  return ALLOWED_CATEGORIES.has(category)
+}
+
 export default function NotificationPopup({ isOpen, onClose, onNotificationToggle }: NotificationPopupProps) {
   const [activeTab, setActiveTab] = useState<'thongbao' | 'ykien' | 'daxem'>('thongbao')
   const [notifications, setNotifications] = useState<Notification[]>([])
@@ -85,7 +92,10 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
       const data = await response.json()
       
       if (data.success) {
-        setNotifications(data.notifications)
+        const filteredNotifications = (data.notifications || []).filter((notification: Notification) =>
+          isAllowedCategory(notification.category)
+        )
+        setNotifications(filteredNotifications)
       }
     } catch (error) {
       console.error('Error fetching notifications:', error)
@@ -137,7 +147,10 @@ export default function NotificationPopup({ isOpen, onClose, onNotificationToggl
       const data = await response.json()
       
       if (data.success) {
-        setReplies(data.replies)
+        const filteredReplies = (data.replies || []).filter((reply: Reply) =>
+          isAllowedCategory(reply.post?.category)
+        )
+        setReplies(filteredReplies)
       }
     } catch (error) {
       console.error('Error fetching replies:', error)

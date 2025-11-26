@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
+const ALLOWED_RELATED_CATEGORIES = new Set(['tin-tuc', 'proposal'])
+
 interface RelatedPost {
   id: string
   title: string
@@ -10,6 +12,8 @@ interface RelatedPost {
   excerpt: string
   createdAt: string
   authorName?: string
+  category?: string
+  subcategory?: string
   author: {
     id: string
     name: string
@@ -78,7 +82,10 @@ export default function RelatedPosts({ currentPostSlug, className = '' }: Relate
         const data = await response.json()
         
         if (response.ok) {
-          setPosts(data.posts || [])
+          const filteredPosts = (data.posts || []).filter((post: RelatedPost) =>
+            post?.category ? ALLOWED_RELATED_CATEGORIES.has(post.category) : false
+          )
+          setPosts(filteredPosts)
         }
       } catch (error) {
       } finally {

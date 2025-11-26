@@ -59,42 +59,29 @@ export default function FundedPage() {
             <p className="text-gray-600">Chưa có dự án nào được cấp vốn.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-4">
             {fundedProjects.map((post) => (
-              <div key={post.id} className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-                <a href={`/bai-viet/${post.slug}`} className="block">
-                  {post.images?.[0]?.image?.path ? (
-                    <div className="relative aspect-video overflow-hidden group">
-                      <img
-                        src={post.images[0].image.path}
-                        alt={post.images[0].image.alt || post.title}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    </div>
-                  ) : (
-                    <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                      <div className="text-center">
-                        <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                        <span className="text-gray-500 text-sm">Sắp ra mắt</span>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="p-4">
-                    <p className="text-xs uppercase tracking-[0.3em] text-gray-400 mb-2">LAB3 FUND</p>
-                    <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 mb-2 hover:text-red-600 transition-colors" title={post.title}>
-                      {post.title}
-                    </h3>
-                    <p className="text-sm text-gray-600 line-clamp-2 mb-3">{post.excerpt || 'Đề xuất được cấp vốn bởi LAB3.'}</p>
-                    <div className="text-xs text-gray-500 flex items-center space-x-2">
-                      <span>{post.authorName || 'LAB3'}</span>
-                      <span>•</span>
-                      <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
-                    </div>
+              <div key={post.id} className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 flex flex-col md:flex-row gap-4">
+                {post.images?.[0]?.image?.path && (
+                  <div className="flex-shrink-0 w-full md:w-48 h-32 overflow-hidden rounded-lg">
+                    <img
+                      src={post.images[0].image.path}
+                      alt={post.images[0].image.alt || post.title}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                </a>
+                )}
+                <div className="flex-1">
+                  <div className="flex items-center text-xs text-gray-500 mb-2">
+                    <span>{new Date(post.createdAt).toLocaleString('vi-VN')}</span>
+                    <span className="mx-2">•</span>
+                    <span>{post.authorName || 'LAB3'}</span>
+                  </div>
+                  <a href={`/bai-viet/${post.slug}`} className="block">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-tech-blue transition-colors line-clamp-2">{post.title}</h3>
+                    <p className="text-sm text-gray-600 line-clamp-2">{post.excerpt || 'Đề xuất được cấp vốn bởi LAB3.'}</p>
+                  </a>
+                </div>
               </div>
             ))}
           </div>

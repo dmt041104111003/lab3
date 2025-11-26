@@ -75,8 +75,8 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
             {subArticles.map((article, index) => (
               <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
                 <Link href={article.href} className="block">
-                  <div className="flex items-stretch">
-                    <div className="flex-shrink-0 w-32 aspect-video" style={{ aspectRatio: '16/9' }}>
+                  <div className="flex flex-col sm:flex-row items-stretch">
+                    <div className="w-full sm:w-32 aspect-video" style={{ aspectRatio: '16/9' }}>
                       {article.imageUrl ? (
                         <img 
                           src={article.imageUrl} 
@@ -94,7 +94,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                         </div>
                       )}
                     </div>
-                    <div className="flex-1 h-full p-2 flex items-center">
+                    <div className="flex-1 h-full p-3 sm:p-2 flex items-center justify-center sm:justify-start text-center sm:text-left">
                       <h4 
                         className="text-gray-800 text-xs font-bold line-clamp-2 hover:text-red-600 transition-colors"
                         title={article.title}
@@ -112,8 +112,8 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
         <div className="space-y-4">
           <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
             <Link href={mainArticle.href} className="block">
-              <div className="flex p-4">
-                <div className="flex-shrink-0 w-32 aspect-video" style={{ aspectRatio: '16/9' }}>
+              <div className="flex flex-col sm:flex-row p-4 gap-4">
+                <div className="w-full sm:w-32 aspect-video" style={{ aspectRatio: '16/9' }}>
                   {mainArticle.imageUrl ? (
                     <img 
                       src={mainArticle.imageUrl} 
@@ -131,7 +131,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                     </div>
                   )}
                 </div>
-                <div className="flex-1 ml-4">
+                <div className="flex-1">
                   {mainArticle.category && (
                     <div className="text-xs text-tech-blue font-medium mb-1">{mainArticle.category}</div>
                   )}
@@ -163,8 +163,8 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
           {subArticles.map((article, index) => (
             <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
               <Link href={article.href} className="block">
-                <div className="flex p-4">
-                  <div className="flex-shrink-0 w-32 aspect-video" style={{ aspectRatio: '16/9' }}>
+                <div className="flex flex-col sm:flex-row p-4 gap-4">
+                  <div className="w-full sm:w-32 aspect-video" style={{ aspectRatio: '16/9' }}>
                     {article.imageUrl ? (
                       <img 
                         src={article.imageUrl} 
@@ -182,7 +182,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
                       </div>
                     )}
                   </div>
-                  <div className="flex-1 ml-4">
+                  <div className="flex-1">
                     {article.category && (
                       <div className="text-xs text-tech-blue font-medium mb-1">{article.category}</div>
                     )}
@@ -235,7 +235,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
             </div>
             
             {/* Nội dung bên phải */}
-            <div className="bg-white p-4 md:p-6 flex flex-col justify-center">
+            <div className="bg-white p-4 md:p-6 flex flex-col justify-center text-center md:text-left">
               <Link href={mainArticle.href} className="block">
                 <h1 
                   className="text-lg md:text-xl font-bold text-gray-900 mb-3 leading-tight hover:text-red-600 transition-colors line-clamp-2"
@@ -263,7 +263,7 @@ export default function ContentSection({ title, mainArticle, subArticles, classN
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
             {subArticles.map((article, index) => (
               <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
                 <Link href={article.href} className="block">
