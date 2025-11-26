@@ -9,6 +9,7 @@ export interface ProposalPost {
   slug: string
   createdAt: string
   authorName?: string
+  subcategory?: string
   images?: Array<{
     image: {
       id: string
@@ -29,11 +30,20 @@ const containsFundingKeyword = (value?: string) => {
   return keywords.some((keyword) => lower.includes(keyword))
 }
 
-const isFundedProject = (post: ProposalPost) => {
+const hasFundedSubcategory = (post: ProposalPost) => post.subcategory === 'funded'
+const hasSubmittedSubcategory = (post: ProposalPost) => post.subcategory === 'submitted'
+
+const classifyPost = (post: ProposalPost) => {
+  if (hasFundedSubcategory(post)) return 'funded'
+  if (hasSubmittedSubcategory(post)) return 'submitted'
+
   if (post.tags && post.tags.some((tag) => containsFundingKeyword(tag.name))) {
-    return true
+    return 'funded'
   }
+
   return containsFundingKeyword(post.title) || containsFundingKeyword(post.excerpt)
+    ? 'funded'
+    : 'submitted'
 }
 
 export function useProposalData() {
@@ -63,8 +73,8 @@ export function useProposalData() {
     document.title = 'Proposal - LAB3'
   }, [])
 
-  const fundedProjects = posts.filter(isFundedProject)
-  const submittedProjects = posts.filter((post) => !isFundedProject(post))
+  const fundedProjects = posts.filter((post) => classifyPost(post) === 'funded')
+  const submittedProjects = posts.filter((post) => classifyPost(post) === 'submitted')
   const featuredPost = posts[0] || null
 
   return {
