@@ -73,8 +73,11 @@ export function useProposalData() {
     document.title = 'Proposal - LAB3'
   }, [])
 
-  const fundedProjects = posts.filter((post) => classifyPost(post) === 'funded')
-  const submittedProjects = posts.filter((post) => classifyPost(post) === 'submitted')
+const fundedProjects = posts.filter((post) => classifyPost(post) === 'funded')
+const submittedProjects = posts.filter((post) => {
+  const type = classifyPost(post)
+  return type === 'submitted' || type === 'funded'
+})
   const featuredPost = posts[0] || null
 
   return {
